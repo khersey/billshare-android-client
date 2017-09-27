@@ -1,0 +1,22 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:name="com.cleganeBowl2k18.trebuchet.android.petdetails.PetDetailsFragment"
+    style="@style/Base.ContainerFullPadded"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_pet_details">
+
+    <TextView
+        android:id="@+id/pet_name"
+        style="@style/Base.Wrapper"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        tools:text="This is a pet"/>
+
+    <TextView
+        android:id="@+id/pet_status"
+        style="@style/Base.Wrapper"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="This is a pet status"/>
+</LinearLayout>

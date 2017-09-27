@@ -1,11 +1,82 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="Base"/>
+
+    <style name="Base.ContainerWithoutPadding">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Base.ContainerTopBottomPadded" parent="Base.ContainerWithoutPadding">
+        <item name="android:paddingTop">@dimen/medium_padding</item>
+        <item name="android:paddingBottom">@dimen/medium_padding</item>
+    </style>
+
+    <style name="Base.ContainerFullPadded" parent="Base.ContainerTopBottomPadded">
+        <item name="android:paddingRight">@dimen/medium_padding</item>
+        <item name="android:paddingLeft">@dimen/medium_padding</item>
+    </style>
+
+    <style name="Base.ContainerFullWidth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Base.ContainerFullWidth.FullPadded">
+        <item name="android:padding">@dimen/medium_padding</item>
+    </style>
+
+    <style name="Base.ContainerFitsSystem" parent="Base.ContainerWithoutPadding">
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="Base.Wrapper">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Base.Wrapper.MarginLeft">
+        <item name="android:layout_marginLeft">@dimen/activity_vertical_margin</item>
+    </style>
+
+    <style name="Base.Wrapper.FullPadding">
+        <item name="android:padding">@dimen/medium_padding</item>
+    </style>
+
+    <style name="Base.Wrapper.FullMargin">
+        <item name="android:layout_margin">@dimen/medium_margin</item>
+    </style>
+
+    <style name="Base.Wrapper.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Base.Wrapper.FullSeparatorMargin">
+        <item name="android:layout_margin">@dimen/separator_margin</item>
+    </style>
+
+    <style name="Base.Toolbar" parent="Base.ContainerFullWidth">
+        <item name="android:height">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Base.ProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_width">@dimen/content_loading_progressbar_size</item>
+        <item name="android:layout_height">@dimen/content_loading_progressbar_size</item>
+    </style>
 </resources>
