@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">trebuchet</string>
+    <string name="lbl_password">Please enter your password</string>
 </resources>
