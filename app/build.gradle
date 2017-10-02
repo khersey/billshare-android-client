@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.khersey.trebuchet"
-        minSdkVersion 19
-        targetSdkVersion 26
+        applicationId "com.cleganeBowl2k18.trebuchet"
+        minSdkVersion 15
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -23,13 +23,86 @@ android {
     }
 }
 
+
+ext {
+    junitVersion = '4.12'
+    supportLibraryVersion = '25.3.1'
+    retrofitVersion = "2.1.0"
+    okHttpVersion = "3.5.0"
+    daggerVersion = "2.8"
+    javaxVersion = "1"
+    rxjava2Version = "2.0.0"
+    rxjavaAdapterVersion = "1.0.0"
+    butterKnifeVersion = "8.5.1"
+    leakCanaryVersion = "1.5"
+
+    // Testing
+    junitVersion = "4.12"
+    mockitoVersion = '2.2.0'
+    dexmakerVersion = "2.2.0"
+    hamcrestVersion = '1.3'
+    espressoVersion = "2.2.2"
+    espressoRunnerVersion = "0.5"
+    assertjVersion = "1.2.0"
+}
+
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation ('com.android.support.test.espresso:espresso-core:3.0.1', {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Android
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.android.support:support-v4:$supportLibraryVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    compile "javax.inject:javax.inject:$javaxVersion"
+
+    // External
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:${rxjavaAdapterVersion}"
+    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    compile "io.reactivex.rxjava2:rxkotlin:$rxjava2Version"
+    compile "io.reactivex.rxjava2:rxandroid:$rxjava2Version"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    compile "com.jakewharton:butterknife:$butterKnifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+
+    // Test
+    androidTestCompile "junit:junit:$junitVersion"
+    androidTestCompile "com.linkedin.dexmaker:dexmaker-mockito:$dexmakerVersion"
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile("com.android.support.test:runner:$espressoRunnerVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile("com.android.support.test:rules:$espressoRunnerVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
+    kaptAndroidTest "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+}
+
+repositories {
+    mavenCentral()
 }

@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">trebuchet</string>
+    <string name="app_name">Pet Store</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_pet_details">Ver Mascota</string>
+    <string name="title_activity_add_pet">Agregar Mascota</string>
+    <string name="title_activity_edit_pet">Editar Mascota</string>
+    <string name="name">Name</string>
+    <string name="sending">Enviando…</string>
+    <string name="empty_name_error">El nombre no puede ser vacío</string>
+    <string name="pet_edit_success">Se han guardado los cambios</string>
+    <string name="loading_pets_message">Cargando mascotas…</string>
+    <string name="created_pet_success">Mascota creada!</string>
+    <string name="empty_pets_list">No tienes mascotas</string>
+    <string name="delete_pet_message">Mascota eliminada</string>
+    <string name="undo_action">Deshacer</string>
+    <string name="synching_pets_message">Hold on, we are syncing your pets…</string>
 </resources>

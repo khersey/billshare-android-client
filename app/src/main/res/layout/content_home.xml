@@ -1,0 +1,32 @@
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_refresh"
+    style="@style/Base.ContainerWithoutPadding"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".presentation.view.home.HomeActivity"
+    tools:showIn="@layout/activity_home">
+
+    <FrameLayout
+        style="@style/Base.ContainerWithoutPadding">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pets_list"
+            style="@style/Base.ContainerTopBottomPadded"
+            android:clipToPadding="false"/>
+
+        <TextView
+            android:id="@+id/empty_pets_list"
+            style="@style/Base.Wrapper"
+            android:layout_gravity="center"
+            android:text="@string/empty_pets_list"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/progressbar"
+            style="@style/Base.ProgressBar"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

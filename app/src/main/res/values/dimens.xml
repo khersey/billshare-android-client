@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="content_loading_progressbar_size">60dp</dimen>
+
+    <dimen name="medium_padding">16dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="separator_height">2dp</dimen>
+    <dimen name="separator_margin">5dp</dimen>
+    <dimen name="zero">0dp</dimen>
+</resources>
