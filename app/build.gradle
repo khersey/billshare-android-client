@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -21,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kapt {
+        generateStubs = true
+    }
+
 }
 
 
@@ -29,7 +34,7 @@ ext {
     supportLibraryVersion = '25.3.1'
     retrofitVersion = "2.1.0"
     okHttpVersion = "3.5.0"
-    daggerVersion = "2.8"
+    daggerVersion = "2.11"
     javaxVersion = "1"
     rxjava2Version = "2.0.0"
     rxjavaAdapterVersion = "1.0.0"
@@ -55,7 +60,7 @@ dependencies {
     compile "com.android.support:cardview-v7:$supportLibraryVersion"
     compile "com.android.support:design:$supportLibraryVersion"
     compile "com.android.support:support-v4:$supportLibraryVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
     compile "javax.inject:javax.inject:$javaxVersion"
 
     // External
