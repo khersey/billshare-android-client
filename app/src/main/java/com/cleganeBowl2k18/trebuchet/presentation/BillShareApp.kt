@@ -10,7 +10,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.module.NetworkModu
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.module.RepositoryModule
 import com.squareup.leakcanary.LeakCanary
 
-class PetApp : Application() {
+class BillShareApp : Application() {
 
     lateinit var mApplicationComponent: ApplicationComponent
 
