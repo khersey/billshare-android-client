@@ -33,7 +33,6 @@ This wil entail downloading a bunch of project dependencies and specific version
 
 The last thing I would recommend doing is switching the project view. By default the view is Android,
 which hides certain files, I recommend using Project.
-which hides certain files, I recommend using Project.
 
 That's it! Once your Android Studio has finished downloading all the project dependicies you're good to go!
 
