@@ -17,9 +17,21 @@ We are targetting Android sdk 26 (android 8.0, Oreo), with minimum sdk 15 (andro
 
 
 # Installation
-Download Android Studio 3.0 Beta from: https://developer.android.com/studio/preview/index.html
+Download and install the latest JDK 1.8: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
+Download and install Android Studio 3.0 Preview from: https://developer.android.com/studio/preview/index.html
 
+Launch Android Studio and select: **Open new project from Version Control**
+
+Configure Github integration, and select the trebuchet repository
+
+There will be pop-up asking something about Gradle, just pick the default one and continue.
+
+Once the editor is open, Gradle will try and sync.  This will fail a bunch of times.
+Each time a message will appear with a button to fix the problem below it.
+This wil entail downloading a bunch of project dependencies and specific versions of android SDK components.
+
+That's it! Once your Android Studio has finished downloading all the project dependicies you're good to go!
 
 
 # Running Trebuchet
