@@ -21,6 +21,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
@@ -37,6 +38,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        ButterKnife.bind(this)
         // Set up the login form.
         populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
