@@ -267,7 +267,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
-                finish()
+                startActivity(MainIntent())
+
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()

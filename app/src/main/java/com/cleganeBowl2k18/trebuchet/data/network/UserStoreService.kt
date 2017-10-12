@@ -4,6 +4,7 @@ import com.cleganeBowl2k18.trebuchet.data.entity.User
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
@@ -24,6 +25,6 @@ interface UserStoreService {
 //    @DELETE("pet/{petId}")
 //    fun deletePet(@Path("petId") petId: Long): Observable<Response<Void>>
 
-//    @GET("pet/{petId}")
-//    fun getPet(petId: Long): Observable<Pet>
+    @GET("user/{userId}")
+    fun getUser(userId: Long): Observable<User>
 }
