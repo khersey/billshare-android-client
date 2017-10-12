@@ -4,7 +4,8 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion "26.0.2"
+
     defaultConfig {
         applicationId "com.cleganeBowl2k18.trebuchet"
         minSdkVersion 15
@@ -31,7 +32,7 @@ android {
 
 ext {
     junitVersion = '4.12'
-    supportLibraryVersion = '25.3.1'
+    supportLibraryVersion = '26.1.0'
     retrofitVersion = "2.1.0"
     okHttpVersion = "3.5.0"
     daggerVersion = "2.11"
@@ -53,6 +54,7 @@ ext {
 
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android

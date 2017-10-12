@@ -10,4 +10,6 @@
     <dimen name="separator_height">2dp</dimen>
     <dimen name="separator_margin">5dp</dimen>
     <dimen name="zero">0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
 </resources>
