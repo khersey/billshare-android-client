@@ -1,5 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
+import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
 import io.reactivex.Observable
 import retrofit2.http.Body
@@ -27,4 +28,7 @@ interface UserStoreService {
 
     @GET("user/{userId}")
     fun getUser(userId: Long): Observable<User>
+
+    @GET("user/{userId}/groups")
+    fun getUserGroups(userId: Long): Observable<List<Group>>
 }
