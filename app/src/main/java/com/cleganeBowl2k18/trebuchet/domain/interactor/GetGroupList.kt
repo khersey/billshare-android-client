@@ -16,6 +16,7 @@ class GetGroupList @Inject constructor(private val mRepository: GroupRepository,
         UseCase<List<Group>, Void>(threadExecutor, postExecutionThread) {
 
     override fun buildUseCaseObservable(params: Void?): Observable<List<Group>> {
-        return mRepository.groupsAvailable()
+        return mRepository.fakeGroupsAvailable()
+        // return mRepository.groupsAvailable()
     }
 }

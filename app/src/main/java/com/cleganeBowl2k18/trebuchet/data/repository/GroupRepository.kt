@@ -12,6 +12,10 @@ class GroupRepository(private val groupService: GroupService) {
 
     fun groupsAvailable(): Observable<List<Group>> = groupService.allGroups
 
+    fun fakeGroupsAvailable(): Observable<List<Group>> {
+
+    }
+
     fun createGroup(group: Group): Observable<Group> = groupService.createGroup(group)
 
     fun updateGroup(group: Group): Observable<Group> = groupService.updateGroup(group)

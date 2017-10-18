@@ -10,9 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.dummy.DummyContent
-import com.cleganeBowl2k18.trebuchet.dummy.DummyContent.DummyItem
+import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
+import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.GroupPresenter
+import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
+import javax.inject.Inject
 
 /**
  * A fragment representing a list of Items.
@@ -25,10 +27,16 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class GroupFragment : Fragment() {
+class GroupFragment : Fragment(), GroupView {
+
+    @Inject
+    lateinit var mPresenter: GroupPresenter
+
     // TODO: Customize parameters
     private var mColumnCount = 1
     private var mListener: OnListFragmentInteractionListener? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +58,7 @@ class GroupFragment : Fragment() {
             } else {
                 view.layoutManager = GridLayoutManager(context, mColumnCount)
             }
-            view.adapter = GroupListAdapter(DummyContent.ITEMS, mListener)
+            view.adapter = GroupListAdapter(mPresenter.getGroupList(), mListener)
         }
         return view
     }
@@ -81,7 +89,7 @@ class GroupFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem)
+        fun onListFragmentInteraction(group: Group)
     }
 
     companion object {
