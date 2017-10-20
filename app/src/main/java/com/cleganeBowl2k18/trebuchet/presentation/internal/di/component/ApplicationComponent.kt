@@ -2,7 +2,8 @@ package com.cleganeBowl2k18.trebuchet.presentation.internal.di.component
 
 import android.app.Application
 import android.content.Context
-import com.cleganeBowl2k18.trebuchet.data.repository.PetRepository
+import com.cleganeBowl2k18.trebuchet.data.repository.GroupRepository
+import com.cleganeBowl2k18.trebuchet.data.repository.UserRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.module.ApplicationModule
@@ -23,5 +24,9 @@ interface ApplicationComponent {
 
     fun postExecutionThread(): PostExecutionThread
 
-    fun userRepository(): PetRepository
+    fun groupRepository(): GroupRepository
+
+    fun userRepository(): UserRepository
+
+
 }

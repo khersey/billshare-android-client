@@ -4,7 +4,7 @@ interface Constants {
 
     interface Api {
         companion object {
-            val BASE_API_URL = "http://petstore.swagger.io/v2/"
+            val BASE_API_URL = "http://billshare.io:3000/"
         }
     }
 

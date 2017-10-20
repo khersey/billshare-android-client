@@ -9,13 +9,18 @@ class User {
 
     @SerializedName("id")
     var email: String? = null
-    var externalId: Long = 0
+    var fName: String? = null
+    var lName: String? = null
+    var id: Long = 0
 
     constructor()
 
-    constructor(email: String?, externalId: Long) {
+    constructor(id: Long, email: String?, fName: String?, lName: String? ) {
+        this.id = id
         this.email = email
-        this.externalId = externalId
+        this.fName = fName
+        this.lName = lName
+
     }
 
 }

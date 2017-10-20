@@ -21,7 +21,7 @@ class BillShareApp : Application() {
     }
 
     private fun initializeInjector() {
-        this.mApplicationComponent = DaggerApplicationComponent
+        mApplicationComponent = DaggerApplicationComponent
                 .builder()
                 .applicationModule(ApplicationModule(this))
                 .repositoryModule(RepositoryModule())
