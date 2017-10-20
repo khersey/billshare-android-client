@@ -11,12 +11,12 @@ class User {
     var email: String? = null
     var fName: String? = null
     var lName: String? = null
-    var externalId: Long = 0
+    var id: Long = 0
 
     constructor()
 
-    constructor(externalId: Long, email: String?, fName: String?, lName: String? ) {
-        this.externalId = externalId
+    constructor(id: Long, email: String?, fName: String?, lName: String? ) {
+        this.id = id
         this.email = email
         this.fName = fName
         this.lName = lName

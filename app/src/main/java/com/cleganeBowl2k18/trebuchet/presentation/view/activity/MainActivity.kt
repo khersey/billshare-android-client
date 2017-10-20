@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v7.app.AppCompatActivity
 import android.view.*
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
+import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.SectionsPagerAdapter
+import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
@@ -18,7 +18,10 @@ fun Context.MainIntent(): Intent {
     return Intent(this, MainActivity::class.java)
 }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener {
+    override fun onGroupSelected(position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -38,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
+        mSectionsPagerAdapter?.addFragment(PlaceholderFragment.newInstance(1), "Dashbaord")
+        mSectionsPagerAdapter?.addFragment(GroupFragment.newInstance(1), "Groups")
+        mSectionsPagerAdapter?.addFragment(PlaceholderFragment.newInstance(3), "Dashbaord")
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter
@@ -72,23 +78,8 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
-    /**
-     * A [FragmentPagerAdapter] that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
-        override fun getItem(position: Int): Fragment {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1)
-        }
-
-        override fun getCount(): Int {
-            // Show 3 total pages.
-            return 3
-        }
+    fun OnListFragmentInteractionListener() {
+        //nothing
     }
 
     /**

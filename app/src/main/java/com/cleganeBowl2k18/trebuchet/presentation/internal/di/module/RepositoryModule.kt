@@ -1,7 +1,11 @@
 package com.cleganeBowl2k18.trebuchet.presentation.internal.di.module
 
+import com.cleganeBowl2k18.trebuchet.data.network.GroupService
 import com.cleganeBowl2k18.trebuchet.data.network.PetStoreService
+import com.cleganeBowl2k18.trebuchet.data.network.UserStoreService
+import com.cleganeBowl2k18.trebuchet.data.repository.GroupRepository
 import com.cleganeBowl2k18.trebuchet.data.repository.PetRepository
+import com.cleganeBowl2k18.trebuchet.data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -13,5 +17,17 @@ class RepositoryModule {
     @Singleton
     internal fun providePetRepository(service: PetStoreService): PetRepository {
         return PetRepository(service)
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideGroupRepository(service: GroupService): GroupRepository {
+        return GroupRepository(service)
+    }
+
+    @Provides
+    @Singleton
+    internal fun providesUserRepository(service: UserStoreService) : UserRepository {
+        return UserRepository(service)
     }
 }

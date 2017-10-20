@@ -1,12 +1,14 @@
 package com.cleganeBowl2k18.trebuchet.presentation.internal.di.module
 
 import android.app.Application
+import com.cleganeBowl2k18.trebuchet.BuildConfig
+import com.cleganeBowl2k18.trebuchet.data.network.GroupService
+import com.cleganeBowl2k18.trebuchet.data.network.PetStoreService
+import com.cleganeBowl2k18.trebuchet.data.network.UserStoreService
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import com.cleganeBowl2k18.trebuchet.BuildConfig
-import com.cleganeBowl2k18.trebuchet.data.network.PetStoreService
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -68,5 +70,17 @@ class NetworkModule(private val mBaseApiUrl: String) {
     @Singleton
     internal fun providePetStoreService(retrofit: Retrofit): PetStoreService {
         return retrofit.create<PetStoreService>(PetStoreService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideUserStoreService(retrofit: Retrofit) : UserStoreService {
+        return retrofit.create<UserStoreService>(UserStoreService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun providesGroupService(retrofit: Retrofit) : GroupService {
+        return retrofit.create<GroupService>(GroupService::class.java)
     }
 }

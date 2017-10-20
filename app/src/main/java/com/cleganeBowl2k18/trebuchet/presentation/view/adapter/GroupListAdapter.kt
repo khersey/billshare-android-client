@@ -1,5 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.adapter
 
+import android.graphics.Canvas
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -11,10 +12,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.R.id.content
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
-
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment.OnListFragmentInteractionListener
 
 
@@ -24,25 +23,36 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment.On
  * TODO: Replace the implementation with code for your data type.
  */
 class GroupListAdapter(private val mGroups: MutableList<Group>,
-                       private val mListener: OnListFragmentInteractionListener?) :
+                       private val mOnGroupItemClickListener: GroupListAdapter.OnGroupItemClickListener) :
         RecyclerView.Adapter<GroupListAdapter.GroupViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    interface OnGroupItemClickListener {
+        fun onGroupItemClick(group: Group)
+
+        fun onEditGroupItemClick(group: Group)
+    }
+
+    var groups: List<Group>
+        get() = mGroups
+        set(groups) {
+            this.mGroups.clear()
+            this.mGroups.addAll(groups)
+            notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_group, parent, false)
-        return ViewHolder(view)
+        return GroupViewHolder(view)
     }
 
     lateinit private var mRecyclerView: RecyclerView
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mGroup = mGroups[position]
-        holder.mIdView.text = mGroups[position].name
-        holder.mContentView.text = mGroups[position].getUsersAsStr()
+    override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
+        val groupName = mGroups[position].name
+        val groupUsers = mGroups[position].users
 
-        holder.mView.setOnClickListener {
-            mListener?.onListFragmentInteraction(holder.mGroup)
-        }
+        holder.bindData(groupName!!, groupUsers!!)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -72,36 +82,56 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
         fun bindData(groupName: String, groupUsers: List<User>) {
             mNameTV.text = groupName
 
-            var content = ""
+            var content = "No Members"
             if (groupUsers != null && groupUsers?.size != 0) {
                 content = "Members: "
-                groupUsers?.forEach{ user -> content += "${user.fName}, "}
-                content.substringBeforeLast(',')
-            } else {
-                content
+                groupUsers?.forEach{
+                    user -> content += "${user.fName}, "
+                }
+                content = content.substringBeforeLast(',')
             }
             mUsersTV.text = content
         }
 
         @OnClick(R.id.group_card_view)
         fun onCardClicked() {
-            mOnPetItemClickListener.onPetItemClick(mGroups[adapterPosition])
+            mOnGroupItemClickListener.onGroupItemClick(mGroups[adapterPosition])
         }
     }
 
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView
-        val mContentView: TextView
-        var mGroup: Group? = null
+    private inner class AdapterItemTouchHelperCallback(dragDirs: Int, swipeDirs: Int) :
+            ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
 
-        init {
-            mIdView = mView.findViewById<View>(R.id.group_card_name) as TextView
-            mContentView = mView.findViewById<View>(R.id.group_card_content) as TextView
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder): Boolean {
+            return false
         }
 
-        override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            // onGroupRemoved(viewHolder)
+        }
+
+        override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
+            ItemTouchHelper.Callback.getDefaultUIUtil().clearView((viewHolder as GroupListAdapter.GroupViewHolder).mCardView)
+        }
+
+        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+            if (viewHolder != null) {
+                ItemTouchHelper.Callback.getDefaultUIUtil().onSelected((viewHolder as GroupListAdapter.GroupViewHolder).mCardView)
+            }
+        }
+
+        override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                                 dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+            ItemTouchHelper.Callback.getDefaultUIUtil().onDraw(c, recyclerView,
+                    (viewHolder as GroupListAdapter.GroupViewHolder).mCardView, dX, dY, actionState, isCurrentlyActive)
+        }
+
+        override fun onChildDrawOver(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                                     dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+            ItemTouchHelper.Callback.getDefaultUIUtil().onDrawOver(c, recyclerView,
+                    (viewHolder as GroupListAdapter.GroupViewHolder).mCardView, dX, dY, actionState, isCurrentlyActive)
         }
     }
 }

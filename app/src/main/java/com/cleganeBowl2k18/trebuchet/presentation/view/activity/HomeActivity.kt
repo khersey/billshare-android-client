@@ -19,7 +19,6 @@ import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Pet
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
-import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.PetsListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.HomePresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.HomeView
@@ -79,10 +78,10 @@ class HomeActivity : BaseActivity(), HomeView, PetsListAdapter.OnPetItemClickLis
         setContentView(R.layout.activity_home)
         ButterKnife.bind(this)
 
-        DaggerActivityComponent.builder()
-                .applicationComponent(mApplicationComponent)
-                .build()
-                .inject(this)
+//        DaggerActivityComponent.builder()
+//                .applicationComponent(mApplicationComponent)
+//                .build()
+//                .inject(this)
 
         mPresenter.setView(this)
         setSupportActionBar(mToolbar)

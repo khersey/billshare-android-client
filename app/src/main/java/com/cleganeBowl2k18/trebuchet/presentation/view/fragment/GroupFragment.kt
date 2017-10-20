@@ -2,18 +2,25 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
+import android.support.v4.widget.ContentLoadingProgressBar
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
+import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
+import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.GroupPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -27,14 +34,63 @@ import javax.inject.Inject
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class GroupFragment : Fragment(), GroupView {
+class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemClickListener {
+
+    interface OnGroupSelectedListener {
+        fun onGroupSelected(position: Int)
+    }
+
+    override fun showProgress() {
+        mGroupListEmptyView.visibility = View.GONE
+        mGroupListRV.visibility = View.GONE
+        mProgressBar.show()
+    }
+
+    override fun hideProgress() {
+        mGroupListEmptyView.visibility = View.VISIBLE
+        mGroupListRV.visibility = View.VISIBLE
+        mProgressBar.hide()
+    }
+
+    override fun showError(message: String) {
+
+    }
+
+    val VERTICAL_SPACING: Int = 30
+
+    // REPLACE WITH GROUP EMPTY LIST
+    @BindView(R.id.group_list)
+    lateinit var mGroupListRV: RecyclerView
+
+    @BindView(R.id.empty_group_list)
+    lateinit var mGroupListEmptyView: TextView
+
+    @BindView(R.id.progressbar)
+    lateinit var mProgressBar: ContentLoadingProgressBar
 
     @Inject
     lateinit var mPresenter: GroupPresenter
 
+    lateinit var mGroupListAdapter: GroupListAdapter
+
+    private val mAdapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+
+        override fun onChanged() {
+            onGroupListChanged()
+        }
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            onGroupListChanged()
+        }
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            onGroupListChanged()
+        }
+    }
+
     // TODO: Customize parameters
     private var mColumnCount = 1
-    private var mListener: OnListFragmentInteractionListener? = null
+    private var mListener: OnGroupSelectedListener? = null
 
 
 
@@ -44,37 +100,88 @@ class GroupFragment : Fragment(), GroupView {
         if (arguments != null) {
             mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_group_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            val context = view.getContext()
-            if (mColumnCount <= 1) {
-                view.layoutManager = LinearLayoutManager(context)
-            } else {
-                view.layoutManager = GridLayoutManager(context, mColumnCount)
-            }
-            view.adapter = GroupListAdapter(mPresenter.getGroupList(), mListener)
-        }
+        ButterKnife.bind(this, view)
+
+        setupRecyclerView()
+
         return view
+    }
+
+    override fun onGroupItemClick(group: Group) {
+        //TODO: do something
+    }
+
+    override fun onEditGroupItemClick(group: Group) {
+        //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showGroups(groups: List<Group>) {
+        mGroupListAdapter.groups = groups
+    }
+
+    override fun showGroups() {
+        mGroupListAdapter.notifyDataSetChanged()
+    }
+
+    private fun setupRecyclerView() {
+        mGroupListAdapter = GroupListAdapter(ArrayList<Group>(0), this)
+
+        mGroupListRV.itemAnimator = DefaultItemAnimator()
+        mGroupListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
+        mGroupListRV.layoutManager = LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        mGroupListRV.setHasFixedSize(true)
+        mGroupListRV.adapter = mGroupListAdapter
+
+        mGroupListAdapter.registerAdapterDataObserver(mAdapterDataObserver)
+    }
+
+    private fun onGroupListChanged() {
+        if (mGroupListAdapter.itemCount == 0) {
+            showEmptyView()
+        } else {
+            showListView()
+        }
+    }
+
+    fun showEmptyView() {
+        mGroupListEmptyView.visibility = View.VISIBLE
+        mGroupListRV.visibility = View.GONE
+    }
+
+    fun showListView() {
+        mGroupListEmptyView.visibility = View.GONE
+        mGroupListRV.visibility = View.VISIBLE
     }
 
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
+        if (context is OnGroupSelectedListener) {
             mListener = context
         } else {
-            throw RuntimeException(context!!.toString() + " must implement OnListFragmentInteractionListener")
+            throw RuntimeException(context!!.toString() + " must implement OnGroupSelectedListener")
         }
+
+        DaggerActivityComponent.builder()
+                .applicationComponent(mApplicationComponent)
+                .build()
+                .inject(this)
+
+        mPresenter.setView(this)
+        mPresenter.fetchGroups()
     }
 
     override fun onDetach() {
         super.onDetach()
+        mPresenter.onDestroy()
+        mGroupListAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
         mListener = null
     }
 

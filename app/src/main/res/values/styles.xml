@@ -79,4 +79,5 @@
         <item name="android:layout_width">@dimen/content_loading_progressbar_size</item>
         <item name="android:layout_height">@dimen/content_loading_progressbar_size</item>
     </style>
+
 </resources>

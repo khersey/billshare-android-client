@@ -23,10 +23,7 @@
             android:text="@string/empty_pets_list"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-        <android.support.v4.widget.ContentLoadingProgressBar
-            android:id="@+id/progressbar"
-            style="@style/Base.ProgressBar"
-            android:layout_gravity="center"/>
+
     </FrameLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>
