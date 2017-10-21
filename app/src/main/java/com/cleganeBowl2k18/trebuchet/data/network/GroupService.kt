@@ -6,7 +6,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 /**
- * Created by khersey on 2017-10-15.
+ * Interface for accessing the Groups API
  */
 interface GroupService {
     @get:GET("group/all")

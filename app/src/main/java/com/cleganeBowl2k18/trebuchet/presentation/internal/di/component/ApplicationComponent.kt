@@ -3,6 +3,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.internal.di.component
 import android.app.Application
 import android.content.Context
 import com.cleganeBowl2k18.trebuchet.data.repository.GroupRepository
+import com.cleganeBowl2k18.trebuchet.data.repository.TransactionRepository
 import com.cleganeBowl2k18.trebuchet.data.repository.UserRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor
@@ -27,6 +28,8 @@ interface ApplicationComponent {
     fun groupRepository(): GroupRepository
 
     fun userRepository(): UserRepository
+
+    fun transactionRepository(): TransactionRepository
 
 
 }

@@ -1,7 +1,8 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 /**
- * Created by khersey on 2017-10-18.
+ * MainActivity Presenter
  */
 class MainPresenter {
+    // TODO: Move Presenter Logic out of MainActivity and into this Presenter
 }

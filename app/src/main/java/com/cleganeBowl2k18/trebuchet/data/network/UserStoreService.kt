@@ -9,7 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
- * Created by khersey on 2017-10-06.
+ * Interface for accessing the User API
  */
 
 interface UserStoreService {

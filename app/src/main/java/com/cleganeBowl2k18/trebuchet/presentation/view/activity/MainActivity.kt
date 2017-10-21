@@ -11,6 +11,7 @@ import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.SectionsPagerAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
+import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
@@ -18,9 +19,14 @@ fun Context.MainIntent(): Intent {
     return Intent(this, MainActivity::class.java)
 }
 
-class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener {
+class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, TransactionFragment.OnTransactionSelectedListener {
+
+    override fun onTransactionSelected(position: Int) {
+        //TODO: go to detailed transaction view
+    }
+
     override fun onGroupSelected(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO: go to detailed group view
     }
 
     /**
@@ -43,7 +49,7 @@ class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener {
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
         mSectionsPagerAdapter?.addFragment(PlaceholderFragment.newInstance(1), "Dashbaord")
         mSectionsPagerAdapter?.addFragment(GroupFragment.newInstance(1), "Groups")
-        mSectionsPagerAdapter?.addFragment(PlaceholderFragment.newInstance(3), "Dashbaord")
+        mSectionsPagerAdapter?.addFragment(TransactionFragment.newInstance(1), "Transactions")
 
         // Set up the ViewPager with the sections adapter.
         container.adapter = mSectionsPagerAdapter

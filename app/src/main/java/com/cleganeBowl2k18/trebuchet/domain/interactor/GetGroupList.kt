@@ -8,13 +8,14 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 /**
- * Created by khersey on 2017-10-15.
+ * Use that fetches all groups a User is a part of
  */
 class GetGroupList @Inject constructor(private val mRepository: GroupRepository,
                                        threadExecutor: ThreadExecutor,
                                        postExecutionThread: PostExecutionThread) :
         UseCase<List<Group>, Void>(threadExecutor, postExecutionThread) {
 
+    // TODO: make this fetch by User.id
     override fun buildUseCaseObservable(params: Void?): Observable<List<Group>> {
         return mRepository.fakeGroupsAvailable()
         // return mRepository.groupsAvailable()

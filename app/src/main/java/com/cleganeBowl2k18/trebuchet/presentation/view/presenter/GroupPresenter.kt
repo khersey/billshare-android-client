@@ -11,7 +11,7 @@ import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
 /**
- * Created by khersey on 2017-10-18.
+ * GroupFragment Presenter
  */
 @PerActivity
 class GroupPresenter @Inject constructor(private val mGetGroupList: GetGroupList) :

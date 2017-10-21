@@ -40,22 +40,6 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         fun onGroupSelected(position: Int)
     }
 
-    override fun showProgress() {
-        mGroupListEmptyView.visibility = View.GONE
-        mGroupListRV.visibility = View.GONE
-        mProgressBar.show()
-    }
-
-    override fun hideProgress() {
-        mGroupListEmptyView.visibility = View.VISIBLE
-        mGroupListRV.visibility = View.VISIBLE
-        mProgressBar.hide()
-    }
-
-    override fun showError(message: String) {
-
-    }
-
     val VERTICAL_SPACING: Int = 30
 
     // REPLACE WITH GROUP EMPTY LIST
@@ -65,7 +49,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
     @BindView(R.id.empty_group_list)
     lateinit var mGroupListEmptyView: TextView
 
-    @BindView(R.id.progressbar)
+    @BindView(R.id.progressbar_group)
     lateinit var mProgressBar: ContentLoadingProgressBar
 
     @Inject
@@ -88,11 +72,8 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         }
     }
 
-    // TODO: Customize parameters
     private var mColumnCount = 1
     private var mListener: OnGroupSelectedListener? = null
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,6 +109,22 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
 
     override fun showGroups() {
         mGroupListAdapter.notifyDataSetChanged()
+    }
+
+    override fun showProgress() {
+        mGroupListEmptyView.visibility = View.GONE
+        mGroupListRV.visibility = View.GONE
+        mProgressBar.show()
+    }
+
+    override fun hideProgress() {
+        mGroupListEmptyView.visibility = View.VISIBLE
+        mGroupListRV.visibility = View.VISIBLE
+        mProgressBar.hide()
+    }
+
+    override fun showError(message: String) {
+
     }
 
     private fun setupRecyclerView() {

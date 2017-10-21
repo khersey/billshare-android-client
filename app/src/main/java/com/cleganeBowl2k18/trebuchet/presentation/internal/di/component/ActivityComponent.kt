@@ -5,6 +5,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.LoginActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.MainActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
+import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragment
 import dagger.Component
 
 @PerActivity
@@ -14,8 +15,9 @@ interface ActivityComponent {
 
     fun inject(fragment: GroupFragment)
 
+    fun inject(fragment: TransactionFragment)
+
     fun inject(activity: MainActivity)
 
     fun inject(activity: LoginActivity)
-
 }
