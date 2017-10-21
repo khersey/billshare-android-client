@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import retrofit2.Response
 
 /**
- * Created by khersey on 2017-10-15.
+ * Facilitates Group API calls
  */
 class GroupRepository(private val groupService: GroupService) {
 

@@ -3,7 +3,7 @@ package com.cleganeBowl2k18.trebuchet.data.entity
 import com.google.gson.annotations.SerializedName
 
 /**
- * Created by khersey on 2017-10-06.
+ * User Model
  */
 class User {
 

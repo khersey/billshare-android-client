@@ -4,7 +4,7 @@ import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
 
 /**
- * Created by khersey on 2017-10-18.
+ * Generates Group objects and their dependencies
  */
 class FakeGroupFactory {
     var userFactory: FakeUserFactory = FakeUserFactory()

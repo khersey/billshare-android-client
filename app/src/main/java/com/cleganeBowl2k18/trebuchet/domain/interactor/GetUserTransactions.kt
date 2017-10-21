@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 /**
- * Created by khersey on 2017-10-20.
+ * UseCase that takes a userId and returns all of that User's Transactions
  */
 class GetUserTransactions @Inject constructor(private val mRepository: TransactionRepository,
                                               threadExecutor: ThreadExecutor,

@@ -3,7 +3,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.view
 import com.cleganeBowl2k18.trebuchet.data.entity.User
 
 /**
- * Created by khersey on 2017-10-18.
+ * Generates fake User objects
  */
 class FakeUserFactory {
     var id: Long = 0

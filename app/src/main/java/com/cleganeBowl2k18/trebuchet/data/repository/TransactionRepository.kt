@@ -6,7 +6,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.FakeTransactionFactory
 import io.reactivex.Observable
 
 /**
- * Created by khersey on 2017-10-20.
+ * Facilitates Transaction API calls
  */
 class TransactionRepository(private val transactionService: TransactionService) {
 

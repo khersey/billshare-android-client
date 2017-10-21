@@ -5,7 +5,7 @@ import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
 import com.cleganeBowl2k18.trebuchet.data.entity.User
 
 /**
- * Created by khersey on 2017-10-21.
+ * Generates fake Transaction objects and their dependencies
  */
 class FakeTransactionFactory {
 

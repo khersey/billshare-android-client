@@ -11,7 +11,7 @@ import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
 /**
- * Created by khersey on 2017-10-20.
+ * TransactionFragment Presenter
  */
 @PerActivity
 class TransactionPresenter @Inject constructor(private val mGetTransactionList: GetUserTransactions) :

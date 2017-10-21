@@ -4,7 +4,7 @@ import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.ProgressView
 
 /**
- * Created by khersey on 2017-10-18.
+ * View interface for GroupFragment
  */
 interface GroupView: ProgressView {
 
