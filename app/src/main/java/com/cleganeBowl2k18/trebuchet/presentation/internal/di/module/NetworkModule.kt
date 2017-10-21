@@ -4,6 +4,7 @@ import android.app.Application
 import com.cleganeBowl2k18.trebuchet.BuildConfig
 import com.cleganeBowl2k18.trebuchet.data.network.GroupService
 import com.cleganeBowl2k18.trebuchet.data.network.PetStoreService
+import com.cleganeBowl2k18.trebuchet.data.network.TransactionService
 import com.cleganeBowl2k18.trebuchet.data.network.UserStoreService
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -82,5 +83,11 @@ class NetworkModule(private val mBaseApiUrl: String) {
     @Singleton
     internal fun providesGroupService(retrofit: Retrofit) : GroupService {
         return retrofit.create<GroupService>(GroupService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun providesTransactionService(retrofit: Retrofit): TransactionService {
+        return retrofit.create<TransactionService>(TransactionService::class.java)
     }
 }

@@ -39,4 +39,5 @@
     <string name="tab_transactions">Transaction</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="empty_group_list">Create a New Group to get Started</string>
+    <string name="empty_transaction_list">Create a new Transaction to get Started!</string>
 </resources>

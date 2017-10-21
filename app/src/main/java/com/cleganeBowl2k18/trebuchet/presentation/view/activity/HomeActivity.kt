@@ -39,7 +39,7 @@ class HomeActivity : BaseActivity(), HomeView, PetsListAdapter.OnPetItemClickLis
     @BindView(R.id.pets_list)
     lateinit var mPetsListRV: RecyclerView
 
-    @BindView(R.id.progressbar)
+    @BindView(R.id.progressbar_group)
     lateinit var mProgressBar: ContentLoadingProgressBar
 
     @BindView(R.id.empty_pets_list)

@@ -26,6 +26,8 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
                        private val mOnGroupItemClickListener: GroupListAdapter.OnGroupItemClickListener) :
         RecyclerView.Adapter<GroupListAdapter.GroupViewHolder>() {
 
+    lateinit private var mRecyclerView: RecyclerView
+
     interface OnGroupItemClickListener {
         fun onGroupItemClick(group: Group)
 
@@ -46,7 +48,7 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
         return GroupViewHolder(view)
     }
 
-    lateinit private var mRecyclerView: RecyclerView
+
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val groupName = mGroups[position].name
