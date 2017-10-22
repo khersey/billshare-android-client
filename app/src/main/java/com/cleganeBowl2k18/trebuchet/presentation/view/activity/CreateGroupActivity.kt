@@ -109,7 +109,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         mCreateGroupAdapter.registerAdapterDataObserver(mAdapterDataObserver)
     }
 
-    @OnClick(R.id.save_group_fab)
+    @OnClick(R.id.save_new_group)
     fun onSaveGroupClicked() {
         // TODO: add form validation
         val groupLabel : String? = mGroupLabelInput.text.toString()

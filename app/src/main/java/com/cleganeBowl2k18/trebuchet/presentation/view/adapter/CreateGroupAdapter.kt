@@ -62,39 +62,33 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         // might be off by one
-        when (holder) {
-            is CreateGroupAdapter.AddUserViewHolder -> setHasLoadButton(true)
-            is CreateGroupAdapter.UserViewHolder -> {
-                    if (hasLoadButton) {
-                    setHasLoadButton(false)
-                }
-                var title = mUsers[position].email
-                var content = "invite sent"
-
-                if (mUsers[position].fName != null && mUsers[position].lName != null ) {
-                    title = "${mUsers[position].fName} ${mUsers[position].lName}"
-                    content = mUsers[position].email!!
-                }
-
-                holder.bindData(title!!, content!!)
-            }
-        }
-//        if (position >= itemCount) {
-//            setHasLoadButton(true)
-//        } else {
-//            if (hasLoadButton) {
-//                setHasLoadButton(false)
-//            }
-//            var title = mUsers[position].email
-//            var content = "invite sent"
+//        when (holder) {
+//            is CreateGroupAdapter.UserViewHolder -> {
+//                var title = mUsers[position].email
+//                var content = "invite sent"
 //
-//            if (mUsers[position].fName != null && mUsers[position].lName != null ) {
-//                title = "${mUsers[position].fName} ${mUsers[position].lName}"
-//                content = mUsers[position].email!!
-//            }
+//                if (mUsers[position].fName != null && mUsers[position].lName != null ) {
+//                    title = "${mUsers[position].fName} ${mUsers[position].lName}"
+//                    content = mUsers[position].email!!
+//                }
 //
-//            holder.bindData(title!!, content!!)
+//                holder.bindData(title!!, content!!)
+//            }
 //        }
+        if (position == itemCount-1) {
+
+        } else if (holder is CreateGroupAdapter.UserViewHolder) {
+
+            var title = mUsers[position].email
+            var content = "invite sent"
+
+            if (mUsers[position].fName != null && mUsers[position].lName != null ) {
+                title = "${mUsers[position].fName} ${mUsers[position].lName}"
+                content = mUsers[position].email!!
+            }
+
+            holder.bindData(title!!, content!!)
+        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -114,9 +108,9 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
 
     override fun getItemViewType(position: Int) : Int {
         // if statements are so last century
-        when (position < itemCount) {
-            true -> return USER_CARD
-            false -> return ADD_USER_BUTTON
+        when (position == itemCount-1) {
+            false -> return USER_CARD
+            true -> return ADD_USER_BUTTON
         }
     }
 

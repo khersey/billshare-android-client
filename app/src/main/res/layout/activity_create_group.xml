@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupActivity">
 
-    <android.support.design.widget.AppBarLayout
-        style="@style/Base.ContainerFullWidth"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Base.Toolbar"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        style="@style/Base.Toolbar"
+        app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_weight="2"
+                android:text="@string/create_group"
                 android:textSize="@dimen/cardview_title"
-                android:text="@string/create_group"/>
+                android:textStyle="bold" />
 
-        </android.support.v7.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+            <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/save_new_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|end"
+                android:text="Save" />
+
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.Toolbar>
+
 
     <include layout="@layout/content_create_group"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/save_group_fab"
-        style="@style/Base.Wrapper.FullMargin"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_done_white"/>
-
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>
