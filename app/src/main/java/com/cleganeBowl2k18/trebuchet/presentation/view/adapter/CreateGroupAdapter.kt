@@ -14,10 +14,6 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.User
-import android.widget.Toast
-import android.R.attr.button
-
-
 
 /**
  * Created by khersey on 2017-10-21.
