@@ -11,14 +11,12 @@ class Group {
     var id: Long = 0
     var name: String? = null
     var users: List<User>? = null
-    var status: String? = null
 
     constructor()
 
-    constructor(id: Long, name: String?, status: String?, users: List<User>?) {
+    constructor(id: Long, name: String?, users: List<User>?) {
         this.id = id
         this.name = name
-        this.status = status
         this.users = users
     }
 

@@ -30,4 +30,10 @@
 
     <include layout="@layout/content_create_group"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/save_group_fab"
+        style="@style/Base.Wrapper.FullMargin"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@drawable/ic_done_white"/>
+
 </android.support.design.widget.CoordinatorLayout>

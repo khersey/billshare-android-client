@@ -15,6 +15,6 @@ class FakeGroupFactory {
     fun generateGroup(name : String, userNames: List<String>) : Group {
         var users : List<User> = userNames.map { uName -> userFactory.generateUser(uName) }
         id += 1
-        return Group(id-1, name, "available", users)
+        return Group(id-1, name, users)
     }
 }

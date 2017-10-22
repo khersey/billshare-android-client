@@ -12,11 +12,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.GroupPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
@@ -180,6 +182,11 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         mPresenter.onDestroy()
         mGroupListAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
         mListener = null
+    }
+
+    @OnClick(R.id.create_group_fab)
+    fun createNewGroup() {
+        startActivity(getActivity().CreateGroupIntent())
     }
 
     /**

@@ -256,7 +256,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000)
+                Thread.sleep(750)
             } catch (e: InterruptedException) {
                 return false
             }
