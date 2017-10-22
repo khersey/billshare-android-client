@@ -13,9 +13,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
-import android.R.attr.data
+import android.widget.Toast
+import android.R.attr.button
+
 
 
 /**
@@ -89,6 +90,8 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
                 title = "${mUsers[position].fName} ${mUsers[position].lName}"
                 content = mUsers[position].email!!
             }
+            var title = mUsers[position].email
+            var content = "invite sent"
 
             holder.bindData(title!!, content!!)
         }
