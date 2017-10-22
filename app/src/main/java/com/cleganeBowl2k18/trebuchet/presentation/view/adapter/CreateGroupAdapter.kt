@@ -86,8 +86,6 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
                 title = "${mUsers[position].fName} ${mUsers[position].lName}"
                 content = mUsers[position].email!!
             }
-            var title = mUsers[position].email
-            var content = "invite sent"
 
             holder.bindData(title!!, content!!)
         }
