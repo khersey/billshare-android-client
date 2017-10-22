@@ -81,7 +81,6 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_group)
