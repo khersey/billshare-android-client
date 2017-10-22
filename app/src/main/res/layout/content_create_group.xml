@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_group_name"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/group_label_text_input_layout"
+        style="@style/Base.ContainerFullWidth"
+        android:hint="@string/name"
+        android:layout_marginBottom="30dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/group_label_text_input"
+            style="@style/Base.ContainerFullWidth"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_group_members"/>
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:name="com.cleganeBowl2k18.trebuchet.ItemFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/card_group_tab"
+        android:id="@+id/create_group_recycle_view">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

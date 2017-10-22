@@ -41,4 +41,9 @@
     <string name="empty_group_list">Create a New Group to get Started</string>
     <string name="empty_transaction_list">Create a new Transaction to get Started!</string>
     <string name="logout">Log Our</string>
+    <string name="create_group">Create New Group</string>
+    <string name="create_group_name">Group Name</string>
+    <string name="billshare">BillShare</string>
+    <string name="create_group_members">Group Members</string>
+    <string name="create_group_add_user">+ Add Group Member</string>
 </resources>

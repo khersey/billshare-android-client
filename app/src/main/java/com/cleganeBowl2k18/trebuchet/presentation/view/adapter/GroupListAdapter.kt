@@ -44,7 +44,7 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_group, parent, false)
+                .inflate(R.layout.card_group_tab, parent, false)
         return GroupViewHolder(view)
     }
 

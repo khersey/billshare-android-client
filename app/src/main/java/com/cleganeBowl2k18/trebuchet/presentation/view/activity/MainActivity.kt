@@ -21,7 +21,9 @@ fun Context.MainIntent(): Intent {
     return Intent(this, MainActivity::class.java)
 }
 
-class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, TransactionFragment.OnTransactionSelectedListener {
+class MainActivity : BaseActivity(),
+        GroupFragment.OnGroupSelectedListener,
+        TransactionFragment.OnTransactionSelectedListener {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
