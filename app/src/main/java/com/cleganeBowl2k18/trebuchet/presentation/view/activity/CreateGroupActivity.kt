@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
@@ -57,7 +58,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
     }
 
     override fun onAddUserClick() {
-        // start AddUser
+
     }
 
 
@@ -76,6 +77,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
         // GET current user
         mPresenter.getUser(1)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
 
@@ -107,7 +109,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         mCreateGroupAdapter.registerAdapterDataObserver(mAdapterDataObserver)
     }
 
-
+    @OnClick(R.id.save_group_fab)
     fun onSaveGroupClicked() {
         // TODO: add form validation
         val groupLabel : String? = mGroupLabelInput.text.toString()

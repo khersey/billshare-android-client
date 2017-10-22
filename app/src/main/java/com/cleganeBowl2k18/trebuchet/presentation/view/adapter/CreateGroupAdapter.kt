@@ -14,10 +14,6 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.User
-import android.widget.Toast
-import android.R.attr.button
-
-
 
 
 /**
@@ -31,8 +27,8 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
     private var hasLoadButton : Boolean = true
 
     // CONSTANTS
-    private val TITLE : Int = 0
-    private val ADD_USER : Int = 1
+    private val USER_CARD: Int = 0
+    private val ADD_USER_BUTTON: Int = 1
 
     interface OnUserItemClickListener {
         fun onUserItemClick(user: User)
@@ -51,11 +47,11 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == ADD_USER) {
+        if (viewType == ADD_USER_BUTTON) {
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.card_add_user, parent, false)
             return AddUserViewHolder(view)
-        } else {
+        } else { // USER_CARD
             val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.card_create_group_user, parent, false)
             return UserViewHolder(view)
@@ -65,26 +61,40 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        if (position >= itemCount) {
-            setHasLoadButton(true)
-            @Bind(R.id.create_group_add_user)
-            holder.mAddUserBtn
+        // might be off by one
+        when (holder) {
+            is CreateGroupAdapter.AddUserViewHolder -> setHasLoadButton(true)
+            is CreateGroupAdapter.UserViewHolder -> {
+                    if (hasLoadButton) {
+                    setHasLoadButton(false)
+                }
+                var title = mUsers[position].email
+                var content = "invite sent"
 
-            holder.mAddUserBtn.setOnClickListener(View.OnClickListener { Toast.makeText(context, "Button Clicked", Toast.LENGTH_LONG).show() })
-        } else {
-            if (hasLoadButton) {
-                setHasLoadButton(false)
+                if (mUsers[position].fName != null && mUsers[position].lName != null ) {
+                    title = "${mUsers[position].fName} ${mUsers[position].lName}"
+                    content = mUsers[position].email!!
+                }
+
+                holder.bindData(title!!, content!!)
             }
-            var title = mUsers[position].email
-            var content = "invite sent"
-
-            if (mUsers[position].fName != null && mUsers[position].lName != null ) {
-                title = "${mUsers[position].fName} ${mUsers[position].lName}"
-                content = mUsers[position].email!!
-            }
-
-            holder.bindData(title!!, content!!)
         }
+//        if (position >= itemCount) {
+//            setHasLoadButton(true)
+//        } else {
+//            if (hasLoadButton) {
+//                setHasLoadButton(false)
+//            }
+//            var title = mUsers[position].email
+//            var content = "invite sent"
+//
+//            if (mUsers[position].fName != null && mUsers[position].lName != null ) {
+//                title = "${mUsers[position].fName} ${mUsers[position].lName}"
+//                content = mUsers[position].email!!
+//            }
+//
+//            holder.bindData(title!!, content!!)
+//        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -105,8 +115,8 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
     override fun getItemViewType(position: Int) : Int {
         // if statements are so last century
         when (position < itemCount) {
-            true -> return TITLE
-            false -> return ADD_USER
+            true -> return USER_CARD
+            false -> return ADD_USER_BUTTON
         }
     }
 
@@ -150,9 +160,9 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
         }
     }
 
-    private inner class AddUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AddUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        @BindView(R.id.add_user_card_view)
+        @BindView(R.id.card_view_add_user_btn)
         lateinit var mCardView: CardView
         @BindView(R.id.create_group_add_user)
         lateinit var mAddUserBtn: Button
@@ -180,25 +190,39 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
         }
 
         override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
-            ItemTouchHelper.Callback.getDefaultUIUtil().clearView((viewHolder as CreateGroupAdapter.UserViewHolder).mCardView)
+            when (viewHolder) {
+                is CreateGroupAdapter.UserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().clearView(viewHolder.mCardView)
+                is CreateGroupAdapter.AddUserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().clearView(viewHolder.mCardView)
+            }
         }
 
         override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
             if (viewHolder != null) {
-                ItemTouchHelper.Callback.getDefaultUIUtil().onSelected((viewHolder as CreateGroupAdapter.UserViewHolder).mCardView)
+                when (viewHolder) {
+                    is CreateGroupAdapter.UserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().onSelected(viewHolder.mCardView)
+                    is CreateGroupAdapter.AddUserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().onSelected(viewHolder.mCardView)
+                }
             }
         }
 
         override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
                                  dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-            ItemTouchHelper.Callback.getDefaultUIUtil().onDraw(c, recyclerView,
-                    (viewHolder as CreateGroupAdapter.UserViewHolder).mCardView, dX, dY, actionState, isCurrentlyActive)
+            when (viewHolder) {
+                is CreateGroupAdapter.UserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().onDraw(c, recyclerView,
+                        viewHolder.mCardView, dX, dY, actionState, isCurrentlyActive)
+                is CreateGroupAdapter.AddUserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().onDraw(c, recyclerView,
+                        viewHolder.mCardView, dX, dY, actionState, isCurrentlyActive)
+            }
         }
 
         override fun onChildDrawOver(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
                                      dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-            ItemTouchHelper.Callback.getDefaultUIUtil().onDrawOver(c, recyclerView,
-                    (viewHolder as CreateGroupAdapter.UserViewHolder).mCardView, dX, dY, actionState, isCurrentlyActive)
+            when (viewHolder) {
+                is CreateGroupAdapter.UserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().onDrawOver(c, recyclerView,
+                        viewHolder.mCardView, dX, dY, actionState, isCurrentlyActive)
+                is CreateGroupAdapter.AddUserViewHolder -> ItemTouchHelper.Callback.getDefaultUIUtil().onDrawOver(c, recyclerView,
+                        viewHolder.mCardView, dX, dY, actionState, isCurrentlyActive)
+            }
         }
     }
 }

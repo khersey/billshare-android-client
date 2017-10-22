@@ -23,7 +23,7 @@ interface GroupService {
     fun deleteGroup(@Path("groupId") groupId: Long): Observable<Response<Void>>
 
     @GET("group/{groupId}")
-    fun getGroup(groupId: Long): Observable<Group>
+    fun getGroup(@Path("groupId") groupId: Long): Observable<Group>
 
 
 }
