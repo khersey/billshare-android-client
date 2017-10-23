@@ -2,10 +2,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.internal.di.component
 
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.module.ActivityModule
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
-<<<<<<< HEAD
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.AddUserByEmailActivity
-=======
->>>>>>> trying two ViewHolders
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.LoginActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.MainActivity
