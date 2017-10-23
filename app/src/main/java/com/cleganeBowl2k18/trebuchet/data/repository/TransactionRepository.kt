@@ -10,8 +10,6 @@ import io.reactivex.Observable
  */
 class TransactionRepository(private val transactionService: TransactionService) {
 
-    fun allTransactionsForUser(userId: Long): Observable<List<Transaction>> = transactionService.getTransactionsByUser(userId)
-
     fun fakeAllTransactionsForUser(userId: Long): Observable<List<Transaction>> {
         var transactionFactory : FakeTransactionFactory = FakeTransactionFactory()
 

@@ -15,7 +15,7 @@ interface UserService {
 //    val petsAvailable: Observable<List<Pet>>
 
     @FormUrlEncoded
-    @POST("user")
+    @POST("user/")
     fun createUser(@Body user: User): Observable<User>
 
 //    @PUT("pet")
@@ -24,12 +24,12 @@ interface UserService {
 //    @DELETE("pet/{petId}")
 //    fun deletePet(@Path("petId") petId: Long): Observable<Response<Void>>
 
-    @GET("user/{id}")
+    @GET("user/{id}/")
     fun getUser( @Path("id") userId: Long): Observable<User>
 
-    @GET("user/{id}/groups")
+    @GET("user/{id}/groups/")
     fun getUserGroups( @Path("id") userId: Long): Observable<List<Group>>
 
-    @GET("user/{id}/transactions")
+    @GET("user/{id}/transactions/")
     fun getUserTransactions( @Path("id") userId: Long): Observable<List<Transaction>>
 }

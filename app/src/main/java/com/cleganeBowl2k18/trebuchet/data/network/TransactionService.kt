@@ -6,22 +6,14 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface TransactionService {
-    @GET("group/{groupId}/transaction")
-    fun getTransactionsByGroup(groupId: Long): Observable<List<Transaction>>
 
-    @GET("user/{userId}/transaction")
-    fun getTransactionsByUser(userId: Long): Observable<List<Transaction>>
-
-    @GET("transaction/{transactionId}")
-    fun getTransacion(transactionId: Long): Observable<Transaction>
-
-    @POST("transaction")
+    @POST("transaction/")
     fun createTransaction(@Body transaction: Transaction): Observable<Transaction>
 
-    @PUT("transaction")
+    @PUT("transaction/")
     fun updateTransaction(@Body transaction: Transaction): Observable<Transaction>
 
-    @DELETE("transaction/{transactionId}")
+    @DELETE("transaction/{transactionId}/")
     fun deleteTransaction(@Path("transactionId") transactionId: Long): Observable<Response<Void>>
 
 }
