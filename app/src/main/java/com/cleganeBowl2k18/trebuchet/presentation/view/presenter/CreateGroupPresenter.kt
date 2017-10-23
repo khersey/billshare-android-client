@@ -20,7 +20,7 @@ import javax.inject.Inject
 @PerActivity
 class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: CreateNewGroup,
                                                private val mGetUser: GetUser) :
-        Presenter(mCreateNewGroup) {
+        Presenter(mCreateNewGroup, mGetUser) {
 
     private var mCreateGroupView: CreateGroupView? = null
 

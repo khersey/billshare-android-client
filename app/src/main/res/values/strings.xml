@@ -49,4 +49,9 @@
     <string name="title_activity_add_user_by_email">AddUserByEmailActivity</string>
     <string name="add_user_by_email">Add User to Group</string>
     <string name="enter_user_email">Enter User\'s Email</string>
+    <string name="title_activity_create_transaction">CreateTransactionActivity</string>
+    <string name="create_transaction">Create New Transaction</string>
+    <string name="transaction_name">transaction name</string>
+    <string name="select_group">Select Group</string>
+    <string name="amount">$ Amount</string>
 </resources>

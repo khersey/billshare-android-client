@@ -41,6 +41,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupActivity" />
         </activity>
+        <activity
+            android:name=".presentation.view.activity.CreateTransactionActivity"
+            android:label="@string/title_activity_create_transaction"
+            android:parentActivityName=".presentation.view.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cleganeBowl2k18.trebuchet.presentation.view.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

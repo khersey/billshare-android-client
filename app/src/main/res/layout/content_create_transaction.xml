@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionActivity"
+    tools:showIn="@layout/activity_create_transaction">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/transaction_name"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_label_edit_text"
+        style="@style/Base.ContainerFullWidth"
+        android:hint="@string/name"
+        android:layout_marginBottom="30dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/label_edit_text"
+            style="@style/Base.ContainerFullWidth"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_group" />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_group_spinner" >
+
+    </Spinner>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/amount" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layout_amount_edit_text"
+            style="@style/Base.ContainerFullWidth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="70"
+            android:layout_marginRight="50dp"
+
+            android:hint="@string/amount">
+
+            <android.support.design.widget.EditText
+                android:id="@+id/amount_edit_text"
+                style="@style/Base.ContainerFullWidth"
+                android:inputType="numberDecimal" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/select_currency_code_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="30"
+            android:layout_height="wrap_content">
+
+        </Spinner>
+
+
+        <!-- TODO: add paid by -->
+
+        <!-- TODO: add split between -->
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

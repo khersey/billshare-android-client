@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
 import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
+import com.cleganeBowl2k18.trebuchet.data.entity.TransactionCreator
 import com.cleganeBowl2k18.trebuchet.data.network.TransactionService
 import com.cleganeBowl2k18.trebuchet.presentation.view.FakeTransactionFactory
 import io.reactivex.Observable
@@ -21,5 +22,7 @@ class TransactionRepository(private val transactionService: TransactionService) 
         var transactionList : List<Transaction> = listOf(transaction1, transaction2, transaction3, transaction4)
         return Observable.just(transactionList)
     }
+
+    fun createTransaction(transaction: TransactionCreator): Observable<Transaction> = transactionService.createTransaction(transaction)
 
 }

@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
 import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
+import com.cleganeBowl2k18.trebuchet.data.entity.TransactionCreator
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.*
@@ -8,7 +9,7 @@ import retrofit2.http.*
 interface TransactionService {
 
     @POST("transaction/")
-    fun createTransaction(@Body transaction: Transaction): Observable<Transaction>
+    fun createTransaction(@Body transaction: TransactionCreator): Observable<Transaction>
 
     @PUT("transaction/")
     fun updateTransaction(@Body transaction: Transaction): Observable<Transaction>

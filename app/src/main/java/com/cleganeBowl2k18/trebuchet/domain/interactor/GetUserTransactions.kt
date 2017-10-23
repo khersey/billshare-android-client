@@ -18,7 +18,6 @@ class GetUserTransactions @Inject constructor(private val mRepository: UserRepos
         UseCase<List<Transaction>, Long>(threadExecutor, postExecutionThread) {
 
     override fun buildUseCaseObservable(params: Long?): Observable<List<Transaction>> {
-        // return mRepository.allTransactionsForUser(params!!)
         return mRepository.getTransactionsByUserId(params!!)
     }
 
