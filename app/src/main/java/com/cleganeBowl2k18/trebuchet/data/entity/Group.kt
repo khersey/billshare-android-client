@@ -10,6 +10,7 @@ class Group {
     @SerializedName("id")
     var id: Long = 0
     var label: String? = null
+    @SerializedName("group_users")
     var users: List<User>? = null
 
     constructor()
