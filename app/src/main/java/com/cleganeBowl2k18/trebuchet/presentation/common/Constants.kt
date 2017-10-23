@@ -1,5 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.presentation.common
 
+import android.content.SharedPreferences
+
 interface Constants {
 
     interface Api {
@@ -10,7 +12,8 @@ interface Constants {
 
     companion object {
 
-        val PET_TAG = "mooveit"
-        val PET_STATUS_AVAILABLE = "available"
+        val PREFS_FILENAME = "com.cleganeBowl2k18.trebuchet.prefs"
+        val LOGGED_IN = "logged_in"
+        val CURRENT_USER ="current_user"
     }
 }
