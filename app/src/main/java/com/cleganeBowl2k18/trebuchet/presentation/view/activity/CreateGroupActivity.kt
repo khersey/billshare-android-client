@@ -141,7 +141,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
         val users : List<User> = mCreateGroupAdapter.users
 
-        val group: Group = Group(-1, groupLabel, users)
+        val group: Group = Group(0, groupLabel, users)
 
         mPresenter.onSaveGroup(group)
     }
