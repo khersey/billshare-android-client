@@ -69,6 +69,8 @@
             android:id="@+id/select_currency_code_spinner"
             android:layout_width="0dp"
             android:layout_weight="30"
+            android:entries="@array/currency_codes"
+            android:prompt="@string/select_currency"
             android:layout_height="wrap_content">
 
         </Spinner>
