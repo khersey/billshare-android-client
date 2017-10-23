@@ -11,8 +11,7 @@ import retrofit2.http.*
 interface GroupService {
     @get:GET("group/all")
     val allGroups: Observable<List<Group>>
-
-    @FormUrlEncoded
+    
     @POST("group")
     fun createGroup(@Body group: Group): Observable<Group>
 

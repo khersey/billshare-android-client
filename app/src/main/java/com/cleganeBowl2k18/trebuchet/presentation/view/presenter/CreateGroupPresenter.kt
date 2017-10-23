@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
+import android.util.Log
 import android.view.View
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
@@ -64,10 +65,13 @@ class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: Crea
 
     private inner class GetUserObserver : DisposableObserver<User>() {
         override fun onNext(user: User) {
+            Log.i("ReturnedUser", user.toString())
+
             mCreateGroupView!!.userFetched(user)
         }
 
         override fun onComplete() {
+            Log.i("ReturnedUser", "COMPLETED")
         }
 
         override fun onError(error: Throwable) {

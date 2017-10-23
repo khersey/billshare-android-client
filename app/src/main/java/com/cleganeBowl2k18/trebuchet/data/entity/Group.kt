@@ -9,14 +9,14 @@ class Group {
 
     @SerializedName("id")
     var id: Long = 0
-    var name: String? = null
+    var label: String? = null
     var users: List<User>? = null
 
     constructor()
 
-    constructor(id: Long, name: String?, users: List<User>?) {
+    constructor(id: Long, label: String?, users: List<User>?) {
         this.id = id
-        this.name = name
+        this.label = label
         this.users = users
     }
 

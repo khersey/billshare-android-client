@@ -47,4 +47,6 @@
     <string name="create_group_members">Group Members</string>
     <string name="create_group_add_user">+ Add Group Member</string>
     <string name="title_activity_add_user_by_email">AddUserByEmailActivity</string>
+    <string name="add_user_by_email">Add User to Group</string>
+    <string name="enter_user_email">Enter User\'s Email</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,9 @@ import android.support.design.widget.TextInputEditText
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
+import android.util.Log
+import android.view.View
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -38,6 +42,9 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
     lateinit var mCreateGroupAdapter: CreateGroupAdapter
 
+    @BindView(R.id.toolbar)
+    lateinit var mToolbar: Toolbar
+
     private val mAdapterDataObserver = object : RecyclerView.AdapterDataObserver() {
 
         override fun onChanged() {
@@ -58,7 +65,20 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
     }
 
     override fun onAddUserClick() {
+        startActivityForResult(this.CreateAddUserByEmailIntent(), 1)
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val email : String? = data?.getStringExtra("email")
+
+            if (email != null) {
+                val user = User(0, null, email, null, null)
+                mCreateGroupAdapter.addUser(user)
+            } else {
+                Log.e("onActivityResultERROR", "AddUserReturned null!")
+            }
+        }
     }
 
 
@@ -74,6 +94,11 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
         mPresenter.setView(this)
         setupRecyclerView()
+        mToolbar.setNavigationOnClickListener(View.OnClickListener {
+            fun onClick(view: View) {
+                this.finish()
+            }
+        })
 
         // GET current user
         mPresenter.getUser(1)
@@ -123,6 +148,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
     // useCase Callbacks
     override fun userFetched(user: User) {
+
         mCreateGroupAdapter.addUser(user)
     }
 

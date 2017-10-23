@@ -10,7 +10,7 @@ import retrofit2.http.*
  * Interface for accessing the User API
  */
 
-interface UserStoreService {
+interface UserService {
 //    @get:GET("pet/findByStatus?status=available")
 //    val petsAvailable: Observable<List<Pet>>
 

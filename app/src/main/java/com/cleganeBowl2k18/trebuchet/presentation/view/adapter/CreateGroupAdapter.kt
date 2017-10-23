@@ -126,6 +126,7 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
 
     fun addUser(user: User) {
         mUsers.add(user)
+        notifyDataSetChanged()
     }
 
 

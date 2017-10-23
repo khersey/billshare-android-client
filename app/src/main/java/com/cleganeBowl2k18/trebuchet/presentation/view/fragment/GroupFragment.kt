@@ -174,7 +174,8 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
                 .inject(this)
 
         mPresenter.setView(this)
-        mPresenter.fetchGroups()
+        // TODO: use current userId
+        mPresenter.fetchGroupsByUserId(1)
     }
 
     override fun onDetach() {

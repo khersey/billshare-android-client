@@ -33,8 +33,8 @@ class GroupPresenter @Inject constructor(private val mGetGroupList: GetGroupList
         this.mGroupView = groupView
     }
 
-    fun fetchGroups() {
-        mGetGroupList.execute(GroupListObserver(), null)
+    fun fetchGroupsByUserId(userId: Long) {
+        mGetGroupList.execute(GroupListObserver(), userId)
     }
 
     private fun onObserverError(error: Throwable) {

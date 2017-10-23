@@ -87,7 +87,7 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
             // TODO: figure out who the current user is and use Splits to generate mContentTV for that User
 
             mTitleTV.text = label
-            mSubTitleTV.text = group.name
+            mSubTitleTV.text = group.label
             mContentTV.text = "$ ${amount}"
         }
 

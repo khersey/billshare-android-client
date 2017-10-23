@@ -2,6 +2,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.internal.di.component
 
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.module.ActivityModule
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.AddUserByEmailActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.LoginActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.MainActivity
@@ -23,4 +24,6 @@ interface ActivityComponent {
     fun inject(activity: LoginActivity)
 
     fun inject(activity: CreateGroupActivity)
+
+    fun inject(activity: AddUserByEmailActivity)
 }
