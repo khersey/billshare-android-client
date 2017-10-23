@@ -12,14 +12,14 @@ import javax.inject.Inject
 /**
  * UseCase that takes a userId and returns all of that User's Transactions
  */
-class GetUserTransactions @Inject constructor(private val mRepository: TransactionRepository,
+class GetUserTransactions @Inject constructor(private val mRepository: UserRepository,
                                               threadExecutor: ThreadExecutor,
                                               postExecutionThread: PostExecutionThread) :
         UseCase<List<Transaction>, Long>(threadExecutor, postExecutionThread) {
 
     override fun buildUseCaseObservable(params: Long?): Observable<List<Transaction>> {
         // return mRepository.allTransactionsForUser(params!!)
-        return mRepository.fakeAllTransactionsForUser(params!!)
+        return mRepository.getTransactionsByUserId(params!!)
     }
 
 }
