@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
 import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
 import io.reactivex.Observable
 import retrofit2.Response
@@ -14,7 +15,7 @@ interface GroupService {
     val allGroups: Observable<List<Group>>
     
     @POST("group/")
-    fun createGroup(@Body group: Group): Observable<Group>
+    fun createGroup(@Body group: GroupCreator): Observable<Group>
 
     @PUT("group/")
     fun updateGroup(@Body group: Group): Observable<Group>

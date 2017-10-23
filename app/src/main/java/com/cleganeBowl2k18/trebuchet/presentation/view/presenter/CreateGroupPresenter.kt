@@ -4,6 +4,7 @@ import android.support.annotation.NonNull
 import android.util.Log
 import android.view.View
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
 import com.cleganeBowl2k18.trebuchet.data.entity.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateNewGroup
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUser
@@ -41,7 +42,7 @@ class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: Crea
         mGetUser.execute(GetUserObserver(), id)
     }
 
-    fun onSaveGroup(group: Group) {
+    fun onSaveGroup(group: GroupCreator) {
         mCreateNewGroup.execute(CreateGroupObserver(), group)
     }
 

@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
 import com.cleganeBowl2k18.trebuchet.data.network.GroupService
 import com.cleganeBowl2k18.trebuchet.presentation.view.FakeGroupFactory
 import io.reactivex.Observable
@@ -25,7 +26,7 @@ class GroupRepository(private val groupService: GroupService) {
         return Observable.just(groupList)
     }
 
-    fun createGroup(group: Group): Observable<Group> = groupService.createGroup(group)
+    fun createGroup(group: GroupCreator): Observable<Group> = groupService.createGroup(group)
 
     fun updateGroup(group: Group): Observable<Group> = groupService.updateGroup(group)
 

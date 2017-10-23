@@ -8,15 +8,15 @@ import com.google.gson.annotations.SerializedName
 class Group {
 
     @SerializedName("id")
-    var id: Long = 0
+    var externalId: Long = 0
     var label: String? = null
     @SerializedName("group_users")
     var users: List<User>? = null
 
     constructor()
 
-    constructor(id: Long, label: String?, users: List<User>?) {
-        this.id = id
+    constructor(externalId: Long, label: String?, users: List<User>?) {
+        this.externalId = externalId
         this.label = label
         this.users = users
     }
@@ -35,5 +35,26 @@ class Group {
         } else {
             return content
         }
+    }
+
+    // ASSUME GROUP CREATION FORMAT FOR GROUP
+    fun toGroupCreator(): GroupCreator {
+
+        var owner : String? = null
+        var addUsers : MutableList<String>? = mutableListOf()
+
+        users?.forEach{ user ->
+            if (user.externalId.toInt() == 0) {
+                addUsers!!.add(user.email!!)
+            } else if (user.externalId.toInt() != 0 && owner.isNullOrBlank()){
+                owner = user.email
+            } else {
+                addUsers!!.add(user.email!!)
+            }
+        }
+        // TODO: validation to ensure only one potential owner comes in
+        //       this is garuanteed to only return one owner, but no guarantee it's the right one
+
+        return GroupCreator(this.label, owner, addUsers)
     }
 }
