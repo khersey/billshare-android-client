@@ -55,6 +55,8 @@
     <string name="select_group">Select Group</string>
     <string name="amount">$ Amount</string>
     <string name="select_currency">currency</string>
+    <string name="paid_by">Paid By</string>
+    <string name="split_between">Split Between</string>
 
     <string-array name="currency_codes">
         <item>CAD</item>

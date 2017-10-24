@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:id="@+id/activity_create_transaction"
     tools:context="com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -39,7 +40,7 @@
 
                 <Button
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:id="@+id/save_new_group"
+                    android:id="@+id/save_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|end"

@@ -1,12 +1,12 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.text.InputType
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -23,11 +23,10 @@ import javax.inject.Inject
 
 class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
-
     private val VERTICAL_SPACING: Int = 30
 
     @BindView(R.id.label_edit_text)
-    lateinit var mLabelEditText: TextInputEditText
+    lateinit var mLabelEditText: EditText
 
     @BindView(R.id.select_group_spinner)
     lateinit var mGroupSpinner: Spinner
@@ -37,6 +36,15 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     @BindView(R.id.select_currency_code_spinner)
     lateinit var mCurrencyCodeSpinner: Spinner
+
+    @BindView(R.id.activity_create_transaction)
+    lateinit var mView: View
+
+    @BindView(R.id.paid_by_text)
+    lateinit var mPaidByText: TextView
+
+    @BindView(R.id.split_between_text)
+    lateinit var mSplitBetweenText: TextView
 
     @Inject
     lateinit var mPresenter: CreateTransactionPresenter
@@ -59,8 +67,30 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
                 .build()
                 .inject(this)
 
+        mPresenter.setView(this)
+        mCurrentUser = User(1, null, null, null, null)
+
+        mPresenter.getGroupsByUserId(mCurrentUser!!.externalId) // TODO: replace with sharedPreference
+        mPresenter.getUser(mCurrentUser!!.externalId)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupSpinners()
+        setupTextViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.getGroupsByUserId(mCurrentUser!!.externalId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mPresenter.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.onDestroy()
     }
 
     private fun setupSpinners() {
@@ -69,10 +99,26 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         mGroupSpinner.adapter = mGroupSpinnerAdapter
     }
 
+    private fun setupTextViews() {
+        mPaidByText.setRawInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+        mPaidByText.setSingleLine(false)
+        mSplitBetweenText.setRawInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+        mSplitBetweenText.setSingleLine(false)
+    }
+
     @OnItemSelected(R.id.select_group_spinner)
     fun onGroupSelected(pos: Int) {
         val label = mGroupSpinner.getItemAtPosition(pos)
         mSelectedGroup = mGroups.find { group -> group.label == label }
+
+        var paySplitString : String = ""
+        paySplitString += "${mCurrentUser?.fName} ${mCurrentUser?.lName!![0]}"
+        mPaidByText.text = paySplitString
+
+        var oweSplitString : String = ""
+        mSelectedGroup?.users?.forEach { user -> oweSplitString += "${user.fName} ${user.lName!![0]}.\n" }
+        mSplitBetweenText.text = oweSplitString
+
     }
 
     @OnClick(R.id.save_button)
@@ -87,11 +133,12 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     fun formIsValid() : Boolean {
         // TODO: Form Validation
-        return false
+        return true
     }
 
     override fun userFetched(user: User) {
         mCurrentUser = user
+        // TODO: remove this, we dont need it
     }
 
     override fun showError(error: String) {
@@ -99,9 +146,11 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     }
 
     override fun groupsFetched(groups: List<Group>) {
-        mGroups = (groups as MutableList<Group>)
+        mGroups = groups.toMutableList()
         mGroupSpinnerAdapter.clear()
         mGroupSpinnerAdapter.addAll(mGroups.map { group -> group.label!! })
+        mGroupSpinnerAdapter.notifyDataSetChanged()
+        onGroupSelected(0)
     }
 
     override fun showProgress() {
@@ -111,4 +160,8 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     override fun hideProgress() {
          //To change body of created functions use File | Settings | File Templates.
     }
+}
+
+fun Context.CreateTransactionIntent(): Intent {
+    return Intent(this, CreateTransactionActivity::class.java)
 }

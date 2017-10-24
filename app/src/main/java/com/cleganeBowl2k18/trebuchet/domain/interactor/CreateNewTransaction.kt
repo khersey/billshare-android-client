@@ -14,9 +14,9 @@ import javax.inject.Inject
 class CreateNewTransaction @Inject constructor(private val mRepository: TransactionRepository,
                                                threadExecutor: ThreadExecutor,
                                                postExecutionThread: PostExecutionThread) :
-        UseCase<Transaction, TransactionCreator>(threadExecutor, postExecutionThread) {
+        UseCase<Transaction, Transaction>(threadExecutor, postExecutionThread) {
 
-    override fun buildUseCaseObservable(params: TransactionCreator?): Observable<Transaction> {
+    override fun buildUseCaseObservable(params: Transaction?): Observable<Transaction> {
         // return mRepository.allTransactionsForUser(params!!)
         return mRepository.createTransaction(params!!)
     }
