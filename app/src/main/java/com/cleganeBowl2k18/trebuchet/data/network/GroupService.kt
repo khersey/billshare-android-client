@@ -19,7 +19,7 @@ interface GroupService {
     fun createGroup(@Body group: GroupCreator): Observable<Group>
 
     @PUT("group/")
-    fun updateGroup(@Body group: Group): Observable<Group>
+    fun updateGroup(@Body group: GroupCreator): Observable<Group>
 
     @DELETE("group/{id}/")
     fun deleteGroup(@Path("id") groupId: Long): Observable<Response<Void>>

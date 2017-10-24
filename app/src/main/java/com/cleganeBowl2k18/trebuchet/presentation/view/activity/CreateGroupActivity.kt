@@ -142,7 +142,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
         val group: Group = Group(0, groupLabel, users)
 
-        mPresenter.onSaveGroup(group.toGroupCreator())
+        mPresenter.onSaveGroup(group)
     }
 
     // useCase Callbacks

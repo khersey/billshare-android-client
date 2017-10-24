@@ -26,9 +26,9 @@ class GroupRepository(private val groupService: GroupService) {
         return Observable.just(groupList)
     }
 
-    fun createGroup(group: GroupCreator): Observable<Group> = groupService.createGroup(group)
+    fun createGroup(group: Group): Observable<Group> = groupService.createGroup(group.toGroupCreator())
 
-    fun updateGroup(group: Group): Observable<Group> = groupService.updateGroup(group)
+    fun updateGroup(group: Group): Observable<Group> = groupService.updateGroup(group.toGroupCreator())
 
     fun deleteGroup(groupId: Long): Observable<Response<Void>> = groupService.deleteGroup(groupId)
 

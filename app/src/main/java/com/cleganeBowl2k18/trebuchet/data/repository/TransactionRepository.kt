@@ -23,6 +23,8 @@ class TransactionRepository(private val transactionService: TransactionService) 
         return Observable.just(transactionList)
     }
 
-    fun createTransaction(transaction: TransactionCreator): Observable<Transaction> = transactionService.createTransaction(transaction)
+    fun createTransaction(transaction: Transaction): Observable<Transaction> {
+        return transactionService.createTransaction(transaction.toTransactionCreator()).toTransaction()
+    }
 
 }

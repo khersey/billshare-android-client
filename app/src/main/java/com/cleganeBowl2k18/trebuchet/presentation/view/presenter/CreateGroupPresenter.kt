@@ -42,7 +42,7 @@ class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: Crea
         mGetUser.execute(GetUserObserver(), id)
     }
 
-    fun onSaveGroup(group: GroupCreator) {
+    fun onSaveGroup(group: Group) {
         mCreateNewGroup.execute(CreateGroupObserver(), group)
     }
 
@@ -51,7 +51,6 @@ class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: Crea
     }
 
     private inner class CreateGroupObserver : DisposableObserver<Group>() {
-
         override fun onNext(group: Group) {
             mCreateGroupView!!.groupCreated()
         }

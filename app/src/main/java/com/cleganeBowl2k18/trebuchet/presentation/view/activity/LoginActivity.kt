@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.data.entity.User
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
@@ -37,6 +38,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      */
     private var mAuthTask: UserLoginTask? = null
     private var prefs: SharedPreferences? = null
+
+    private var mCurrentUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -256,6 +259,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             try {
                 // Simulate network access.
+
                 Thread.sleep(750)
             } catch (e: InterruptedException) {
                 return false
