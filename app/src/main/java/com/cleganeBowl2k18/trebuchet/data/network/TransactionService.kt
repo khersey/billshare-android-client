@@ -8,6 +8,9 @@ import retrofit2.http.*
 
 interface TransactionService {
 
+    @GET("transaction/{id}/")
+    fun getTransactionById(@Path("id") transactionId: Long): Observable<Transaction>
+
     @POST("transaction/")
     fun createTransaction(@Body transaction: TransactionCreator): Observable<Transaction>
 
