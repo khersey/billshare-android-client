@@ -24,7 +24,8 @@ class TransactionRepository(private val transactionService: TransactionService) 
     }
 
     fun createTransaction(transaction: Transaction): Observable<Transaction> {
-        return transactionService.createTransaction(transaction.toTransactionCreator()).toTransaction()
+        //return transactionService.createTransaction(transaction.toTransactionCreator()).toTransaction()
+        return Observable.just(transaction) //TODO: get networking working @Deyvid
     }
 
 }
