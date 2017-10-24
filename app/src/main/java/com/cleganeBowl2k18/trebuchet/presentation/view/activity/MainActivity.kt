@@ -2,12 +2,14 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.view.*
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.SectionsPagerAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
@@ -21,14 +23,6 @@ fun Context.MainIntent(): Intent {
 
 class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, TransactionFragment.OnTransactionSelectedListener {
 
-    override fun onTransactionSelected(position: Int) {
-        //TODO: go to detailed transaction view
-    }
-
-    override fun onGroupSelected(position: Int) {
-        //TODO: go to detailed group view
-    }
-
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
      * fragments for each of the sections. We use a
@@ -39,9 +33,12 @@ class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, Tran
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
+    private var prefs: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
 
         setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
@@ -80,12 +77,27 @@ class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, Tran
         if (id == R.id.action_settings) {
             return true
         }
+        if (id == R.id.action_logout) {
+            val editor = prefs!!.edit()
+            editor.putBoolean(Constants.LOGGED_IN, false)
+            editor.apply()
+            finish()
+            return true
+        }
 
         return super.onOptionsItemSelected(item)
     }
 
     fun OnListFragmentInteractionListener() {
         //nothing
+    }
+
+    override fun onTransactionSelected(position: Int) {
+        //TODO: go to detailed transaction view
+    }
+
+    override fun onGroupSelected(position: Int) {
+        //TODO: go to detailed group view
     }
 
     /**

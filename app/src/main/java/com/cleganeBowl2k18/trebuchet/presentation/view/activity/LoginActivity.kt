@@ -7,6 +7,7 @@ import android.annotation.TargetApi
 import android.app.LoaderManager.LoaderCallbacks
 import android.content.CursorLoader
 import android.content.Loader
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -23,6 +24,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
 
@@ -34,11 +36,14 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
+    private var prefs: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
         setContentView(R.layout.activity_login)
         ButterKnife.bind(this)
+
         // Set up the login form.
         populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
@@ -50,6 +55,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         })
 
         email_sign_in_button.setOnClickListener { attemptLogin() }
+
+        if (prefs!!.getBoolean(Constants.LOGGED_IN, false)) {
+            startActivity(MainIntent())
+        }
     }
 
     private fun populateAutoComplete() {
@@ -267,12 +276,19 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
-                startActivity(MainIntent())
-
+                loginInSuccess()
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()
             }
+        }
+
+        fun loginInSuccess() {
+            val editor = prefs!!.edit()
+            editor.putBoolean(Constants.LOGGED_IN, true)
+            editor.apply()
+            startActivity(MainIntent())
+            return
         }
 
         override fun onCancelled() {
