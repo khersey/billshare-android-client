@@ -11,6 +11,7 @@ import retrofit2.http.*
  * Interface for accessing the Groups API
  */
 interface GroupService {
+
     @get:GET("group/all/")
     val allGroups: Observable<List<Group>>
     

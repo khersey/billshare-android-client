@@ -11,6 +11,7 @@ import retrofit2.http.*
  */
 
 interface UserService {
+
 //    @get:GET("pet/findByStatus?status=available")
 //    val petsAvailable: Observable<List<Pet>>
 
@@ -32,4 +33,5 @@ interface UserService {
 
     @GET("user/{id}/transactions/")
     fun getUserTransactions( @Path("id") userId: Long): Observable<List<Transaction>>
+
 }
