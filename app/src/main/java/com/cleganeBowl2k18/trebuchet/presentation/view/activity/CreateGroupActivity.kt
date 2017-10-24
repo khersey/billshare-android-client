@@ -153,6 +153,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
     }
 
     override fun groupCreated() {
+        setResult(Activity.RESULT_OK, Intent())
         this.finish()
     }
 

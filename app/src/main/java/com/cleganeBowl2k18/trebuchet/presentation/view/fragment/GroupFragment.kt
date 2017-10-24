@@ -1,6 +1,8 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.DefaultItemAnimator
@@ -187,7 +189,13 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
 
     @OnClick(R.id.create_group_fab)
     fun createNewGroup() {
-        startActivity(getActivity().CreateGroupIntent())
+        startActivityForResult(getActivity().CreateGroupIntent(), 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            mPresenter.fetchGroupsByUserId(1) // TODO: replace with current_user from prefs
+        }
     }
 
     /**
