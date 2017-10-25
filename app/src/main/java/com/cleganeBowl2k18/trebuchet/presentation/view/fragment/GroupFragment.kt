@@ -1,6 +1,8 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.DefaultItemAnimator
@@ -12,11 +14,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.GroupPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
@@ -172,7 +176,8 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
                 .inject(this)
 
         mPresenter.setView(this)
-        mPresenter.fetchGroups()
+        // TODO: use current userId
+        mPresenter.fetchGroupsByUserId(1)
     }
 
     override fun onDetach() {
@@ -180,6 +185,17 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         mPresenter.onDestroy()
         mGroupListAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
         mListener = null
+    }
+
+    @OnClick(R.id.create_group_fab)
+    fun createNewGroup() {
+        startActivityForResult(getActivity().CreateGroupIntent(), 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            mPresenter.fetchGroupsByUserId(1) // TODO: replace with current_user from prefs
+        }
     }
 
     /**

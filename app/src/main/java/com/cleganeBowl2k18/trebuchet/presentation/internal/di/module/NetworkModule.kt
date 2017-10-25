@@ -2,10 +2,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.internal.di.module
 
 import android.app.Application
 import com.cleganeBowl2k18.trebuchet.BuildConfig
-import com.cleganeBowl2k18.trebuchet.data.network.GroupService
-import com.cleganeBowl2k18.trebuchet.data.network.PetStoreService
-import com.cleganeBowl2k18.trebuchet.data.network.TransactionService
-import com.cleganeBowl2k18.trebuchet.data.network.UserStoreService
+import com.cleganeBowl2k18.trebuchet.data.network.*
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -75,8 +72,8 @@ class NetworkModule(private val mBaseApiUrl: String) {
 
     @Provides
     @Singleton
-    internal fun provideUserStoreService(retrofit: Retrofit) : UserStoreService {
-        return retrofit.create<UserStoreService>(UserStoreService::class.java)
+    internal fun provideUserService(retrofit: Retrofit) : UserService {
+        return retrofit.create<UserService>(UserService::class.java)
     }
 
     @Provides

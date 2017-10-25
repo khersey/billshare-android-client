@@ -1,7 +1,9 @@
 package com.cleganeBowl2k18.trebuchet.domain.interactor
 
 import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
+import com.cleganeBowl2k18.trebuchet.data.repository.GroupRepository
 import com.cleganeBowl2k18.trebuchet.data.repository.TransactionRepository
+import com.cleganeBowl2k18.trebuchet.data.repository.UserRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor
 import io.reactivex.Observable

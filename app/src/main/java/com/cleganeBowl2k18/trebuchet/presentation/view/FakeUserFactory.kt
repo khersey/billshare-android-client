@@ -12,6 +12,6 @@ class FakeUserFactory {
 
     fun generateUser(name : String) : User {
         id += 1
-        return User(id-1, "someEmail@somewhere.com", name, "Johnson")
+        return User(id-1, null, "someEmail@somewhere.com", name, "Johnson")
     }
 }

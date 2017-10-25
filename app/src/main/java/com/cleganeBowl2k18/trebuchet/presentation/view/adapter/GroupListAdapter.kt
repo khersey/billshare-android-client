@@ -14,6 +14,7 @@ import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.presentation.view.FakeGroupFactory
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment.OnListFragmentInteractionListener
 
 
@@ -34,24 +35,35 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
         fun onEditGroupItemClick(group: Group)
     }
 
+    private val fakeGroupFactory: FakeGroupFactory = FakeGroupFactory()
+
+    fun generateGroups() : List<Group> {
+        var group1 = fakeGroupFactory.generateGroup("Cat Fans", listOf("Tom", "Bob", "Ian"))
+        var group2 = fakeGroupFactory.generateGroup("Book Club", listOf("Tammy", "Barbora"))
+        var group3 = fakeGroupFactory.generateGroup("Trip", listOf("Joseph", "Margaret", "Doug"))
+        var group4 = fakeGroupFactory.generateGroup("Chad Land", listOf("Chad", "Chad", "Chad"))
+        return listOf(group1,group2,group3,group4)
+    }
+
     var groups: List<Group>
         get() = mGroups
         set(groups) {
             this.mGroups.clear()
             this.mGroups.addAll(groups)
+            this.mGroups.addAll(generateGroups())
             notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_group, parent, false)
+                .inflate(R.layout.card_group_tab, parent, false)
         return GroupViewHolder(view)
     }
 
 
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
-        val groupName = mGroups[position].name
+        val groupName = mGroups[position].label
         val groupUsers = mGroups[position].users
 
         holder.bindData(groupName!!, groupUsers!!)

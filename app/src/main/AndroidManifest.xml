@@ -3,6 +3,7 @@
     package="com.cleganeBowl2k18.trebuchet">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -29,7 +30,16 @@
         <activity
             android:name=".presentation.view.activity.MainActivity"
             android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".presentation.view.activity.CreateGroupActivity" />
+        <activity
+            android:name=".presentation.view.activity.AddUserByEmailActivity"
+            android:label="@string/title_activity_add_user_by_email"
+            android:parentActivityName=".presentation.view.activity.CreateGroupActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupActivity" />
         </activity>
     </application>
 

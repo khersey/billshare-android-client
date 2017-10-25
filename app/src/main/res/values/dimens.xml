@@ -13,6 +13,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="cardview_title">18dp</dimen>
-    <dimen name="cardview_content">14dp</dimen>
+    <dimen name="cardview_title">18sp</dimen>
+    <dimen name="cardview_content">14sp</dimen>
+    <dimen name="big_title">30dp</dimen>
 </resources>

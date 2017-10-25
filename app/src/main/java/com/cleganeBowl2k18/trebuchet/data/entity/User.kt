@@ -8,19 +8,29 @@ import com.google.gson.annotations.SerializedName
 class User {
 
     @SerializedName("id")
+    var externalId: Long = 0
+    @SerializedName("last_login")
+    var lastLogin: String? = null
+    //
     var email: String? = null
+    @SerializedName("first_name")
     var fName: String? = null
+    @SerializedName("last_name")
     var lName: String? = null
-    var id: Long = 0
+
 
     constructor()
 
-    constructor(id: Long, email: String?, fName: String?, lName: String? ) {
-        this.id = id
+    constructor(id: Long, lastLogin: String?, email: String?, fName: String?, lName: String?) {
+        this.externalId = id
+        this.lastLogin = lastLogin
         this.email = email
         this.fName = fName
         this.lName = lName
+    }
 
+    override fun toString(): String {
+        return "User(externalId=$externalId, lastLogin=$lastLogin, email=$email, fName=$fName, lName=$lName)"
     }
 
 }

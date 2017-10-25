@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.view.*
@@ -17,11 +16,9 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
-fun Context.MainIntent(): Intent {
-    return Intent(this, MainActivity::class.java)
-}
-
-class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, TransactionFragment.OnTransactionSelectedListener {
+class MainActivity : BaseActivity(),
+        GroupFragment.OnGroupSelectedListener,
+        TransactionFragment.OnTransactionSelectedListener {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -53,11 +50,6 @@ class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, Tran
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
 
     }
 
@@ -132,4 +124,8 @@ class MainActivity : BaseActivity(), GroupFragment.OnGroupSelectedListener, Tran
             }
         }
     }
+}
+
+fun Context.MainIntent(): Intent {
+    return Intent(this, MainActivity::class.java)
 }

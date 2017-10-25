@@ -1,23 +1,21 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
 import com.cleganeBowl2k18.trebuchet.data.entity.User
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * Interface for accessing the User API
  */
 
-interface UserStoreService {
+interface UserService {
 //    @get:GET("pet/findByStatus?status=available")
 //    val petsAvailable: Observable<List<Pet>>
 
     @FormUrlEncoded
-    @POST("user")
+    @POST("user/")
     fun createUser(@Body user: User): Observable<User>
 
 //    @PUT("pet")
@@ -26,9 +24,12 @@ interface UserStoreService {
 //    @DELETE("pet/{petId}")
 //    fun deletePet(@Path("petId") petId: Long): Observable<Response<Void>>
 
-    @GET("user/{userId}")
-    fun getUser(userId: Long): Observable<User>
+    @GET("user/{id}/")
+    fun getUser( @Path("id") userId: Long): Observable<User>
 
-    @GET("user/{userId}/groups")
-    fun getUserGroups(userId: Long): Observable<List<Group>>
+    @GET("user/{id}/groups/")
+    fun getUserGroups( @Path("id") userId: Long): Observable<List<Group>>
+
+    @GET("user/{id}/transactions/")
+    fun getUserTransactions( @Path("id") userId: Long): Observable<List<Transaction>>
 }

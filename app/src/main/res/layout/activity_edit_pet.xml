@@ -2,16 +2,19 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Base.ContainerFitsSystem">
 
     <android.support.design.widget.AppBarLayout
         style="@style/Base.ContainerFullWidth"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="55dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        tools:layout_editor_absoluteY="57dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/Base.Toolbar"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
