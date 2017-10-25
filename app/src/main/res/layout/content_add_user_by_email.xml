@@ -18,12 +18,14 @@
         android:id="@+id/group_label_text_input_layout"
         style="@style/Base.ContainerFullWidth"
         android:layout_width="match_parent"
+        android:hint="@string/enter_user_email"
         tools:layout_editor_absoluteY="2dp">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/email_edit_text"
             style="@style/Base.ContainerFullWidth"
-            android:text="@string/enter_user_email" />
+            android:inputType="textEmailAddress"
+             />
 
     </android.support.design.widget.TextInputLayout>
 
