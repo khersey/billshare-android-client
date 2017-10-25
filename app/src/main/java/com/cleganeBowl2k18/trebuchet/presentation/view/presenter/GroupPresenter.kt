@@ -4,6 +4,7 @@ import android.support.annotation.NonNull
 import android.view.View
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetGroupList
+import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUserGroups
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
@@ -14,8 +15,8 @@ import javax.inject.Inject
  * GroupFragment Presenter
  */
 @PerActivity
-class GroupPresenter @Inject constructor(private val mGetGroupList: GetGroupList) :
-        Presenter(mGetGroupList) {
+class GroupPresenter @Inject constructor(private val mGetUserGroups: GetUserGroups) :
+        Presenter(mGetUserGroups) {
 
     private var mGroupView: GroupView? = null
 
@@ -34,7 +35,7 @@ class GroupPresenter @Inject constructor(private val mGetGroupList: GetGroupList
     }
 
     fun fetchGroupsByUserId(userId: Long) {
-        mGetGroupList.execute(GroupListObserver(), userId)
+        mGetUserGroups.execute(GroupListObserver(), userId)
     }
 
     private fun onObserverError(error: Throwable) {

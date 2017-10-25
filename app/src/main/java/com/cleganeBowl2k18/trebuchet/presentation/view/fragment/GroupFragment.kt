@@ -44,7 +44,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         fun onGroupSelected(position: Int)
     }
 
-    val VERTICAL_SPACING: Int = 30
+
 
     // REPLACE WITH GROUP EMPTY LIST
     @BindView(R.id.group_list)
@@ -76,6 +76,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         }
     }
 
+    val VERTICAL_SPACING: Int = 30
     private var mColumnCount = 1
     private var mListener: OnGroupSelectedListener? = null
 

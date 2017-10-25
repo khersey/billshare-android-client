@@ -111,11 +111,13 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
                 .inject(this)
 
         mPresenter.setView(this)
-        mPresenter.fetchTransactions()
+        mPresenter.fetchTransactionsByUser(1)
     }
 
     override fun onDetach() {
         super.onDetach()
+        mPresenter.onDestroy()
+        mTransactionListAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
         mListener = null
     }
 
@@ -174,6 +176,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
         } else {
             showListView()
         }
+
     }
 
     private fun showEmptyView() {

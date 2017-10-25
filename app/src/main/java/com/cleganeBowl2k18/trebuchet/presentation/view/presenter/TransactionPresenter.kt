@@ -33,8 +33,8 @@ class TransactionPresenter @Inject constructor(private val mGetTransactionList: 
         this.mTransactionView = transactionView
     }
 
-    fun fetchTransactions() {
-        mGetTransactionList.execute(TransactionListObserver(), 1)
+    fun fetchTransactionsByUser(userId: Long) {
+        mGetTransactionList.execute(TransactionListObserver(), userId)
     }
 
     private fun onObserverError(error: Throwable) {

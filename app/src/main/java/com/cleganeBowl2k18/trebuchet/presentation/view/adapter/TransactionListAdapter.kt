@@ -15,6 +15,7 @@ import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.entity.Group
 import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
 import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.presentation.view.FakeTransactionFactory
 
 
 class TransactionListAdapter(private val mTransactions: MutableList<Transaction>,
@@ -29,12 +30,22 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         fun onEditTransactionItemClick(transaction: Transaction)
     }
 
+    private  val transactionFactory: FakeTransactionFactory = FakeTransactionFactory()
+
+    private fun generateTransactions(): List<Transaction> {
+        var transaction1 = transactionFactory.generateTransaction("Scuba Gear", 159.99, "Scuba Guys")
+        var transaction2 = transactionFactory.generateTransaction("Expedition to Cape Cod", 1459.99, "Scuba Guys")
+        var transaction3 = transactionFactory.generateTransaction("Mr. Fluffles food", 48.00, "cat ladyz")
+        var transaction4 = transactionFactory.generateTransaction("Beer", 20000.00, "fer tha boys")
+        return listOf(transaction1, transaction2, transaction3, transaction4)
+    }
     // allow user to get and set transactions as List
     var transactions: List<Transaction>
         get() = mTransactions
         set(transactions) {
             this.mTransactions.clear()
             this.mTransactions.addAll(transactions)
+            this.mTransactions.addAll(generateTransactions())
             notifyDataSetChanged()
         }
 
