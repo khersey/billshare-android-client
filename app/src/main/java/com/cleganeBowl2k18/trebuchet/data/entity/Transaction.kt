@@ -12,14 +12,14 @@ class Transaction {
     var group: Group? = null
     var label: String? = null
     var amount: Double = 0.0
-    var paySplit: MutableMap<User, Double> = mutableMapOf<User,Double>()
-    var oweSplit: MutableMap<User, Double> = mutableMapOf<User,Double>()
     var resolved: Boolean = false
+    var paySplit: MutableMap<Long, Double> = mutableMapOf<Long,Double>()
+    var oweSplit: MutableMap<Long, Double> = mutableMapOf<Long,Double>()
     // TODO: add date
 
     constructor()
 
-    constructor(id: Long, group: Group?, label: String?, amount: Double, paySplit: MutableMap<User, Double>, oweSplit: MutableMap<User, Double>, resolved: Boolean = false) {
+    constructor(id: Long, group: Group?, label: String?, amount: Double, paySplit: MutableMap<Long, Double>, oweSplit: MutableMap<Long, Double>) {
         this.id = id
         this.group = group
         this.label = label
