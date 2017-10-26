@@ -33,4 +33,7 @@ class User {
         return "User(externalId=$externalId, lastLogin=$lastLogin, email=$email, fName=$fName, lName=$lName)"
     }
 
+    fun getUserTitle(): String? {
+        return "${this.fName!!} ${this.lName!![0]}."
+    }
 }

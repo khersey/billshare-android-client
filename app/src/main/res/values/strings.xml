@@ -63,4 +63,14 @@
         <item>USD</item>
         <item>EUR</item>
     </string-array>
+
+    <string-array name="split_types">
+        <item>Equally</item>
+        <item>By Amount</item>
+        <!--<item>By Percent</item>-->
+    </string-array>
+
+    <string name="title_activity_edit_transaction_split">EditTransactionSplit</string>
+    <string name="who_paid_the_bill">Who Paid the Bill?</string>
+    <string name="split_type">Split:</string>
 </resources>
