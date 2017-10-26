@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.view
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.ProgressView
 
 /**

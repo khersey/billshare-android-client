@@ -1,7 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.domain.interactor
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
+import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.repository.GroupRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor

@@ -12,9 +12,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.presentation.view.FakeTransactionFactory
 
 
@@ -33,10 +32,10 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
     private  val transactionFactory: FakeTransactionFactory = FakeTransactionFactory()
 
     private fun generateTransactions(): List<Transaction> {
-        var transaction1 = transactionFactory.generateTransaction("Scuba Gear", 159.99, "Scuba Guys")
-        var transaction2 = transactionFactory.generateTransaction("Expedition to Cape Cod", 1459.99, "Scuba Guys")
-        var transaction3 = transactionFactory.generateTransaction("Mr. Fluffles food", 48.00, "cat ladyz")
-        var transaction4 = transactionFactory.generateTransaction("Beer", 20000.00, "fer tha boys")
+        var transaction1 = transactionFactory.generateTransaction("Scuba Gear", 15999, "Scuba Guys")
+        var transaction2 = transactionFactory.generateTransaction("Expedition to Cape Cod", 145999, "Scuba Guys")
+        var transaction3 = transactionFactory.generateTransaction("Mr. Fluffles food", 4800, "cat ladyz")
+        var transaction4 = transactionFactory.generateTransaction("Beer", 2000000, "fer tha boys")
         return listOf(transaction1, transaction2, transaction3, transaction4)
     }
     // allow user to get and set transactions as List
@@ -56,7 +55,7 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         val transactionOwed = mTransactions[position].oweSplit
         val transactionPayed = mTransactions[position].paySplit
 
-        holder?.bindData(transactionGroup!!, transactionAmount!!, transactionLabel!!, transactionOwed!!, transactionPayed!!)
+        holder?.bindData(transactionGroup!!, transactionAmount!!.toDouble() * 0.01, transactionLabel!!, transactionOwed!!, transactionPayed!!)
     }
 
 
@@ -92,7 +91,7 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<User, Double>, paySplit: MutableMap<User, Double>
+        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>
         ) {
 
             // TODO: figure out who the current user is and use Splits to generate mContentTV for that User

@@ -11,9 +11,16 @@ interface Constants {
     }
 
     companion object {
+        // SharedPreference files
+        val PREFS_FILENAME  = "com.cleganeBowl2k18.trebuchet.prefs"
 
-        val PREFS_FILENAME = "com.cleganeBowl2k18.trebuchet.prefs"
-        val LOGGED_IN = "logged_in"
-        val CURRENT_USER ="current_user"
+        // SharedPreference IDs
+        val LOGGED_IN       = "logged_in"
+        val CURRENT_USER    = "current_user"
+
+        // Split Types
+        val SPLIT_EQUALLY       = 0
+        val SPLIT_BY_AMOUNT     = 1
+        val SPLIT_BY_PERCENTAGE = 2
     }
 }

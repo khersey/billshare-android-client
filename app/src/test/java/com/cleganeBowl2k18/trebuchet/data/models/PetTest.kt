@@ -1,4 +1,4 @@
-package com.cleganeBowl2k18.trebuchet.data.entity
+package com.cleganeBowl2k18.trebuchet.data.models
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before

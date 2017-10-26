@@ -62,9 +62,7 @@
             android:layout_weight="30"
             android:layout_gravity="center_vertical|center_horizontal"
             android:entries="@array/currency_codes"
-            android:prompt="@string/select_currency"
-            >
-
+            android:prompt="@string/select_currency" >
         </Spinner>
 
     </LinearLayout>
@@ -74,29 +72,54 @@
         android:layout_height="fill_parent">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:baselineAligned="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/paid_by" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/paid_by_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/paid_by" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/split_between" />
+                <TextView
+                    android:id="@+id/paid_by_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/split_between_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/split_between" />
+
+                <TextView
+                    android:id="@+id/split_between_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="match_parent"
+                >
+
+                <Button
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit_transaction_btn"
+                    android:text="@string/edit_transactons" />
+
+            </FrameLayout>
+
 
         </LinearLayout>
 

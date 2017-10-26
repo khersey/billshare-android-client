@@ -7,13 +7,14 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import butterknife.OnTextChanged
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.User
 
 /**
  * Created by khersey on 2017-10-25.
@@ -23,6 +24,7 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
         RecyclerView.Adapter<UserEditMoneyAdapter.UserViewHolder>() {
 
     lateinit private var mRecyclerView: RecyclerView
+    private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
 
     interface OnUserItemClickListener {
         fun onUserItemClick(user: User)
@@ -36,7 +38,7 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserCheckmarkAdapter.UserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserEditMoneyAdapter.UserViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.card_user_checkbox, parent, false)
         return UserViewHolder(view)
@@ -53,31 +55,51 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
     override fun onBindViewHolder(holder: UserViewHolder?, position: Int) {
         val title = mUsers[position].getUserTitle()
         val content = mUsers[position].email
-        holder!!.bindData(title, content)
+        val id = mUsers[position].externalId
+        holder!!.bindData(title, content, id)
     }
 
     override fun getItemCount(): Int {
         return mUsers.size
     }
 
+    fun getOweSplit(): MutableMap<Long, Long> {
+        return mOweSplit
+    }
+
+    fun returnData(pair: Pair<Long, Long>?) {
+        if (pair != null) {
+            mOweSplit[pair.first] = pair.second
+        }
+    }
+
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        @BindView(R.id.card_user_checkbox)
+        @BindView(R.id.card_user_edit_money)
         lateinit var mCardView: CardView
         @BindView(R.id.user_label)
         lateinit var mTitleTV: TextView
         @BindView(R.id.user_content)
         lateinit var mContentTV: TextView
-        @BindView(R.id.user_checkbox)
-        lateinit var mCheckbox: CheckBox
+        @BindView(R.id.user_amount_edit_text)
+        lateinit var mEditText: EditText
+
+        @OnTextChanged(R.id.user_amount_edit_text)
+        fun setSplitPair() {
+            val amount: Long = (mEditText.text.toString().toDouble() * 10).toLong() // TODO remove hacky shit
+            returnData(mId to amount)
+        }
+
+        var mId: Long = 0
 
         init {
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindData(title: String?, content: String?) {
+        fun bindData(title: String?, content: String?, id: Long) {
             mTitleTV.text = title
             mContentTV.text = content
+            mId = id
         }
 
         @OnClick(R.id.create_group_card_view)

@@ -1,6 +1,8 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.DefaultItemAnimator
@@ -14,11 +16,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Transaction
+import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
-import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.TransactionListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.TransactionPresenter
@@ -123,7 +124,14 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     @OnClick(R.id.create_transaction_fab)
     fun createNewTransaction() {
-        startActivity(activity.CreateTransactionIntent())
+        startActivityForResult(activity.CreateTransactionIntent(), 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            mPresenter.fetchTransactionsByUser(1) // TODO fix hardcoded userid
+        }
     }
 
     override fun showProgress() {

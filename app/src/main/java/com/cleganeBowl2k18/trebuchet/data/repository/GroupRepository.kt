@@ -1,7 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
+import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.network.GroupService
 import com.cleganeBowl2k18.trebuchet.presentation.view.FakeGroupFactory
 import io.reactivex.Observable

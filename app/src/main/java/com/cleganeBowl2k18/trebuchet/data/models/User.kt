@@ -1,4 +1,4 @@
-package com.cleganeBowl2k18.trebuchet.data.entity
+package com.cleganeBowl2k18.trebuchet.data.models
 
 import com.google.gson.annotations.SerializedName
 

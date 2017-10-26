@@ -1,6 +1,7 @@
-package com.cleganeBowl2k18.trebuchet.data.entity
+package com.cleganeBowl2k18.trebuchet.data.modelAdapters
 
 class TransactionReceiverTransaction {
+    // {"id": 1, "label": "testLabel", "group": 1, "creator": 1}
     var id: Long = 0
     var label: String = ""
     var group: Long = 0
@@ -15,3 +16,4 @@ class TransactionReceiverTransaction {
         this.creator = creator
     }
 }
+

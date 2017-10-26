@@ -11,9 +11,10 @@ import android.widget.CheckBox
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnCheckedChanged
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.User
 
 /**
  * Created by khersey on 2017-10-25.
@@ -23,6 +24,7 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
         RecyclerView.Adapter<UserCheckmarkAdapter.UserViewHolder>() {
 
     lateinit private var mRecyclerView: RecyclerView
+    private var mUsersInSplit: MutableMap<Long, Boolean> = mutableMapOf()
 
     interface OnUserItemClickListener {
         fun onUserItemClick(user: User)
@@ -33,6 +35,7 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
         set(users) {
             this.mUsers.clear()
             this.mUsers.addAll(users)
+            configureUserBooleanMap()
             notifyDataSetChanged()
         }
 
@@ -53,11 +56,20 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
     override fun onBindViewHolder(holder: UserViewHolder?, position: Int) {
         val title = mUsers[position].getUserTitle()
         val content = mUsers[position].email
-        holder!!.bindData(title, content)
+        val userId = mUsers[position].externalId
+        holder!!.bindData(title, content, userId)
     }
 
     override fun getItemCount(): Int {
         return mUsers.size
+    }
+
+    fun configureUserBooleanMap() {
+        mUsersInSplit = (mUsers.map {user -> user.externalId to true}.toMap() as MutableMap<Long, Boolean>)
+    }
+
+    fun getUserIds(): List<Long> {
+        return mUsersInSplit.keys.filter { id -> mUsersInSplit[id]!! }
     }
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -71,13 +83,21 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
         @BindView(R.id.user_checkbox)
         lateinit var mCheckbox: CheckBox
 
+        var mId: Long = 0
+
+        @OnCheckedChanged(R.id.user_checkbox)
+        fun checkboxChanged() {
+            mUsersInSplit[mId] = !mUsersInSplit[mId]!! // that's some ugly
+        }
+
         init {
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindData(title: String?, content: String?) {
+        fun bindData(title: String?, content: String?, id: Long) {
             mTitleTV.text = title
             mContentTV.text = content
+            mId = id
         }
 
         @OnClick(R.id.create_group_card_view)

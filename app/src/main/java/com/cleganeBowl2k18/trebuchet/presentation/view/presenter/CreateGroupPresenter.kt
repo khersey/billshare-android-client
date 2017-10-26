@@ -3,9 +3,8 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 import android.support.annotation.NonNull
 import android.util.Log
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateNewGroup
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUser
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter

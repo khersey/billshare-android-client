@@ -2,17 +2,17 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.User
-import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateNewGroup
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionCreator
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Transaction
+import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateNewTransaction
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUser
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUserGroups
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
-import com.cleganeBowl2k18.trebuchet.presentation.view.view.CreateGroupView
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.CreateTransactionView
-import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
@@ -21,8 +21,9 @@ import javax.inject.Inject
  */
 @PerActivity
 class CreateTransactionPresenter @Inject constructor(private val mGetUserGroups: GetUserGroups,
-                                                     private val mGetUser: GetUser) :
-        Presenter(mGetUserGroups, mGetUser) {
+                                                     private val mGetUser: GetUser,
+                                                     private val mCreateNewTransaction: CreateNewTransaction) :
+        Presenter(mGetUserGroups, mGetUser, mCreateNewTransaction) {
 
     // REFERENCE TO ACTIVITY
     private var mCreateTransactionView: CreateTransactionView? = null
@@ -46,10 +47,27 @@ class CreateTransactionPresenter @Inject constructor(private val mGetUserGroups:
         mGetUserGroups.execute(GetGroupsByUserIdObserver(), id)
     }
 
+    fun createTransaction(transaction: Transaction) {
+        mCreateNewTransaction.execute(CreateTranactionObserver(), TransactionCreator(transaction, 1)) // TODO: fix this
+    }
+
     // USE CASE OBSERVERS
     private inner class GetGroupsByUserIdObserver : DisposableObserver<List<Group>>() {
         override fun onNext(groups: List<Group>) {
             mCreateTransactionView!!.groupsFetched(groups)
+        }
+
+        override fun onComplete() {
+        }
+
+        override fun onError(error: Throwable) {
+            onObserverError(error)
+        }
+    }
+
+    private inner class CreateTranactionObserver : DisposableObserver<TransactionReceiver>() {
+        override fun onNext(transactionReceiver: TransactionReceiver) {
+            mCreateTransactionView!!.transactionCreated(transactionReceiver)
         }
 
         override fun onComplete() {

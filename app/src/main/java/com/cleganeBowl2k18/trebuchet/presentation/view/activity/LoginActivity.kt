@@ -24,7 +24,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*

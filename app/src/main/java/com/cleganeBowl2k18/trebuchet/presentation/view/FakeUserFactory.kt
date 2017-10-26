@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view
 
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.User
 
 /**
  * Generates fake User objects

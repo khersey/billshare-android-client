@@ -1,27 +1,31 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.text.InputType
 import android.view.View
 import android.widget.*
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import butterknife.OnItemSelected
+import butterknife.*
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Transaction
+import com.cleganeBowl2k18.trebuchet.data.models.User
+import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
+import com.cleganeBowl2k18.trebuchet.presentation.common.SplitUtil
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.CreateTransactionPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.CreateTransactionView
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_create_transaction.*
+import java.io.Serializable
 import javax.inject.Inject
 
 class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
+
 
     private val VERTICAL_SPACING: Int = 30
 
@@ -33,6 +37,16 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     @BindView(R.id.amount_edit_text)
     lateinit var mAmountEditText: EditText
+    @OnTextChanged(R.id.amount_edit_text)
+    fun amountChanged() {
+        try {
+            mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
+            oweSplit = SplitUtil.equalSplit(mAmount, mSelectedGroup!!.users!!.map { user -> user.externalId })
+            paySplit = mutableMapOf(mCurrentUser!!.externalId to mAmount)
+        } catch(exception: Exception) {
+
+        }
+    }
 
     @BindView(R.id.select_currency_code_spinner)
     lateinit var mCurrencyCodeSpinner: Spinner
@@ -46,6 +60,31 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     @BindView(R.id.split_between_text)
     lateinit var mSplitBetweenText: TextView
 
+    val gson: Gson = Gson()
+
+    @OnClick(R.id.edit_transaction_btn)
+    fun editTransactionClicked() {
+        var intent = this.CreateEditTransactionIntent()
+        intent.putExtra("amount", mAmount)
+        val list = mSelectedGroup!!.users
+        intent.putExtra("users", gson.toJson(list))
+        startActivityForResult(intent, 0)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            var temp: MutableMap<Long, Long> = (data!!.getSerializableExtra("oweSplit") as MutableMap<Long, Long>)
+            if (temp != null) {
+                oweSplit = temp
+            }
+            temp = (data!!.getSerializableExtra("paySplit") as MutableMap<Long, Long>)
+            if (temp != null) {
+                paySplit = temp
+            }
+        }
+    }
+
     @Inject
     lateinit var mPresenter: CreateTransactionPresenter
 
@@ -54,6 +93,10 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     var mGroups : MutableList<Group> = mutableListOf()
     var mSelectedGroup: Group? = null
     var mCurrentUser: User? = null
+    var mTransactionType: Int = Constants.SPLIT_EQUALLY
+    var oweSplit: MutableMap<Long, Long> = mutableMapOf()
+    var paySplit: MutableMap<Long, Long> = mutableMapOf()
+    var mAmount: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,10 +168,16 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     fun saveTransaction() {
         if (formIsValid()) {
             val currencyCode: String = mCurrencyCodeSpinner.selectedItem.toString()
-            // CreateTransaction()
-            // presenter.useCase()
-            finish()
+            val label : String = mLabelEditText.text.toString()
+            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, false, paySplit, oweSplit)
+            mPresenter.createTransaction(newTransaction)
         }
+    }
+
+    override fun transactionCreated(transactionReceiver: TransactionReceiver) {
+        val transaction: Transaction = transactionReceiver.toTransaction()
+        setResult(Activity.RESULT_OK, Intent())
+        finish()
     }
 
     fun formIsValid() : Boolean {
