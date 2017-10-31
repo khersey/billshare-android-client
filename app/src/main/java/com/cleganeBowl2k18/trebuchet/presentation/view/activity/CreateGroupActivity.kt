@@ -15,8 +15,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
@@ -81,7 +81,6 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_group)
@@ -143,7 +142,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
         val group: Group = Group(0, groupLabel, users)
 
-        mPresenter.onSaveGroup(group.toGroupCreator())
+        mPresenter.onSaveGroup(group)
     }
 
     // useCase Callbacks

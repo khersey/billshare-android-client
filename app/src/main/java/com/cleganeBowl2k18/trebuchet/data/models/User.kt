@@ -1,4 +1,4 @@
-package com.cleganeBowl2k18.trebuchet.data.entity
+package com.cleganeBowl2k18.trebuchet.data.models
 
 import com.google.gson.annotations.SerializedName
 
@@ -33,4 +33,7 @@ class User {
         return "User(externalId=$externalId, lastLogin=$lastLogin, email=$email, fName=$fName, lName=$lName)"
     }
 
+    fun getUserTitle(): String? {
+        return "${this.fName!!} ${this.lName!![0]}."
+    }
 }

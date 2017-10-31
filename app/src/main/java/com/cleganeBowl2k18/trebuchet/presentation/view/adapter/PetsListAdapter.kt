@@ -13,7 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Pet
+import com.cleganeBowl2k18.trebuchet.data.models.Pet
 
 class PetsListAdapter(private val mPets: MutableList<Pet>,
                       private val mOnPetItemClickListener: PetsListAdapter.OnPetItemClickListener,

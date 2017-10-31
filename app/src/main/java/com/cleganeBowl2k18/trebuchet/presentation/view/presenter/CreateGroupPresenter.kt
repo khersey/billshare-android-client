@@ -3,9 +3,8 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 import android.support.annotation.NonNull
 import android.util.Log
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.GroupCreator
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateNewGroup
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUser
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
@@ -20,7 +19,7 @@ import javax.inject.Inject
 @PerActivity
 class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: CreateNewGroup,
                                                private val mGetUser: GetUser) :
-        Presenter(mCreateNewGroup) {
+        Presenter(mCreateNewGroup, mGetUser) {
 
     private var mCreateGroupView: CreateGroupView? = null
 
@@ -42,7 +41,7 @@ class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: Crea
         mGetUser.execute(GetUserObserver(), id)
     }
 
-    fun onSaveGroup(group: GroupCreator) {
+    fun onSaveGroup(group: Group) {
         mCreateNewGroup.execute(CreateGroupObserver(), group)
     }
 
@@ -51,7 +50,6 @@ class CreateGroupPresenter @Inject constructor(private val mCreateNewGroup: Crea
     }
 
     private inner class CreateGroupObserver : DisposableObserver<Group>() {
-
         override fun onNext(group: Group) {
             mCreateGroupView!!.groupCreated()
         }

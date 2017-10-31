@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
-import com.cleganeBowl2k18.trebuchet.data.entity.User
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.User
 
 /**
  * Generates Group objects and their dependencies

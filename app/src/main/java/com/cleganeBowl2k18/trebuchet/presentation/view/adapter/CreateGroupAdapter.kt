@@ -13,15 +13,15 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.User
-
+import com.cleganeBowl2k18.trebuchet.data.models.User
 
 /**
  * Created by khersey on 2017-10-21.
  */
 class CreateGroupAdapter(private val mUsers: MutableList<User>,
                          private val mOnUserItemClickListener: CreateGroupAdapter.OnUserItemClickListener) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        RecyclerView.Adapter<CreateGroupAdapter.UserViewHolder>() {
 
     lateinit private var mRecyclerView: RecyclerView
     private var hasLoadButton : Boolean = true

@@ -49,4 +49,29 @@
     <string name="title_activity_add_user_by_email">AddUserByEmailActivity</string>
     <string name="add_user_by_email">Add User to Group</string>
     <string name="enter_user_email">Enter User\'s Email</string>
+    <string name="title_activity_create_transaction">CreateTransactionActivity</string>
+    <string name="create_transaction">Create New Transaction</string>
+    <string name="transaction_name">transaction name</string>
+    <string name="select_group">Select Group</string>
+    <string name="amount">$ Amount</string>
+    <string name="select_currency">currency</string>
+    <string name="paid_by">Paid By</string>
+    <string name="split_between">Split Between</string>
+
+    <string-array name="currency_codes">
+        <item>CAD</item>
+        <item>USD</item>
+        <item>EUR</item>
+    </string-array>
+
+    <string-array name="split_types">
+        <item>Equally</item>
+        <item>By Amount</item>
+        <!--<item>By Percent</item>-->
+    </string-array>
+
+    <string name="title_activity_edit_transaction_split">EditTransactionSplit</string>
+    <string name="who_paid_the_bill">Who Paid the Bill?</string>
+    <string name="split_type">Split:</string>
+    <string name="edit_transactons">Edit</string>
 </resources>

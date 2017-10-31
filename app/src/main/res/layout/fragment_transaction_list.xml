@@ -1,4 +1,4 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/group_fragment"
@@ -31,11 +31,13 @@
         android:layout_gravity="center"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_transaction_fab"
+        android:id="@+id/create_transaction_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="70dp"
+        app:backgroundTint="@color/red"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

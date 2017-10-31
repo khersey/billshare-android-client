@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.view
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Pet
+import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.ProgressView
 
 interface HomeView : ProgressView {

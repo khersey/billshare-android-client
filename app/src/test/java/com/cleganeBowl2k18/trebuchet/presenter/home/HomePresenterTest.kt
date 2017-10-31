@@ -1,20 +1,14 @@
 package com.cleganeBowl2k18.trebuchet.presenter.home
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Pet
+import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.DeletePet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetPetList
 import com.cleganeBowl2k18.trebuchet.presentation.view.home.HomePresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.home.HomeView
-import io.reactivex.Observable
-import io.reactivex.observers.DisposableObserver
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
-import org.mockito.BDDMockito.given
-import org.mockito.Matchers.any
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.runners.MockitoJUnitRunner
 

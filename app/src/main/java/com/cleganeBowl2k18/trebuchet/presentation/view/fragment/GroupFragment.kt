@@ -16,7 +16,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.entity.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
@@ -44,7 +44,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         fun onGroupSelected(position: Int)
     }
 
-    val VERTICAL_SPACING: Int = 30
+
 
     // REPLACE WITH GROUP EMPTY LIST
     @BindView(R.id.group_list)
@@ -76,6 +76,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         }
     }
 
+    val VERTICAL_SPACING: Int = 30
     private var mColumnCount = 1
     private var mListener: OnGroupSelectedListener? = null
 

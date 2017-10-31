@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.domain.interactor
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Pet
+import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.data.repository.PetRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor

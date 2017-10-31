@@ -79,6 +79,7 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     compile "com.jakewharton:butterknife:$butterKnifeVersion"
     kapt "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+    compile 'com.google.code.gson:gson:2.8.1'
 
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 

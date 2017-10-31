@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
-import com.cleganeBowl2k18.trebuchet.data.entity.Pet
+import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.data.network.PetStoreService
 import io.reactivex.Observable
 import retrofit2.Response

@@ -2,7 +2,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.entity.Pet
+import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.DeletePet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetPetList
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
