@@ -91,8 +91,7 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>
-        ) {
+        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>) {
 
             // TODO: figure out who the current user is and use Splits to generate mContentTV for that User
 

@@ -8,6 +8,7 @@ import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -124,11 +125,10 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     @OnClick(R.id.create_transaction_fab)
     fun createNewTransaction() {
-        startActivityForResult(activity.CreateTransactionIntent(), 1)
+        startActivityForResult(getActivity().CreateTransactionIntent(), 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             mPresenter.fetchTransactionsByUser(1) // TODO fix hardcoded userid
         }
@@ -148,6 +148,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     override fun showTransactions(transactions: List<Transaction>) {
         mTransactionListAdapter.transactions = transactions
+        mTransactionListAdapter.notifyDataSetChanged()
     }
 
     override fun showTransactions() {
@@ -180,6 +181,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     private fun onTransactionListChanged() {
         if (mTransactionListAdapter.itemCount == 0) {
+            Log.e("TRANSACTIONS", "displaying EMPTY VIEW")
             showEmptyView()
         } else {
             showListView()

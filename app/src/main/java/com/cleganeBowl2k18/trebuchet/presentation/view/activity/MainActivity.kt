@@ -6,7 +6,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.*
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
@@ -28,34 +31,42 @@ class MainActivity : BaseActivity(),
      * may be best to switch to a
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
+    val POSITION: String = "POSITION"
+
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
     private var prefs: SharedPreferences? = null
+
+    @BindView(R.id.container)
+    lateinit var mViewPager: ViewPager
+
+    @BindView(R.id.tabs)
+    lateinit var mTabs: TabLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
 
+        ButterKnife.bind(this)
+
         setSupportActionBar(toolbar)
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
-        mSectionsPagerAdapter?.addFragment(PlaceholderFragment.newInstance(1), "Dashbaord")
-        mSectionsPagerAdapter?.addFragment(GroupFragment.newInstance(1), "Groups")
-        mSectionsPagerAdapter?.addFragment(TransactionFragment.newInstance(1), "Transactions")
 
-        // Set up the ViewPager with the sections adapter.
-        container.adapter = mSectionsPagerAdapter
-
-        container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
-
+        mSectionsPagerAdapter = SectionsPagerAdapter(this.supportFragmentManager, this)
+        mViewPager.adapter = mSectionsPagerAdapter
+        mViewPager.setOffscreenPageLimit(3)
+        mTabs.setupWithViewPager(mViewPager)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putInt(POSITION, mTabs.getSelectedTabPosition())
+    }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        mViewPager.setCurrentItem(savedInstanceState.getInt(POSITION))
     }
 
 

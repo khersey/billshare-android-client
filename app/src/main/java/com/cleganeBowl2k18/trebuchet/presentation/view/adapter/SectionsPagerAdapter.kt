@@ -1,30 +1,44 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.adapter
 
+import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.MainActivity
+import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
+import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragment
 
 /**
  * This adapter controls tab switching in the MainActivity
  */
-class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class SectionsPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerAdapter(fm) {
 
-    val fragments = LinkedHashMap<Fragment, String>()
+    private var mContext: Context
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return fragments.values.elementAt(position)
+    init {
+        mContext = context
     }
 
-    fun addFragment(fragment: Fragment, title: String) {
-        fragments.put(fragment, title)
+    override fun getPageTitle(position: Int): CharSequence {
+        when(position) {
+            0 -> return mContext.getString(R.string.tab_dashboard)
+            1 -> return mContext.getString(R.string.tab_groups)
+            2 -> return mContext.getString(R.string.tab_transactions)
+        }
+        return "ERROR"
     }
 
     override fun getItem(position: Int): Fragment {
-        return fragments.keys.elementAt(position)
+        when(position) {
+            0 -> return MainActivity.PlaceholderFragment.newInstance(1)
+            1 -> return GroupFragment.newInstance(1)
+            2 -> return TransactionFragment.newInstance(1)
+        }
+        return MainActivity.PlaceholderFragment.newInstance(1)
     }
 
     override fun getCount(): Int {
-        // Show 3 total pages.
         return 3
     }
 }
