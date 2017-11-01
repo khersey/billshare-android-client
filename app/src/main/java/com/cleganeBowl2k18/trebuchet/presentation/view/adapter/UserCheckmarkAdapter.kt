@@ -26,10 +26,6 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
     lateinit private var mRecyclerView: RecyclerView
     private var mUsersInSplit: MutableMap<Long, Boolean> = mutableMapOf()
 
-    interface OnUserItemClickListener {
-        fun onUserItemClick(user: User)
-    }
-
     var users: List<User>
         get() = mUsers
         set(users) {
@@ -70,6 +66,10 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
 
     fun getUserIds(): List<Long> {
         return mUsersInSplit.keys.filter { id -> mUsersInSplit[id]!! }
+    }
+
+    interface OnUserItemClickListener {
+        fun onUserItemClick(user: User)
     }
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -14,7 +14,6 @@ import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
-import com.cleganeBowl2k18.trebuchet.presentation.view.FakeGroupFactory
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment.OnListFragmentInteractionListener
 
 
@@ -29,28 +28,11 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
 
     lateinit private var mRecyclerView: RecyclerView
 
-    interface OnGroupItemClickListener {
-        fun onGroupItemClick(group: Group)
-
-        fun onEditGroupItemClick(group: Group)
-    }
-
-    private val fakeGroupFactory: FakeGroupFactory = FakeGroupFactory()
-
-    fun generateGroups() : List<Group> {
-        var group1 = fakeGroupFactory.generateGroup("Cat Fans", listOf("Tom", "Bob", "Ian"))
-        var group2 = fakeGroupFactory.generateGroup("Book Club", listOf("Tammy", "Barbora"))
-        var group3 = fakeGroupFactory.generateGroup("Trip", listOf("Joseph", "Margaret", "Doug"))
-        var group4 = fakeGroupFactory.generateGroup("Chad Land", listOf("Chad", "Chad", "Chad"))
-        return listOf(group1,group2,group3,group4)
-    }
-
     var groups: List<Group>
         get() = mGroups
         set(groups) {
             this.mGroups.clear()
             this.mGroups.addAll(groups)
-            this.mGroups.addAll(generateGroups())
             notifyDataSetChanged()
         }
 
@@ -59,8 +41,6 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
                 .inflate(R.layout.card_group_tab, parent, false)
         return GroupViewHolder(view)
     }
-
-
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val groupName = mGroups[position].label
@@ -78,6 +58,12 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
 
     override fun getItemCount(): Int {
         return mGroups.size
+    }
+
+    interface OnGroupItemClickListener {
+        fun onGroupItemClick(group: Group)
+
+        fun onEditGroupItemClick(group: Group)
     }
 
     inner class GroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -112,7 +98,6 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
             mOnGroupItemClickListener.onGroupItemClick(mGroups[adapterPosition])
         }
     }
-
 
     private inner class AdapterItemTouchHelperCallback(dragDirs: Int, swipeDirs: Int) :
             ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {

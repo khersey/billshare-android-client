@@ -26,10 +26,6 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
     lateinit private var mRecyclerView: RecyclerView
     private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
 
-    interface OnUserItemClickListener {
-        fun onUserItemClick(user: User)
-    }
-
     var users: List<User>
         get() = mUsers
         set(users) {
@@ -71,6 +67,10 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
         if (pair != null) {
             mOweSplit[pair.first] = pair.second
         }
+    }
+
+    interface OnUserItemClickListener {
+        fun onUserItemClick(user: User)
     }
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

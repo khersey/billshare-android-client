@@ -29,14 +29,6 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
     private val USER_CARD: Int = 0
     private val ADD_USER_BUTTON: Int = 1
 
-    interface OnUserItemClickListener {
-        fun onUserItemClick(user: User)
-
-        fun onEditUserItemClick(user: User)
-
-        fun onAddUserClick()
-    }
-
     var users: List<User>
         get() = mUsers
         set(users) {
@@ -102,6 +94,13 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
         notifyDataSetChanged()
     }
 
+    interface OnUserItemClickListener {
+        fun onUserItemClick(user: User)
+
+        fun onEditUserItemClick(user: User)
+
+        fun onAddUserClick()
+    }
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
