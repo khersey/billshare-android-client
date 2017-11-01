@@ -1,7 +1,5 @@
 package com.cleganeBowl2k18.trebuchet.presentation.common
 
-import android.content.SharedPreferences
-
 interface Constants {
 
     interface Api {
@@ -17,6 +15,7 @@ interface Constants {
         // SharedPreference IDs
         val LOGGED_IN       = "logged_in"
         val CURRENT_USER    = "current_user"
+        val CURRENT_USER_ID = "current_user_id"
 
         // Split Types
         val SPLIT_EQUALLY       = 0

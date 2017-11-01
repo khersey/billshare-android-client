@@ -3,6 +3,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v7.widget.DefaultItemAnimator
@@ -17,6 +18,7 @@ import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
+import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
@@ -29,62 +31,22 @@ import javax.inject.Inject
 class CreateGroupActivity : BaseActivity(), CreateGroupView,
         CreateGroupAdapter.OnUserItemClickListener {
 
+    // class variables
     private val VERTICAL_SPACING: Int = 30
-
-    @BindView(R.id.create_group_recycle_view)
-    lateinit var mUserListRV: RecyclerView
-
-    @BindView(R.id.group_label_text_input)
-    lateinit var mGroupLabelInput: TextInputEditText
 
     @Inject
     lateinit var mPresenter: CreateGroupPresenter
 
-    lateinit var mCreateGroupAdapter: CreateGroupAdapter
+    private var prefs: SharedPreferences? = null
+    private var mCurrentUserId: Long = 0
 
-    @BindView(R.id.toolbar)
-    lateinit var mToolbar: Toolbar
-
-    private val mAdapterDataObserver = object : RecyclerView.AdapterDataObserver() {
-
-        override fun onChanged() {
-            onUserListChanged()
-        }
-
-        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-            onUserListChanged()
-        }
-
-        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-            onUserListChanged()
-        }
-    }
-
-    private fun onUserListChanged() {
-        //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onAddUserClick() {
-        startActivityForResult(this.CreateAddUserByEmailIntent(), 1)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            val email : String? = data?.getStringExtra("email")
-
-            if (email != null) {
-                val user = User(0, null, email, null, null)
-                mCreateGroupAdapter.addUser(user)
-            } else {
-                Log.e("onActivityResultERROR", "AddUserReturned null!")
-            }
-        }
-    }
-
+    // Lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_group)
         ButterKnife.bind(this)
+        prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
+        mCurrentUserId = prefs!!.getLong(Constants.CURRENT_USER_ID, -1)
 
         DaggerActivityComponent.builder()
                 .applicationComponent(mApplicationComponent)
@@ -95,15 +57,15 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         setupRecyclerView()
         mToolbar.setNavigationOnClickListener(View.OnClickListener {
             fun onClick(view: View) {
+                // TODO: form validation
                 this.finish()
             }
         })
 
         // GET current user
-        mPresenter.getUser(1)
+        mPresenter.getUser(mCurrentUserId)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -121,6 +83,20 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         mCreateGroupAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val email : String? = data?.getStringExtra("email")
+
+            if (email != null) {
+                val user = User(0, null, email, null, null)
+                mCreateGroupAdapter.addUser(user)
+            } else {
+                Log.e("onActivityResultERROR", "AddUserReturned null!")
+            }
+        }
+    }
+
+    // Helper functions
     private fun setupRecyclerView() {
         mCreateGroupAdapter = CreateGroupAdapter(ArrayList<User>(0), this)
 
@@ -131,6 +107,41 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         mUserListRV.adapter = mCreateGroupAdapter
 
         mCreateGroupAdapter.registerAdapterDataObserver(mAdapterDataObserver)
+    }
+
+    // useCase Callbacks
+    override fun userFetched(user: User) {
+        mCreateGroupAdapter.addUser(user)
+    }
+
+    override fun groupCreated() {
+        setResult(Activity.RESULT_OK, Intent())
+        this.finish()
+    }
+
+    override fun showError(message: String) {
+
+    }
+    // useCase Callbacks end
+
+    // UI Elements
+    @BindView(R.id.create_group_recycle_view)
+    lateinit var mUserListRV: RecyclerView
+    lateinit var mCreateGroupAdapter: CreateGroupAdapter
+
+    @BindView(R.id.group_label_text_input)
+    lateinit var mGroupLabelInput: TextInputEditText
+
+    @BindView(R.id.toolbar)
+    lateinit var mToolbar: Toolbar
+
+    // UI methods
+    private fun onUserListChanged() {
+        //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onAddUserClick() {
+        startActivityForResult(this.CreateAddUserByEmailIntent(), 1)
     }
 
     @OnClick(R.id.save_new_group)
@@ -144,23 +155,6 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
         mPresenter.onSaveGroup(group)
     }
-
-    // useCase Callbacks
-    override fun userFetched(user: User) {
-
-        mCreateGroupAdapter.addUser(user)
-    }
-
-    override fun groupCreated() {
-        setResult(Activity.RESULT_OK, Intent())
-        this.finish()
-    }
-
-    override fun showError(message: String) {
-
-    }
-
-    // Callbacks end
 
     override fun showProgress() {
 
@@ -178,6 +172,20 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
     }
 
+    private val mAdapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+
+        override fun onChanged() {
+            onUserListChanged()
+        }
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            onUserListChanged()
+        }
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            onUserListChanged()
+        }
+    }
 }
 
 fun Context.CreateGroupIntent(): Intent {

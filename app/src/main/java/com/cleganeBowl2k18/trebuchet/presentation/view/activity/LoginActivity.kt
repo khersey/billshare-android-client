@@ -280,16 +280,18 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
-                loginInSuccess()
+                // TODO: replace with currentUser
+                loginInSuccess(1)
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()
             }
         }
 
-        fun loginInSuccess() {
+        fun loginInSuccess(currentUserId: Long) {
             val editor = prefs!!.edit()
             editor.putBoolean(Constants.LOGGED_IN, true)
+            editor.putLong(Constants.CURRENT_USER_ID, currentUserId)
             editor.apply()
             startActivity(MainIntent())
             return

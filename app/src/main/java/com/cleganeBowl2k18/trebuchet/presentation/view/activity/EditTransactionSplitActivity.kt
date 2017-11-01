@@ -30,55 +30,31 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_edit_transaction_split.*
 import java.io.Serializable
-import java.util.ArrayList
+import java.util.*
 
 class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUserItemClickListener, UserCheckmarkAdapter.OnUserItemClickListener {
 
     private val VERTICAL_SPACING: Int = 30
     private val gson: Gson = Gson()
 
-    @BindView(R.id.toolbar_title)
-    lateinit var mToolbarTitle : TextView
-
-    @BindView(R.id.paid_by_spinner)
-    lateinit var mSpinnerPaidBy : Spinner
-    private var mSpinnerPaidByPos : Int = 0
-
-    @BindView(R.id.split_type_spinner)
-    lateinit var mSpinnerSplitType : Spinner
-    private var mSpinnerSplitTypePos : Int = 0
-
-    @BindView(R.id.transaction_equal_split)
-    lateinit var mContainerEqualSplit : LinearLayout
-
-    @BindView(R.id.equal_split_recycle_view)
-    lateinit var mEqualSplitRV : RecyclerView
-    lateinit var mEqualSplitAdapter: UserCheckmarkAdapter
-
-    @BindView(R.id.amount_split_recycler_view)
-    lateinit var mAmountSplitRV : RecyclerView
-    lateinit var mAmountSplitAdapter: UserEditMoneyAdapter
-
-    @BindView(R.id.transaction_amount_split)
-    lateinit var mContainerAmountSplit : LinearLayout
-
-    lateinit var mPaidBySpinnerAdapter: ArrayAdapter<String>
-
     var mUsers : MutableList<User>? = null
     var mCurrentUser : User? = null // TODO: use shared preferences for current user
     var mAmount : Long = 0
     private var prefs: SharedPreferences? = null
+    private var mCurrentUserId: Long = 0
 
+    // Lifecycle Events
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
+        mCurrentUserId = prefs!!.getLong(Constants.CURRENT_USER_ID, -1)
         setContentView(R.layout.activity_edit_transaction_split)
         setSupportActionBar(toolbar)
 
         mAmount = getIntent().getLongExtra("amount", 0)
         mUsers = gson.fromJson(getIntent().getStringExtra("users"), object : TypeToken<List<User>>() {}.type)
         val firstID: Long = 1
-        mCurrentUser = mUsers!!.find {user -> user.externalId == firstID}
+        mCurrentUser = mUsers!!.find { user -> user.externalId == firstID }
 
 
         ButterKnife.bind(this)
@@ -122,6 +98,34 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
         mAmountSplitRV.setHasFixedSize(true)
         mAmountSplitRV.adapter = mAmountSplitAdapter
     }
+
+    // UI Elements
+    @BindView(R.id.toolbar_title)
+    lateinit var mToolbarTitle : TextView
+
+    @BindView(R.id.paid_by_spinner)
+    lateinit var mSpinnerPaidBy : Spinner
+    private var mSpinnerPaidByPos : Int = 0
+
+    @BindView(R.id.split_type_spinner)
+    lateinit var mSpinnerSplitType : Spinner
+    private var mSpinnerSplitTypePos : Int = 0
+
+    @BindView(R.id.transaction_equal_split)
+    lateinit var mContainerEqualSplit : LinearLayout
+
+    @BindView(R.id.equal_split_recycle_view)
+    lateinit var mEqualSplitRV : RecyclerView
+    lateinit var mEqualSplitAdapter: UserCheckmarkAdapter
+
+    @BindView(R.id.amount_split_recycler_view)
+    lateinit var mAmountSplitRV : RecyclerView
+    lateinit var mAmountSplitAdapter: UserEditMoneyAdapter
+
+    @BindView(R.id.transaction_amount_split)
+    lateinit var mContainerAmountSplit : LinearLayout
+
+    lateinit var mPaidBySpinnerAdapter: ArrayAdapter<String>
 
     @OnItemSelected(R.id.split_type_spinner)
     fun onSplitTypeChanged(pos: Int) {
