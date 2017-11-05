@@ -3,10 +3,14 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
-import android.view.View
-import android.widget.*
+import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import butterknife.*
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
@@ -20,88 +24,38 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerAc
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.CreateTransactionPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.CreateTransactionView
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_create_transaction.*
-import java.io.Serializable
 import javax.inject.Inject
 
 class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
-
+    // class variables
     private val VERTICAL_SPACING: Int = 30
-
-    @BindView(R.id.label_edit_text)
-    lateinit var mLabelEditText: EditText
-
-    @BindView(R.id.select_group_spinner)
-    lateinit var mGroupSpinner: Spinner
-
-    @BindView(R.id.amount_edit_text)
-    lateinit var mAmountEditText: EditText
-    @OnTextChanged(R.id.amount_edit_text)
-    fun amountChanged() {
-        try {
-            mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
-            oweSplit = SplitUtil.equalSplit(mAmount, mSelectedGroup!!.users!!.map { user -> user.externalId })
-            paySplit = mutableMapOf(mCurrentUser!!.externalId to mAmount)
-        } catch(exception: Exception) {
-
-        }
-    }
-
-    @BindView(R.id.select_currency_code_spinner)
-    lateinit var mCurrencyCodeSpinner: Spinner
-
-    @BindView(R.id.activity_create_transaction)
-    lateinit var mView: View
-
-    @BindView(R.id.paid_by_text)
-    lateinit var mPaidByText: TextView
-
-    @BindView(R.id.split_between_text)
-    lateinit var mSplitBetweenText: TextView
-
-    val gson: Gson = Gson()
-
-    @OnClick(R.id.edit_transaction_btn)
-    fun editTransactionClicked() {
-        var intent = this.CreateEditTransactionIntent()
-        intent.putExtra("amount", mAmount)
-        val list = mSelectedGroup!!.users
-        intent.putExtra("users", gson.toJson(list))
-        startActivityForResult(intent, 0)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            var temp: MutableMap<Long, Long> = (data!!.getSerializableExtra("oweSplit") as MutableMap<Long, Long>)
-            if (temp != null) {
-                oweSplit = temp
-            }
-            temp = (data!!.getSerializableExtra("paySplit") as MutableMap<Long, Long>)
-            if (temp != null) {
-                paySplit = temp
-            }
-        }
-    }
-
     @Inject
     lateinit var mPresenter: CreateTransactionPresenter
 
     lateinit var mGroupSpinnerAdapter: ArrayAdapter<String>
 
+    val gson: Gson = Gson()
+    private var prefs: SharedPreferences? = null
     var mGroups : MutableList<Group> = mutableListOf()
     var mSelectedGroup: Group? = null
     var mCurrentUser: User? = null
-    var mTransactionType: Int = Constants.SPLIT_EQUALLY
-    var oweSplit: MutableMap<Long, Long> = mutableMapOf()
-    var paySplit: MutableMap<Long, Long> = mutableMapOf()
+    var mSplitType: Int = -1
+    var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
+    var mPaySplit: MutableMap<Long, Long> = mutableMapOf()
     var mAmount: Long = 0
+    var mCurrentUserId: Long = 0
 
+
+    // Lifecycle Methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_transaction)
         setSupportActionBar(toolbar)
+        prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
+        mCurrentUserId = prefs!!.getLong(Constants.CURRENT_USER_ID, -1)
 
         ButterKnife.bind(this)
 
@@ -111,10 +65,11 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
                 .inject(this)
 
         mPresenter.setView(this)
-        mCurrentUser = User(1, null, null, null, null)
 
-        mPresenter.getGroupsByUserId(mCurrentUser!!.externalId) // TODO: replace with sharedPreference
-        mPresenter.getUser(mCurrentUser!!.externalId)
+        mPresenter.getUser(mCurrentUserId)
+        mPresenter.getGroupsByUserId(mCurrentUserId)
+
+        mSplitType = Constants.SPLIT_EQUALLY
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupSpinners()
@@ -123,7 +78,7 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     override fun onResume() {
         super.onResume()
-        mPresenter.getGroupsByUserId(mCurrentUser!!.externalId)
+
     }
 
     override fun onPause() {
@@ -136,6 +91,47 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         mPresenter.onDestroy()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            var temp: MutableMap<Long, Long> = (data!!.getSerializableExtra("mOweSplit") as MutableMap<Long, Long>)
+            if (temp != null) {
+                mOweSplit = temp
+            } else {
+                Log.e("ActivityResult", "FAILED to deserialize OweSplit")
+            }
+            temp = (data!!.getSerializableExtra("mPaySplit") as MutableMap<Long, Long>)
+            if (temp != null) {
+                mPaySplit = temp
+            } else {
+                Log.e("ActivityResult", "FAILED to deserialize PaySplit")
+            }
+            mSplitType = data!!.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
+            updateTransactionSplit()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putString("mGroups", gson.toJson(mGroups))
+        outState!!.putString("mSelecedGroup", gson.toJson(mSelectedGroup))
+        outState!!.putString("mOweSplit", gson.toJson(mOweSplit))
+        outState!!.putString("mPaySplit", gson.toJson(mPaySplit))
+        outState!!.putString("mCurrentUser", gson.toJson(mCurrentUser))
+        outState!!.putInt("mSplitType", mSplitType)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        mGroups        = gson.fromJson(savedInstanceState.getString("mGroups"), object : TypeToken<MutableList<Group>>() {}.type)
+        mSelectedGroup = gson.fromJson(savedInstanceState.getString("mSelectedGroup"), object : TypeToken<Group>() {}.type)
+        mOweSplit      = gson.fromJson(savedInstanceState.getString("mOweSplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+        mPaySplit      = gson.fromJson(savedInstanceState.getString("mPaySplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+        mCurrentUser   = gson.fromJson(savedInstanceState.getString("mCurrentUser"), object : TypeToken<User>() {}.type)
+        mSplitType     = savedInstanceState.getInt("mSplitType")
+    }
+
+    // Helper Functions
     private fun setupSpinners() {
         mGroupSpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mGroups.map { group: Group -> group.label!! })
         mGroupSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -149,19 +145,39 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         mSplitBetweenText.setSingleLine(false)
     }
 
+    // UI Elements
+    @BindView(R.id.label_edit_text)
+    lateinit var mLabelEditText: EditText
+
+    @BindView(R.id.select_group_spinner)
+    lateinit var mGroupSpinner: Spinner
+
+    @BindView(R.id.amount_edit_text)
+    lateinit var mAmountEditText: EditText
+
+    @BindView(R.id.select_currency_code_spinner)
+    lateinit var mCurrencyCodeSpinner: Spinner
+
+    @BindView(R.id.paid_by_text)
+    lateinit var mPaidByText: TextView
+
+    @BindView(R.id.split_between_text)
+    lateinit var mSplitBetweenText: TextView
+
+    @OnClick(R.id.edit_transaction_btn)
+    fun editTransactionClicked() {
+        var intent = this.CreateEditTransactionIntent()
+        intent.putExtra("amount", mAmount)
+        val list = mSelectedGroup!!.users
+        intent.putExtra("users", gson.toJson(list))
+        startActivityForResult(intent, 0)
+    }
+
     @OnItemSelected(R.id.select_group_spinner)
     fun onGroupSelected(pos: Int) {
         val label = mGroupSpinner.getItemAtPosition(pos)
         mSelectedGroup = mGroups.find { group -> group.label == label }
-
-        var paySplitString : String = ""
-        paySplitString += "${mCurrentUser?.fName} ${mCurrentUser?.lName!![0]}"
-        mPaidByText.text = paySplitString
-
-        var oweSplitString : String = ""
-        mSelectedGroup?.users?.forEach { user -> oweSplitString += "${user.fName} ${user.lName!![0]}.\n" }
-        mSplitBetweenText.text = oweSplitString
-
+        amountChanged()
     }
 
     @OnClick(R.id.save_button)
@@ -169,11 +185,55 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         if (formIsValid()) {
             val currencyCode: String = mCurrencyCodeSpinner.selectedItem.toString()
             val label : String = mLabelEditText.text.toString()
-            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, false, paySplit, oweSplit)
+            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, mCurrentUserId, false, mPaySplit, mOweSplit)
             mPresenter.createTransaction(newTransaction)
         }
     }
 
+    @OnTextChanged(R.id.amount_edit_text)
+    fun amountChanged() {
+        try {
+            mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
+            mOweSplit = SplitUtil.equalSplit(mAmount, mSelectedGroup!!.users!!.map { user -> user.externalId })
+            mPaySplit = mutableMapOf(mCurrentUser!!.externalId to mAmount)
+            updateTransactionSplit()
+        } catch(exception: Exception) {
+
+        }
+    }
+
+    override fun showProgress() {
+        //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hideProgress() {
+        //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun updateTransactionSplit() {
+//        var paySplitString : String = ""
+//        paySplitString += "${mCurrentUser?.fName} ${mCurrentUser?.lName!![0]}"
+//        mPaidByText.text = paySplitString
+//
+//        var oweSplitString : String = ""
+//        mSelectedGroup?.users?.forEach { user -> oweSplitString += "${user.fName} ${user.lName!![0]}.\n" }
+//        mSplitBetweenText.text = oweSplitString
+        var paySplitString : String = ""
+        for (userId in mPaySplit.keys) {
+            var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
+            if (user != null) paySplitString += "${user?.fName} ${user?.lName!![0]} => $${(mPaySplit[userId]!! * 0.01)!!.toDouble()}\n"
+        }
+        mPaidByText.text = paySplitString
+
+        var oweSplitString : String = ""
+        for (userId in mOweSplit.keys) {
+            var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
+            if (user != null) oweSplitString += "${user?.fName} ${user?.lName!![0]} => $${(mOweSplit[userId]!! * 0.01)!!.toDouble()}\n"
+        }
+        mSplitBetweenText.text = oweSplitString
+    }
+
+    // useCase Stuff
     override fun transactionCreated(transactionReceiver: TransactionReceiver) {
         val transaction: Transaction = transactionReceiver.toTransaction()
         setResult(Activity.RESULT_OK, Intent())
@@ -181,7 +241,17 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     }
 
     fun formIsValid() : Boolean {
-        // TODO: Form Validation
+        var oweTotal: Long = mOweSplit.values.sum()
+        if (oweTotal != mAmount) {
+            // TODO: display error
+            return false
+        }
+        var payTotal: Long = mPaySplit.values.sum()
+        if (payTotal != mAmount) {
+            // TODO: display error
+            return false
+        }
+
         return true
     }
 
@@ -189,6 +259,7 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         mCurrentUser = user
         // TODO: remove this, we dont need it
     }
+
 
     override fun showError(error: String) {
         // snackbar in an error here
@@ -202,13 +273,6 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         onGroupSelected(0)
     }
 
-    override fun showProgress() {
-         //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun hideProgress() {
-         //To change body of created functions use File | Settings | File Templates.
-    }
 }
 
 fun Context.CreateTransactionIntent(): Intent {

@@ -26,10 +26,6 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
     lateinit private var mRecyclerView: RecyclerView
     private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
 
-    interface OnUserItemClickListener {
-        fun onUserItemClick(user: User)
-    }
-
     var users: List<User>
         get() = mUsers
         set(users) {
@@ -40,7 +36,7 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserEditMoneyAdapter.UserViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.card_user_checkbox, parent, false)
+                .inflate(R.layout.card_user_edit_money, parent, false)
         return UserViewHolder(view)
 
     }
@@ -73,9 +69,17 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
         }
     }
 
+    interface OnUserItemClickListener {
+        fun onUserItemClick(user: User)
+    }
+
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        @BindView(R.id.card_user_edit_money)
+        init {
+            ButterKnife.bind(this, itemView)
+        }
+
+        @BindView(R.id.user_edit_money_card_view)
         lateinit var mCardView: CardView
         @BindView(R.id.user_label)
         lateinit var mTitleTV: TextView
@@ -92,17 +96,13 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
 
         var mId: Long = 0
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
-
         fun bindData(title: String?, content: String?, id: Long) {
             mTitleTV.text = title
             mContentTV.text = content
             mId = id
         }
 
-        @OnClick(R.id.create_group_card_view)
+        @OnClick(R.id.user_edit_money_card_view)
         fun onCardClicked() {
             mOnUserItemClickListener.onUserItemClick(mUsers[adapterPosition])
         }

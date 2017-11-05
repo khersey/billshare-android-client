@@ -14,7 +14,6 @@ import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
-import com.cleganeBowl2k18.trebuchet.presentation.view.FakeTransactionFactory
 
 
 class TransactionListAdapter(private val mTransactions: MutableList<Transaction>,
@@ -23,28 +22,12 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
 
     lateinit private var mRecyclerView: RecyclerView
 
-    interface OnTransactionItemClickListener {
-        fun onTransactionItemClick(transaction: Transaction)
-
-        fun onEditTransactionItemClick(transaction: Transaction)
-    }
-
-    private  val transactionFactory: FakeTransactionFactory = FakeTransactionFactory()
-
-    private fun generateTransactions(): List<Transaction> {
-        var transaction1 = transactionFactory.generateTransaction("Scuba Gear", 15999, "Scuba Guys")
-        var transaction2 = transactionFactory.generateTransaction("Expedition to Cape Cod", 145999, "Scuba Guys")
-        var transaction3 = transactionFactory.generateTransaction("Mr. Fluffles food", 4800, "cat ladyz")
-        var transaction4 = transactionFactory.generateTransaction("Beer", 2000000, "fer tha boys")
-        return listOf(transaction1, transaction2, transaction3, transaction4)
-    }
     // allow user to get and set transactions as List
     var transactions: List<Transaction>
         get() = mTransactions
         set(transactions) {
             this.mTransactions.clear()
             this.mTransactions.addAll(transactions)
-            this.mTransactions.addAll(generateTransactions())
             notifyDataSetChanged()
         }
 
@@ -57,7 +40,6 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
 
         holder?.bindData(transactionGroup!!, transactionAmount!!.toDouble() * 0.01, transactionLabel!!, transactionOwed!!, transactionPayed!!)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -76,6 +58,12 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         return mTransactions.size
     }
 
+    interface OnTransactionItemClickListener {
+        fun onTransactionItemClick(transaction: Transaction)
+
+        fun onEditTransactionItemClick(transaction: Transaction)
+    }
+
     inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @BindView(R.id.transaction_card_view)
@@ -91,8 +79,7 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>
-        ) {
+        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>) {
 
             // TODO: figure out who the current user is and use Splits to generate mContentTV for that User
 

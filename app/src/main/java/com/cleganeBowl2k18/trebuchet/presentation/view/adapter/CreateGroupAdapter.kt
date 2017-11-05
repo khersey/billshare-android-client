@@ -20,8 +20,7 @@ import com.cleganeBowl2k18.trebuchet.data.models.User
  */
 class CreateGroupAdapter(private val mUsers: MutableList<User>,
                          private val mOnUserItemClickListener: CreateGroupAdapter.OnUserItemClickListener) :
-
-        RecyclerView.Adapter<CreateGroupAdapter.UserViewHolder>() {
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit private var mRecyclerView: RecyclerView
     private var hasLoadButton : Boolean = true
@@ -29,14 +28,6 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
     // CONSTANTS
     private val USER_CARD: Int = 0
     private val ADD_USER_BUTTON: Int = 1
-
-    interface OnUserItemClickListener {
-        fun onUserItemClick(user: User)
-
-        fun onEditUserItemClick(user: User)
-
-        fun onAddUserClick()
-    }
 
     var users: List<User>
         get() = mUsers
@@ -61,23 +52,7 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        // might be off by one
-//        when (holder) {
-//            is CreateGroupAdapter.UserViewHolder -> {
-//                var title = mUsers[position].email
-//                var content = "invite sent"
-//
-//                if (mUsers[position].fName != null && mUsers[position].lName != null ) {
-//                    title = "${mUsers[position].fName} ${mUsers[position].lName}"
-//                    content = mUsers[position].email!!
-//                }
-//
-//                holder.bindData(title!!, content!!)
-//            }
-//        }
-        if (position == itemCount-1) {
-
-        } else if (holder is CreateGroupAdapter.UserViewHolder) {
+        if (holder is CreateGroupAdapter.UserViewHolder) {
 
             var title = mUsers[position].email
             var content = "invite sent"
@@ -114,21 +89,19 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
         }
     }
 
-    fun isHasLoadButton(): Boolean {
-        return hasLoadButton
-    }
-
-    fun setHasLoadButton(hasLoadButton: Boolean) {
-        this.hasLoadButton = hasLoadButton
-        notifyDataSetChanged()
-    }
-
-
     fun addUser(user: User) {
         mUsers.add(user)
         notifyDataSetChanged()
     }
 
+    interface OnUserItemClickListener {
+
+        fun onUserItemClick(user: User)
+
+        fun onEditUserItemClick(user: User)
+
+        fun onAddUserClick()
+    }
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

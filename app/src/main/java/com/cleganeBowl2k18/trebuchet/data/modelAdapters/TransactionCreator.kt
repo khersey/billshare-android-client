@@ -1,7 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.data.modelAdapters
 
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
-import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.google.gson.annotations.SerializedName
 
 class TransactionCreator {
@@ -11,6 +10,7 @@ class TransactionCreator {
     var label: String? = null
     var group: Long? = null
     var creator: Long? = null
+    @SerializedName("user_shares")
     var transactions: List<TransactionCreatorTransaction>? = listOf()
 
     constructor()
@@ -24,24 +24,23 @@ class TransactionCreator {
         this.transactions = transactions
     }
 
-    constructor(transaction: Transaction, creator: Long) {
+    constructor(transaction: Transaction) {
         this.total = transaction.amount.toDouble() * 0.01
         this.currencyCode = transaction.currencyCode
         this.label = transaction.label
         this.group = transaction.group!!.externalId
-        this.creator = creator
+        this.creator = transaction.creator
         var list: MutableList<TransactionCreatorTransaction> = mutableListOf()
 
         for (user in transaction!!.group!!.users!!) {
             var tc = TransactionCreatorTransaction()
-            tc.payer = user.externalId
-            if (transaction!!.oweSplit!!.keys.contains(tc.payer)) {
+            tc.user = user.externalId
+            if (transaction!!.oweSplit!!.keys.contains(tc.user)) {
                 tc.owes = transaction!!.oweSplit!![user.externalId]!!.toDouble() * 0.01
             }
-            if (transaction!!.paySplit!!.keys.contains(tc.payer)) {
+            if (transaction!!.paySplit!!.keys.contains(tc.user)) {
                 tc.paid = transaction!!.paySplit!![user.externalId]!!.toDouble() * 0.01
             }
-
             if (tc.owes > 0 || tc.paid > 0) {
                 list.add(tc)
             }

@@ -47,7 +47,7 @@ class TransactionPresenter @Inject constructor(private val mGetTransactionList: 
         override fun onNext(transactions: List<TransactionReceiver>) {
             mTransactionView!!.hideProgress()
             var list: MutableList<Transaction> = mutableListOf()
-            for( tr in transactions) {
+            for (tr in transactions) {
                 list.add(tr.toTransaction())
             }
             mTransactionView!!.showTransactions(list)

@@ -34,9 +34,9 @@
 
 
     <string name="title_activity_main">MainActivity</string>
-    <string name="tab_dashboard">Dashbaord</string>
+    <string name="tab_dashboard">Dashboard</string>
     <string name="tab_groups">Groups</string>
-    <string name="tab_transactions">Transaction</string>
+    <string name="tab_transactions">Transactions</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="empty_group_list">Create a New Group to get Started</string>
     <string name="empty_transaction_list">Create a new Transaction to get Started!</string>
@@ -62,12 +62,6 @@
         <item>CAD</item>
         <item>USD</item>
         <item>EUR</item>
-    </string-array>
-
-    <string-array name="split_types">
-        <item>Equally</item>
-        <item>By Amount</item>
-        <!--<item>By Percent</item>-->
     </string-array>
 
     <string name="title_activity_edit_transaction_split">EditTransactionSplit</string>
