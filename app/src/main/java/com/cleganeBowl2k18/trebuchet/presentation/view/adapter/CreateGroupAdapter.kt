@@ -95,6 +95,7 @@ class CreateGroupAdapter(private val mUsers: MutableList<User>,
     }
 
     interface OnUserItemClickListener {
+
         fun onUserItemClick(user: User)
 
         fun onEditUserItemClick(user: User)

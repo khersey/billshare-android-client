@@ -47,8 +47,8 @@ class CreateTransactionPresenter @Inject constructor(private val mGetUserGroups:
         mGetUserGroups.execute(GetGroupsByUserIdObserver(), id)
     }
 
-    fun createTransaction(transaction: Transaction, userId: Long) {
-        mCreateNewTransaction.execute(CreateTranactionObserver(), TransactionCreator(transaction, userId))
+    fun createTransaction(transaction: Transaction) {
+        mCreateNewTransaction.execute(CreateTranactionObserver(), TransactionCreator(transaction))
     }
 
     // USE CASE OBSERVERS

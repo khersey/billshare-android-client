@@ -26,7 +26,8 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupInten
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.GroupPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.GroupView
-import java.util.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
 
 /**
@@ -51,6 +52,8 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
     private var mListener: OnGroupSelectedListener? = null
     private var prefs: SharedPreferences? = null
     private var mCurrentUserId: Long = 0
+    private var mGroups: MutableList<Group> = mutableListOf()
+    val gson: Gson = Gson()
 
     // Lifecycle methods
     override fun onAttach(context: Context?) {
@@ -105,9 +108,21 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putString("mGroups", gson.toJson(mGroups))
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState != null) {
+            mGroups = gson.fromJson(savedInstanceState!!.getString("mGroups"), object : TypeToken<MutableList<Group>>() {}.type)
+        }
+    }
+
     // Helper Methods
     private fun setupRecyclerView() {
-        mGroupListAdapter = GroupListAdapter(ArrayList<Group>(0), this)
+        mGroupListAdapter = GroupListAdapter(mGroups, this)
 
         mGroupListRV.itemAnimator = DefaultItemAnimator()
         mGroupListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -121,6 +136,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
     // useCases
     override fun showGroups(groups: List<Group>) {
         mGroupListAdapter.groups = groups
+        mGroups = groups.toMutableList()
     }
 
     override fun showGroups() {

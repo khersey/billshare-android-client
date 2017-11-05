@@ -2,7 +2,6 @@ package com.cleganeBowl2k18.trebuchet.presentation.view
 
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
-import com.cleganeBowl2k18.trebuchet.data.models.User
 
 /**
  * Generates fake Transaction objects and their dependencies
@@ -18,6 +17,6 @@ class FakeTransactionFactory {
         val group: Group = groupFactory.generateGroup(groupName, listOf("Tom", "Bob", "Ian", "Jack"))
 
         id += 1
-        return Transaction(id-1, group, name, amount, "CAD", false, mutableMapOf<Long,Long>(), mutableMapOf<Long,Long>())
+        return Transaction(id-1, group, name, amount, "CAD", 1, false, mutableMapOf<Long,Long>(), mutableMapOf<Long,Long>())
     }
 }

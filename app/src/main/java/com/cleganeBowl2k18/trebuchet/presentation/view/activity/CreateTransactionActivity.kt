@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
@@ -23,6 +24,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerAc
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.CreateTransactionPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.CreateTransactionView
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_create_transaction.*
 import javax.inject.Inject
 
@@ -40,11 +42,12 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     var mGroups : MutableList<Group> = mutableListOf()
     var mSelectedGroup: Group? = null
     var mCurrentUser: User? = null
-    var mTransactionType: Int = Constants.SPLIT_EQUALLY
-    var oweSplit: MutableMap<Long, Long> = mutableMapOf()
-    var paySplit: MutableMap<Long, Long> = mutableMapOf()
+    var mSplitType: Int = -1
+    var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
+    var mPaySplit: MutableMap<Long, Long> = mutableMapOf()
     var mAmount: Long = 0
     var mCurrentUserId: Long = 0
+
 
     // Lifecycle Methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,10 +65,11 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
                 .inject(this)
 
         mPresenter.setView(this)
-        mCurrentUser = User(mCurrentUserId, null, null, null, null)
 
-        mPresenter.getGroupsByUserId(mCurrentUserId)
         mPresenter.getUser(mCurrentUserId)
+        mPresenter.getGroupsByUserId(mCurrentUserId)
+
+        mSplitType = Constants.SPLIT_EQUALLY
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupSpinners()
@@ -74,7 +78,7 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     override fun onResume() {
         super.onResume()
-        mPresenter.getGroupsByUserId(mCurrentUserId)
+
     }
 
     override fun onPause() {
@@ -90,15 +94,41 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            var temp: MutableMap<Long, Long> = (data!!.getSerializableExtra("oweSplit") as MutableMap<Long, Long>)
+            var temp: MutableMap<Long, Long> = (data!!.getSerializableExtra("mOweSplit") as MutableMap<Long, Long>)
             if (temp != null) {
-                oweSplit = temp
+                mOweSplit = temp
+            } else {
+                Log.e("ActivityResult", "FAILED to deserialize OweSplit")
             }
-            temp = (data!!.getSerializableExtra("paySplit") as MutableMap<Long, Long>)
+            temp = (data!!.getSerializableExtra("mPaySplit") as MutableMap<Long, Long>)
             if (temp != null) {
-                paySplit = temp
+                mPaySplit = temp
+            } else {
+                Log.e("ActivityResult", "FAILED to deserialize PaySplit")
             }
+            mSplitType = data!!.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
+            updateTransactionSplit()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putString("mGroups", gson.toJson(mGroups))
+        outState!!.putString("mSelecedGroup", gson.toJson(mSelectedGroup))
+        outState!!.putString("mOweSplit", gson.toJson(mOweSplit))
+        outState!!.putString("mPaySplit", gson.toJson(mPaySplit))
+        outState!!.putString("mCurrentUser", gson.toJson(mCurrentUser))
+        outState!!.putInt("mSplitType", mSplitType)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        mGroups        = gson.fromJson(savedInstanceState.getString("mGroups"), object : TypeToken<MutableList<Group>>() {}.type)
+        mSelectedGroup = gson.fromJson(savedInstanceState.getString("mSelectedGroup"), object : TypeToken<Group>() {}.type)
+        mOweSplit      = gson.fromJson(savedInstanceState.getString("mOweSplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+        mPaySplit      = gson.fromJson(savedInstanceState.getString("mPaySplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+        mCurrentUser   = gson.fromJson(savedInstanceState.getString("mCurrentUser"), object : TypeToken<User>() {}.type)
+        mSplitType     = savedInstanceState.getInt("mSplitType")
     }
 
     // Helper Functions
@@ -147,15 +177,7 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     fun onGroupSelected(pos: Int) {
         val label = mGroupSpinner.getItemAtPosition(pos)
         mSelectedGroup = mGroups.find { group -> group.label == label }
-
-        var paySplitString : String = ""
-        paySplitString += "${mCurrentUser?.fName} ${mCurrentUser?.lName!![0]}"
-        mPaidByText.text = paySplitString
-
-        var oweSplitString : String = ""
-        mSelectedGroup?.users?.forEach { user -> oweSplitString += "${user.fName} ${user.lName!![0]}.\n" }
-        mSplitBetweenText.text = oweSplitString
-
+        amountChanged()
     }
 
     @OnClick(R.id.save_button)
@@ -163,8 +185,8 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         if (formIsValid()) {
             val currencyCode: String = mCurrencyCodeSpinner.selectedItem.toString()
             val label : String = mLabelEditText.text.toString()
-            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, false, paySplit, oweSplit)
-            mPresenter.createTransaction(newTransaction, mCurrentUserId)
+            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, mCurrentUserId, false, mPaySplit, mOweSplit)
+            mPresenter.createTransaction(newTransaction)
         }
     }
 
@@ -172,8 +194,9 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     fun amountChanged() {
         try {
             mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
-            oweSplit = SplitUtil.equalSplit(mAmount, mSelectedGroup!!.users!!.map { user -> user.externalId })
-            paySplit = mutableMapOf(mCurrentUser!!.externalId to mAmount)
+            mOweSplit = SplitUtil.equalSplit(mAmount, mSelectedGroup!!.users!!.map { user -> user.externalId })
+            mPaySplit = mutableMapOf(mCurrentUser!!.externalId to mAmount)
+            updateTransactionSplit()
         } catch(exception: Exception) {
 
         }
@@ -187,6 +210,29 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         //To change body of created functions use File | Settings | File Templates.
     }
 
+    fun updateTransactionSplit() {
+//        var paySplitString : String = ""
+//        paySplitString += "${mCurrentUser?.fName} ${mCurrentUser?.lName!![0]}"
+//        mPaidByText.text = paySplitString
+//
+//        var oweSplitString : String = ""
+//        mSelectedGroup?.users?.forEach { user -> oweSplitString += "${user.fName} ${user.lName!![0]}.\n" }
+//        mSplitBetweenText.text = oweSplitString
+        var paySplitString : String = ""
+        for (userId in mPaySplit.keys) {
+            var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
+            if (user != null) paySplitString += "${user?.fName} ${user?.lName!![0]} => $${(mPaySplit[userId]!! * 0.01)!!.toDouble()}\n"
+        }
+        mPaidByText.text = paySplitString
+
+        var oweSplitString : String = ""
+        for (userId in mOweSplit.keys) {
+            var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
+            if (user != null) oweSplitString += "${user?.fName} ${user?.lName!![0]} => $${(mOweSplit[userId]!! * 0.01)!!.toDouble()}\n"
+        }
+        mSplitBetweenText.text = oweSplitString
+    }
+
     // useCase Stuff
     override fun transactionCreated(transactionReceiver: TransactionReceiver) {
         val transaction: Transaction = transactionReceiver.toTransaction()
@@ -195,7 +241,17 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     }
 
     fun formIsValid() : Boolean {
-        // TODO: Form Validation
+        var oweTotal: Long = mOweSplit.values.sum()
+        if (oweTotal != mAmount) {
+            // TODO: display error
+            return false
+        }
+        var payTotal: Long = mPaySplit.values.sum()
+        if (payTotal != mAmount) {
+            // TODO: display error
+            return false
+        }
+
         return true
     }
 

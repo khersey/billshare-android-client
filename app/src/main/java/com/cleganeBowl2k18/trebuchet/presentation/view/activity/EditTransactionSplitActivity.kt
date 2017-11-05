@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
@@ -30,18 +31,21 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_edit_transaction_split.*
 import java.io.Serializable
-import java.util.*
 
-class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUserItemClickListener, UserCheckmarkAdapter.OnUserItemClickListener {
+class EditTransactionSplitActivity : BaseActivity(),
+        UserEditMoneyAdapter.OnUserItemClickListener, UserCheckmarkAdapter.OnUserItemClickListener {
 
     private val VERTICAL_SPACING: Int = 30
     private val gson: Gson = Gson()
 
     var mUsers : MutableList<User>? = null
-    var mCurrentUser : User? = null // TODO: use shared preferences for current user
+    var mCurrentUser : User? = null
     var mAmount : Long = 0
+    private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
+    private var mPaySplit: MutableMap<Long, Long> = mutableMapOf()
     private var prefs: SharedPreferences? = null
     private var mCurrentUserId: Long = 0
+
 
     // Lifecycle Events
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +57,9 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
 
         mAmount = getIntent().getLongExtra("amount", 0)
         mUsers = gson.fromJson(getIntent().getStringExtra("users"), object : TypeToken<List<User>>() {}.type)
-        val firstID: Long = 1
-        mCurrentUser = mUsers!!.find { user -> user.externalId == firstID }
-
+        mUsers = mUsers?.toMutableList()
+        mUsers!!.forEach {user: User -> Log.i("EditTransaction", "user: ${user.fName} ${user.lName!![0]}")}
+        mCurrentUser = mUsers!!.find { user -> user.externalId == mCurrentUserId }
 
         ButterKnife.bind(this)
 
@@ -64,6 +68,7 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
                 .build()
                 .inject(this)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupSpinners()
         setupRecycleViews()
     }
@@ -72,17 +77,20 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
 
     }
 
-
+    // 
     private fun setupSpinners() {
         mPaidBySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mUsers!!.map { user: User -> "${user.fName!!} ${user.lName!![0]}." })
         mPaidBySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinnerPaidBy.adapter = mPaidBySpinnerAdapter
 
-        onSplitTypeChanged(0)
+        mSplitTypeSpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Equally", "By Amount", "By Percent"))
+        mSplitTypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mSpinnerSplitType.adapter = mSplitTypeSpinnerAdapter
+        onSplitTypeChanged()
     }
 
     private fun setupRecycleViews() {
-        mEqualSplitAdapter = UserCheckmarkAdapter(ArrayList<User>(0), this)
+        mEqualSplitAdapter = UserCheckmarkAdapter(mUsers!!, this)
 
         mEqualSplitRV.itemAnimator = DefaultItemAnimator()
         mEqualSplitRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -90,7 +98,7 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
         mEqualSplitRV.setHasFixedSize(true)
         mEqualSplitRV.adapter = mEqualSplitAdapter
 
-        mAmountSplitAdapter = UserEditMoneyAdapter(ArrayList<User>(0), this)
+        mAmountSplitAdapter = UserEditMoneyAdapter(mUsers!!, this)
 
         mAmountSplitRV.itemAnimator = DefaultItemAnimator()
         mAmountSplitRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -105,11 +113,11 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
 
     @BindView(R.id.paid_by_spinner)
     lateinit var mSpinnerPaidBy : Spinner
-    private var mSpinnerPaidByPos : Int = 0
+    lateinit var mPaidBySpinnerAdapter: ArrayAdapter<String>
 
     @BindView(R.id.split_type_spinner)
     lateinit var mSpinnerSplitType : Spinner
-    private var mSpinnerSplitTypePos : Int = 0
+    lateinit var mSplitTypeSpinnerAdapter: ArrayAdapter<String>
 
     @BindView(R.id.transaction_equal_split)
     lateinit var mContainerEqualSplit : LinearLayout
@@ -125,38 +133,48 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
     @BindView(R.id.transaction_amount_split)
     lateinit var mContainerAmountSplit : LinearLayout
 
-    lateinit var mPaidBySpinnerAdapter: ArrayAdapter<String>
+
 
     @OnItemSelected(R.id.split_type_spinner)
-    fun onSplitTypeChanged(pos: Int) {
+    fun onSplitTypeChanged() {
         mContainerAmountSplit.visibility = View.GONE
         mContainerEqualSplit.visibility = View.GONE
-        val selection = mSpinnerSplitType.getItemAtPosition(pos)
+        val selection = mSpinnerSplitType.selectedItem.toString()
 
-        when (selection) {
-            "Equally"   -> mContainerEqualSplit.visibility = View.VISIBLE
-            "By Amount" -> mContainerAmountSplit.visibility = View.VISIBLE
+        if (selection == "Equally") {
+            Log.d("SPLIT CHANGED", "Equally == $selection")
+            mContainerAmountSplit.visibility = View.VISIBLE
+        } else if (selection == "By Amount") {
+            Log.d("SPLIT CHANGED", "By Amount == $selection")
+            mContainerEqualSplit.visibility = View.VISIBLE
         }
-        mSpinnerSplitTypePos = pos
-    }
 
-    @OnItemSelected(R.id.paid_by_spinner)
-    fun onPaidByPosChange(pos: Int) {
-        mSpinnerPaidByPos = pos
+        // TODO: Figure why the fuck these are inverted...
     }
 
     @OnClick(R.id.save_button)
     fun saveTransaction() {
-        if (formIsValid()) {
+        try {
+            mPaySplit = buildPaySplit()
+            mOweSplit = buildOweSplit()
 
-            val paySplit = buildPaySplit()
-            val oweSplit = buildOweSplit()
+            if (formIsValid()) {
 
-            var intent : Intent = Intent()
-            intent.putExtra("oweSplit", (oweSplit as Serializable))
-            intent.putExtra("paySplit", (paySplit as Serializable))
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+                var splitType: Int = -1
+                when (mSpinnerSplitType.selectedItem) {
+                    "Equally" -> splitType = Constants.SPLIT_EQUALLY
+                    "By Amount" -> splitType = Constants.SPLIT_BY_AMOUNT
+                }
+
+                var intent: Intent = Intent()
+                intent.putExtra("mOweSplit", (mOweSplit as Serializable))
+                intent.putExtra("mPaySplit", (mPaySplit as Serializable))
+                intent.putExtra("splitType", splitType)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        } catch (e: Exception) {
+            Log.e("EDIT_TRANSACTION_SPLIT", "something went HORRIBLY wrong while saving", e)
         }
     }
 
@@ -166,13 +184,13 @@ class EditTransactionSplitActivity : BaseActivity(), UserEditMoneyAdapter.OnUser
     }
 
     fun buildPaySplit() : MutableMap<Long, Long> {
-        return mutableMapOf(mUsers!![mSpinnerPaidByPos].externalId to mAmount)
+        return mutableMapOf(mUsers!![mSpinnerPaidBy.selectedItemPosition].externalId to mAmount)
     }
 
     fun buildOweSplit(): MutableMap<Long, Long> {
         var oweSplit : MutableMap<Long, Long> = mutableMapOf()
 
-        when (mSpinnerSplitType.getItemAtPosition(mSpinnerSplitTypePos)) {
+        when (mSpinnerSplitType.selectedItem) {
             "Equally" -> {
                 val userIds: List<Long> = mEqualSplitAdapter.getUserIds()
                 oweSplit = SplitUtil.equalSplit(mAmount, userIds)

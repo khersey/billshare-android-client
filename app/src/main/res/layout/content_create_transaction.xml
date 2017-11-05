@@ -27,7 +27,9 @@
 
         <EditText
             android:id="@+id/label_edit_text"
+            android:importantForAutofill="noExcludeDescendants"
             android:hint="@string/name"
+            android:inputType="textFilter|textNoSuggestions"
             style="@style/Base.ContainerFullWidth"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -50,6 +52,7 @@
             <EditText
                 android:id="@+id/amount_edit_text"
                 style="@style/Base.ContainerFullWidth"
+                android:importantForAutofill="noExcludeDescendants"
                 android:hint="@string/amount"
                 android:inputType="numberDecimal" />
 

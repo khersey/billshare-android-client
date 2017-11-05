@@ -27,7 +27,8 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactio
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.TransactionListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.TransactionPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.TransactionView
-import java.util.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
 
 /**
@@ -45,6 +46,8 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     @Inject
     lateinit var mPresenter: TransactionPresenter
+    private val gson: Gson = Gson()
+    private var mTransactions: MutableList<Transaction> = mutableListOf()
 
     private var mColumnCount = 1
     private var mListener: OnTransactionSelectedListener? = null
@@ -90,10 +93,9 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         val view = inflater!!.inflate(R.layout.fragment_transaction_list, container, false)
-
         ButterKnife.bind(this, view)
-
         setupRecyclerView()
 
         return view
@@ -105,9 +107,21 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putString("mTransactions", gson.toJson(mTransactions))
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState != null) {
+            mTransactions = gson.fromJson(savedInstanceState!!.getString("mTransactions"), object : TypeToken<MutableList<Transaction>>() {}.type)
+        }
+    }
+
     // Helper Methods
     private fun setupRecyclerView() {
-        mTransactionListAdapter = TransactionListAdapter(ArrayList<Transaction>(0), this)
+        mTransactionListAdapter = TransactionListAdapter(mTransactions, this)
 
         mTransactionListRV.itemAnimator = DefaultItemAnimator()
         mTransactionListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -122,6 +136,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     override fun showTransactions(transactions: List<Transaction>) {
         mTransactionListAdapter.transactions = transactions
         mTransactionListAdapter.notifyDataSetChanged()
+        mTransactions = transactions.toMutableList()
     }
 
     override fun showTransactions() {

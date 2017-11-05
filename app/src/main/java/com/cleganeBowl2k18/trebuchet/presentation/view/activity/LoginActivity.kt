@@ -64,6 +64,13 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (prefs!!.getBoolean(Constants.LOGGED_IN, false)) {
+            finish()
+        }
+    }
+
     private fun populateAutoComplete() {
         if (!mayRequestContacts()) {
             return

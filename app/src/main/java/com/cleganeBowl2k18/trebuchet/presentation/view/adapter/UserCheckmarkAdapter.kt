@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,10 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
             notifyDataSetChanged()
         }
 
+    init {
+        configureUserBooleanMap()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserCheckmarkAdapter.UserViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.card_user_checkbox, parent, false)
@@ -65,7 +70,7 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
     }
 
     fun getUserIds(): List<Long> {
-        return mUsersInSplit.keys.filter { id -> mUsersInSplit[id]!! }
+        return mUsersInSplit.keys.filter { id -> mUsersInSplit[id] == true }
     }
 
     interface OnUserItemClickListener {
@@ -87,7 +92,15 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
 
         @OnCheckedChanged(R.id.user_checkbox)
         fun checkboxChanged() {
-            mUsersInSplit[mId] = !mUsersInSplit[mId]!! // that's some ugly
+            try {
+                if (mCheckbox.isChecked == true) {
+                    mUsersInSplit[mId] = true
+                } else {
+                    mUsersInSplit[mId] = false
+                }
+            } catch(e: Exception) {
+                Log.e("CHECKBOX_ERROR", "something went horribly wrong while clicking a checkbox...", e)
+            }
         }
 
         init {
@@ -98,9 +111,11 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
             mTitleTV.text = title
             mContentTV.text = content
             mId = id
+            mCheckbox.isChecked = true
+            checkboxChanged()
         }
 
-        @OnClick(R.id.create_group_card_view)
+        @OnClick(R.id.card_user_checkbox)
         fun onCardClicked() {
             mOnUserItemClickListener.onUserItemClick(mUsers[adapterPosition])
         }
