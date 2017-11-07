@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
@@ -93,21 +92,14 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            var temp: MutableMap<Long, Long> = (data!!.getSerializableExtra("mOweSplit") as MutableMap<Long, Long>)
-            if (temp != null) {
-                mOweSplit = temp
-            } else {
-                Log.e("ActivityResult", "FAILED to deserialize OweSplit")
-            }
-            temp = (data!!.getSerializableExtra("mPaySplit") as MutableMap<Long, Long>)
-            if (temp != null) {
-                mPaySplit = temp
-            } else {
-                Log.e("ActivityResult", "FAILED to deserialize PaySplit")
-            }
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            mOweSplit = gson.fromJson(data!!.getStringExtra("oweSplit"),  object : TypeToken<MutableMap<Long, Long>>() {}.type)
+            mPaySplit = gson.fromJson(data!!.getStringExtra("paySplit"),  object : TypeToken<MutableMap<Long, Long>>() {}.type)
             mSplitType = data!!.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
-            updateTransactionSplit()
+            mAmount = data!!.getLongExtra("amount" ,(mAmountEditText.text.toString().toDouble() * 100).toLong())
+            mAmountEditText.setText("${mAmount.toDouble() * 0.01}")
+
+            updateTransactionSplitText()
         }
     }
 
@@ -168,8 +160,10 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     fun editTransactionClicked() {
         var intent = this.CreateEditTransactionIntent()
         intent.putExtra("amount", mAmount)
-        val list = mSelectedGroup!!.users
-        intent.putExtra("users", gson.toJson(list))
+        intent.putExtra("users", gson.toJson(mSelectedGroup!!.users))
+        intent.putExtra("splitType", mSplitType)
+        intent.putExtra("paySplit", gson.toJson(mPaySplit))
+        intent.putExtra("oweSplit", gson.toJson(mOweSplit))
         startActivityForResult(intent, 0)
     }
 
@@ -177,7 +171,8 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     fun onGroupSelected(pos: Int) {
         val label = mGroupSpinner.getItemAtPosition(pos)
         mSelectedGroup = mGroups.find { group -> group.label == label }
-        amountChanged()
+        mSplitType = Constants.SPLIT_EQUALLY
+        initializeSplits()
     }
 
     @OnClick(R.id.save_button)
@@ -192,14 +187,20 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
 
     @OnTextChanged(R.id.amount_edit_text)
     fun amountChanged() {
-        try {
-            mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
-            mOweSplit = SplitUtil.equalSplit(mAmount, mSelectedGroup!!.users!!.map { user -> user.externalId })
-            mPaySplit = mutableMapOf(mCurrentUser!!.externalId to mAmount)
-            updateTransactionSplit()
-        } catch(exception: Exception) {
+
+        if (mSplitType == Constants.SPLIT_EQUALLY) {
+            try {
+                mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
+                mOweSplit = SplitUtil.equalSplit(mAmount, mOweSplit!!.keys.toList())
+                mPaySplit = SplitUtil.equalSplit(mAmount, mPaySplit!!.keys.toList())
+                updateTransactionSplitText()
+            } catch(exception: Exception) {
+
+            }
+        } else if (mSplitType == Constants.SPLIT_BY_AMOUNT) {
 
         }
+
     }
 
     override fun showProgress() {
@@ -210,25 +211,25 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun updateTransactionSplit() {
-//        var paySplitString : String = ""
-//        paySplitString += "${mCurrentUser?.fName} ${mCurrentUser?.lName!![0]}"
-//        mPaidByText.text = paySplitString
-//
-//        var oweSplitString : String = ""
-//        mSelectedGroup?.users?.forEach { user -> oweSplitString += "${user.fName} ${user.lName!![0]}.\n" }
-//        mSplitBetweenText.text = oweSplitString
+    fun initializeSplits() {
+        mOweSplit = mutableMapOf()
+        mSelectedGroup!!.users!!.map { user: User -> mOweSplit[user.externalId] = 0 }
+        mPaySplit = mutableMapOf()
+        mPaySplit[mCurrentUserId] = 0
+    }
+
+    fun updateTransactionSplitText() {
         var paySplitString : String = ""
         for (userId in mPaySplit.keys) {
             var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
-            if (user != null) paySplitString += "${user?.fName} ${user?.lName!![0]} => $${(mPaySplit[userId]!! * 0.01)!!.toDouble()}\n"
+            if (user != null) paySplitString += "${user?.fName} ${user?.lName!![0]} -> $${(mPaySplit[userId]!! * 0.01)!!.toDouble()}\n"
         }
         mPaidByText.text = paySplitString
 
         var oweSplitString : String = ""
         for (userId in mOweSplit.keys) {
             var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
-            if (user != null) oweSplitString += "${user?.fName} ${user?.lName!![0]} => $${(mOweSplit[userId]!! * 0.01)!!.toDouble()}\n"
+            if (user != null) oweSplitString += "${user?.fName} ${user?.lName!![0]} -> $${(mOweSplit[userId]!! * 0.01)!!.toDouble()}\n"
         }
         mSplitBetweenText.text = oweSplitString
     }

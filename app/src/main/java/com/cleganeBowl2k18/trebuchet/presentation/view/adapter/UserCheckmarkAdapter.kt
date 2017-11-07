@@ -21,6 +21,7 @@ import com.cleganeBowl2k18.trebuchet.data.models.User
  * Created by khersey on 2017-10-25.
  */
 class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
+                           private val mOweSplit: MutableMap<Long, Long>,
                            private val mOnUserItemClickListener: UserCheckmarkAdapter.OnUserItemClickListener) :
         RecyclerView.Adapter<UserCheckmarkAdapter.UserViewHolder>() {
 
@@ -65,8 +66,11 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
         return mUsers.size
     }
 
-    fun configureUserBooleanMap() {
-        mUsersInSplit = (mUsers.map {user -> user.externalId to true}.toMap() as MutableMap<Long, Boolean>)
+    private fun configureUserBooleanMap() {
+        mUsersInSplit = mutableMapOf()
+        for (user in mUsers) {
+            mUsersInSplit[user.externalId] = mOweSplit.containsKey(user.externalId)
+        }
     }
 
     fun getUserIds(): List<Long> {
@@ -93,11 +97,7 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
         @OnCheckedChanged(R.id.user_checkbox)
         fun checkboxChanged() {
             try {
-                if (mCheckbox.isChecked == true) {
-                    mUsersInSplit[mId] = true
-                } else {
-                    mUsersInSplit[mId] = false
-                }
+                mUsersInSplit[mId] = mCheckbox.isChecked
             } catch(e: Exception) {
                 Log.e("CHECKBOX_ERROR", "something went horribly wrong while clicking a checkbox...", e)
             }
@@ -111,7 +111,7 @@ class UserCheckmarkAdapter(private val mUsers: MutableList<User>,
             mTitleTV.text = title
             mContentTV.text = content
             mId = id
-            mCheckbox.isChecked = true
+            mCheckbox.isChecked = (mUsersInSplit[mId] == null || mUsersInSplit[mId] == true)
             checkboxChanged()
         }
 
