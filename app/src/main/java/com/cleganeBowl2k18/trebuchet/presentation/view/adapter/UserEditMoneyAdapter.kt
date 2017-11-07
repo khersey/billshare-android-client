@@ -20,11 +20,11 @@ import com.cleganeBowl2k18.trebuchet.data.models.User
  * Created by khersey on 2017-10-25.
  */
 class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
+                           private val mOweSplit: MutableMap<Long, Long>,
                            private val mOnUserItemClickListener: UserCheckmarkAdapter.OnUserItemClickListener) :
         RecyclerView.Adapter<UserEditMoneyAdapter.UserViewHolder>() {
 
     lateinit private var mRecyclerView: RecyclerView
-    private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
 
     var users: List<User>
         get() = mUsers
@@ -90,8 +90,13 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
 
         @OnTextChanged(R.id.user_amount_edit_text)
         fun setSplitPair() {
-            val amount: Long = (mEditText.text.toString().toDouble() * 10).toLong() // TODO remove hacky shit
-            returnData(mId to amount)
+            try {
+                val amount: Long = (mEditText.text.toString().toDouble() * 100).toLong() // TODO remove hacky shit
+                returnData(mId to amount)
+            } catch (e: Exception) { // if user deletes entire string
+                returnData(mId to 0)
+            }
+
         }
 
         var mId: Long = 0
@@ -100,6 +105,13 @@ class UserEditMoneyAdapter(private val mUsers: MutableList<User>,
             mTitleTV.text = title
             mContentTV.text = content
             mId = id
+            val amount: Long? = mOweSplit[mId]
+            if (amount != null) {
+                mEditText.setText("${amount.toDouble() * 0.01}")
+            } else {
+                mEditText.setText("0")
+            }
+
         }
 
         @OnClick(R.id.user_edit_money_card_view)

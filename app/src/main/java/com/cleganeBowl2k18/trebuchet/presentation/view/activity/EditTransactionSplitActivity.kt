@@ -30,7 +30,6 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserEditMoneyAdap
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_edit_transaction_split.*
-import java.io.Serializable
 
 class EditTransactionSplitActivity : BaseActivity(),
         UserEditMoneyAdapter.OnUserItemClickListener, UserCheckmarkAdapter.OnUserItemClickListener {
@@ -41,6 +40,7 @@ class EditTransactionSplitActivity : BaseActivity(),
     var mUsers : MutableList<User>? = null
     var mCurrentUser : User? = null
     var mAmount : Long = 0
+    var mSplitType : Int = Constants.SPLIT_EQUALLY
     private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
     private var mPaySplit: MutableMap<Long, Long> = mutableMapOf()
     private var prefs: SharedPreferences? = null
@@ -55,11 +55,7 @@ class EditTransactionSplitActivity : BaseActivity(),
         setContentView(R.layout.activity_edit_transaction_split)
         setSupportActionBar(toolbar)
 
-        mAmount = getIntent().getLongExtra("amount", 0)
-        mUsers = gson.fromJson(getIntent().getStringExtra("users"), object : TypeToken<List<User>>() {}.type)
-        mUsers = mUsers?.toMutableList()
-        mUsers!!.forEach {user: User -> Log.i("EditTransaction", "user: ${user.fName} ${user.lName!![0]}")}
-        mCurrentUser = mUsers!!.find { user -> user.externalId == mCurrentUserId }
+        unpackIntent()
 
         ButterKnife.bind(this)
 
@@ -77,20 +73,38 @@ class EditTransactionSplitActivity : BaseActivity(),
 
     }
 
-    // 
+    // helper methods
+    private fun unpackIntent() {
+        mAmount = intent.getLongExtra("amount", 0)
+        mUsers = gson.fromJson(intent.getStringExtra("users"), object : TypeToken<MutableList<User>>() {}.type)
+        mCurrentUser = mUsers!!.find { user -> user.externalId == mCurrentUserId }
+        mSplitType = intent.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
+
+        mOweSplit = gson.fromJson(intent.getStringExtra("oweSplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+        mPaySplit = gson.fromJson(intent.getStringExtra("paySplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+    }
+
     private fun setupSpinners() {
         mPaidBySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mUsers!!.map { user: User -> "${user.fName!!} ${user.lName!![0]}." })
         mPaidBySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinnerPaidBy.adapter = mPaidBySpinnerAdapter
 
+        // TODO: support multiple paying users
+        mPaySplit.keys.forEach { userId -> mSpinnerPaidBy.setSelection(mUsers!!.indexOfFirst { user -> user.externalId == userId }) }
+
         mSplitTypeSpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Equally", "By Amount", "By Percent"))
         mSplitTypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinnerSplitType.adapter = mSplitTypeSpinnerAdapter
+        when (mSplitType) {
+            Constants.SPLIT_EQUALLY -> mSpinnerSplitType.setSelection(0)
+            Constants.SPLIT_BY_AMOUNT -> mSpinnerSplitType.setSelection(1)
+            Constants.SPLIT_BY_PERCENTAGE -> mSpinnerSplitType.setSelection(2)
+        }
         onSplitTypeChanged()
     }
 
     private fun setupRecycleViews() {
-        mEqualSplitAdapter = UserCheckmarkAdapter(mUsers!!, this)
+        mEqualSplitAdapter = UserCheckmarkAdapter(mUsers!!, mOweSplit, this)
 
         mEqualSplitRV.itemAnimator = DefaultItemAnimator()
         mEqualSplitRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -98,7 +112,7 @@ class EditTransactionSplitActivity : BaseActivity(),
         mEqualSplitRV.setHasFixedSize(true)
         mEqualSplitRV.adapter = mEqualSplitAdapter
 
-        mAmountSplitAdapter = UserEditMoneyAdapter(mUsers!!, this)
+        mAmountSplitAdapter = UserEditMoneyAdapter(mUsers!!, mOweSplit, this)
 
         mAmountSplitRV.itemAnimator = DefaultItemAnimator()
         mAmountSplitRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -133,8 +147,6 @@ class EditTransactionSplitActivity : BaseActivity(),
     @BindView(R.id.transaction_amount_split)
     lateinit var mContainerAmountSplit : LinearLayout
 
-
-
     @OnItemSelected(R.id.split_type_spinner)
     fun onSplitTypeChanged() {
         mContainerAmountSplit.visibility = View.GONE
@@ -143,13 +155,25 @@ class EditTransactionSplitActivity : BaseActivity(),
 
         if (selection == "Equally") {
             Log.d("SPLIT CHANGED", "Equally == $selection")
+            mSplitType = Constants.SPLIT_EQUALLY
             mContainerAmountSplit.visibility = View.VISIBLE
         } else if (selection == "By Amount") {
             Log.d("SPLIT CHANGED", "By Amount == $selection")
+            mSplitType = Constants.SPLIT_BY_AMOUNT
             mContainerEqualSplit.visibility = View.VISIBLE
+        } else if (selection == "By Percent") {
+            Log.d("SPLIT CHANGED", "By Percent == $selection")
+            mSplitType = Constants.SPLIT_BY_PERCENTAGE
+            // TODO: add this UI
         }
 
         // TODO: Figure why the fuck these are inverted...
+    }
+
+    @OnItemSelected(R.id.paid_by_spinner)
+    fun paidByChanged() {
+        val userId: Long = mUsers!![mSpinnerPaidBy.selectedItemPosition].externalId
+        mPaySplit = mutableMapOf(mUsers!![mSpinnerPaidBy.selectedItemPosition].externalId to mAmount)
     }
 
     @OnClick(R.id.save_button)
@@ -160,16 +184,11 @@ class EditTransactionSplitActivity : BaseActivity(),
 
             if (formIsValid()) {
 
-                var splitType: Int = -1
-                when (mSpinnerSplitType.selectedItem) {
-                    "Equally" -> splitType = Constants.SPLIT_EQUALLY
-                    "By Amount" -> splitType = Constants.SPLIT_BY_AMOUNT
-                }
-
                 var intent: Intent = Intent()
-                intent.putExtra("mOweSplit", (mOweSplit as Serializable))
-                intent.putExtra("mPaySplit", (mPaySplit as Serializable))
-                intent.putExtra("splitType", splitType)
+                intent.putExtra("oweSplit", gson.toJson(mOweSplit))
+                intent.putExtra("paySplit", gson.toJson(mPaySplit))
+                intent.putExtra("splitType", mSplitType)
+                intent.putExtra("amount", mAmount)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -190,12 +209,11 @@ class EditTransactionSplitActivity : BaseActivity(),
     fun buildOweSplit(): MutableMap<Long, Long> {
         var oweSplit : MutableMap<Long, Long> = mutableMapOf()
 
-        when (mSpinnerSplitType.selectedItem) {
-            "Equally" -> {
-                val userIds: List<Long> = mEqualSplitAdapter.getUserIds()
-                oweSplit = SplitUtil.equalSplit(mAmount, userIds)
+        when (mSplitType) {
+            Constants.SPLIT_EQUALLY -> {
+                oweSplit = SplitUtil.equalSplit(mAmount, mEqualSplitAdapter.getUserIds())
             }
-            "By Amount" -> {
+            Constants.SPLIT_BY_AMOUNT -> {
                 oweSplit = mAmountSplitAdapter.getOweSplit()
             }
         }
