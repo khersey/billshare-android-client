@@ -79,6 +79,7 @@ class EditTransactionSplitActivity : BaseActivity(),
         mUsers = gson.fromJson(intent.getStringExtra("users"), object : TypeToken<MutableList<User>>() {}.type)
         mCurrentUser = mUsers!!.find { user -> user.externalId == mCurrentUserId }
         mSplitType = intent.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
+
         mOweSplit = gson.fromJson(intent.getStringExtra("oweSplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
         mPaySplit = gson.fromJson(intent.getStringExtra("paySplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
     }
@@ -94,6 +95,11 @@ class EditTransactionSplitActivity : BaseActivity(),
         mSplitTypeSpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf("Equally", "By Amount", "By Percent"))
         mSplitTypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinnerSplitType.adapter = mSplitTypeSpinnerAdapter
+        when (mSplitType) {
+            Constants.SPLIT_EQUALLY -> mSpinnerSplitType.setSelection(0)
+            Constants.SPLIT_BY_AMOUNT -> mSpinnerSplitType.setSelection(1)
+            Constants.SPLIT_BY_PERCENTAGE -> mSpinnerSplitType.setSelection(2)
+        }
         onSplitTypeChanged()
     }
 
@@ -106,7 +112,7 @@ class EditTransactionSplitActivity : BaseActivity(),
         mEqualSplitRV.setHasFixedSize(true)
         mEqualSplitRV.adapter = mEqualSplitAdapter
 
-        mAmountSplitAdapter = UserEditMoneyAdapter(mUsers!!, this)
+        mAmountSplitAdapter = UserEditMoneyAdapter(mUsers!!, mOweSplit, this)
 
         mAmountSplitRV.itemAnimator = DefaultItemAnimator()
         mAmountSplitRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -140,8 +146,6 @@ class EditTransactionSplitActivity : BaseActivity(),
 
     @BindView(R.id.transaction_amount_split)
     lateinit var mContainerAmountSplit : LinearLayout
-
-
 
     @OnItemSelected(R.id.split_type_spinner)
     fun onSplitTypeChanged() {
