@@ -23,6 +23,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionDetailItent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.TransactionListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.TransactionPresenter
@@ -186,7 +187,9 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     }
 
     override fun onTransactionItemClick(transaction: Transaction) {
-        //To change body of created functions use File | Settings | File Templates.
+        var intent = getActivity().CreateTransactionDetailItent()
+        intent.putExtra("transaction", gson.toJson(transaction))
+        startActivity(intent)
     }
 
     override fun onEditTransactionItemClick(transaction: Transaction) {

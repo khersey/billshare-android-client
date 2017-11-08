@@ -191,14 +191,14 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         if (mSplitType == Constants.SPLIT_EQUALLY) {
             try {
                 mAmount = (mAmountEditText.text.toString().toDouble() * 100).toLong()
-                mOweSplit = SplitUtil.equalSplit(mAmount, mOweSplit!!.keys.toList())
-                mPaySplit = SplitUtil.equalSplit(mAmount, mPaySplit!!.keys.toList())
-                updateTransactionSplitText()
             } catch(exception: Exception) {
-
+                mAmount = 0
             }
+            mOweSplit = SplitUtil.equalSplit(mAmount, mOweSplit!!.keys.toList())
+            mPaySplit = SplitUtil.equalSplit(mAmount, mPaySplit!!.keys.toList())
+            updateTransactionSplitText()
         } else if (mSplitType == Constants.SPLIT_BY_AMOUNT) {
-
+            updateTransactionSplitText()
         }
 
     }
@@ -216,6 +216,7 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         mSelectedGroup!!.users!!.map { user: User -> mOweSplit[user.externalId] = 0 }
         mPaySplit = mutableMapOf()
         mPaySplit[mCurrentUserId] = 0
+        amountChanged()
     }
 
     fun updateTransactionSplitText() {
