@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/transaction_equal_split"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,21 +9,17 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.cleganeBowl2k18.trebuchet.presentation.view.activity.EditTransactionSplitActivity"
-    tools:showIn="@layout/activity_edit_transaction_split"
-    android:id="@+id/transaction_equal_split" >
+    tools:showIn="@layout/activity_edit_transaction_split">
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/amount_split_recycler_view"
         android:name="com.cleganeBowl2k18.trebuchet.ItemFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/card_user_edit_money"
-        android:id="@+id/amount_split_recycler_view">
-
+        tools:listitem="@layout/card_user_edit_money">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

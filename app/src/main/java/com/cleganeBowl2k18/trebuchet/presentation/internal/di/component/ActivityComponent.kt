@@ -30,4 +30,6 @@ interface ActivityComponent {
 
     fun inject(activity: TransactionDetailsActivity)
 
+    fun inject(activity: GroupDetailsActivity)
+
 }

@@ -22,14 +22,14 @@ import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
-import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.CreateGroupAdapter
+import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserSmallAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.CreateGroupPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.CreateGroupView
 import java.util.*
 import javax.inject.Inject
 
 class CreateGroupActivity : BaseActivity(), CreateGroupView,
-        CreateGroupAdapter.OnUserItemClickListener {
+        UserSmallAdapter.OnUserItemClickListener {
 
     // class variables
     private val VERTICAL_SPACING: Int = 30
@@ -80,7 +80,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.onDestroy()
-        mCreateGroupAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
+        mUserSmallAdapter.unregisterAdapterDataObserver(mAdapterDataObserver)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -89,7 +89,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
             if (email != null) {
                 val user = User(0, null, email, null, null)
-                mCreateGroupAdapter.addUser(user)
+                mUserSmallAdapter.addUser(user)
             } else {
                 Log.e("onActivityResultERROR", "AddUserReturned null!")
             }
@@ -98,20 +98,20 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
 
     // Helper functions
     private fun setupRecyclerView() {
-        mCreateGroupAdapter = CreateGroupAdapter(ArrayList<User>(0), this)
+        mUserSmallAdapter = UserSmallAdapter(ArrayList<User>(0), this, true)
 
         mUserListRV.itemAnimator = DefaultItemAnimator()
         mUserListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
         mUserListRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         mUserListRV.setHasFixedSize(true)
-        mUserListRV.adapter = mCreateGroupAdapter
+        mUserListRV.adapter = mUserSmallAdapter
 
-        mCreateGroupAdapter.registerAdapterDataObserver(mAdapterDataObserver)
+        mUserSmallAdapter.registerAdapterDataObserver(mAdapterDataObserver)
     }
 
     // useCase Callbacks
     override fun userFetched(user: User) {
-        mCreateGroupAdapter.addUser(user)
+        mUserSmallAdapter.addUser(user)
     }
 
     override fun groupCreated() {
@@ -127,7 +127,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
     // UI Elements
     @BindView(R.id.create_group_recycle_view)
     lateinit var mUserListRV: RecyclerView
-    lateinit var mCreateGroupAdapter: CreateGroupAdapter
+    lateinit var mUserSmallAdapter: UserSmallAdapter
 
     @BindView(R.id.group_label_text_input)
     lateinit var mGroupLabelInput: TextInputEditText
@@ -149,7 +149,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         // TODO: add form validation
         val groupLabel : String? = mGroupLabelInput.text.toString()
 
-        val users : List<User> = mCreateGroupAdapter.users
+        val users : List<User> = mUserSmallAdapter.users
 
         val group: Group = Group(0, groupLabel, users)
 

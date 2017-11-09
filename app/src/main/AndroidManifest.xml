@@ -55,6 +55,10 @@
             android:label="@string/title_activity_edit_transaction_split"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".presentation.view.activity.TransactionDetailsActivity"></activity>
+        <activity
+            android:name=".presentation.view.activity.GroupDetailsActivity"
+            android:label="Group Details"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
