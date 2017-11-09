@@ -2,10 +2,13 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionResolver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetGroup
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUser
+import com.cleganeBowl2k18.trebuchet.domain.interactor.ResolveTransaction
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.TransactionDetailsView
@@ -17,8 +20,9 @@ import javax.inject.Inject
  */
 @PerActivity
 class TransactionDetailPresenter @Inject constructor(private val mGetGroup: GetGroup,
-                                                     private val mGetUser: GetUser):
-        Presenter(mGetGroup, mGetUser) {
+                                                     private val mGetUser: GetUser,
+                                                     private val mResolveTransaction: ResolveTransaction):
+        Presenter(mGetGroup, mGetUser, mResolveTransaction) {
 
     var mTransactionDetailsView: TransactionDetailsView? = null
 
@@ -44,6 +48,10 @@ class TransactionDetailPresenter @Inject constructor(private val mGetGroup: GetG
         mGetUser.execute(GetUserObserver(), id)
     }
 
+    fun resolveTransaction(transactionId: Long, lineItemId: Long) {
+        mResolveTransaction.execute(ResolveTransactionObserver(), TransactionResolver(transactionId, lineItemId))
+    }
+
     private fun onObserverError(error: Throwable) {
         error.message?.let { mTransactionDetailsView!!.showError(it) }
     }
@@ -64,6 +72,19 @@ class TransactionDetailPresenter @Inject constructor(private val mGetGroup: GetG
     private inner class GetUserObserver : DisposableObserver<User>() {
         override fun onNext(user: User) {
             mTransactionDetailsView!!.userReturned(user)
+        }
+
+        override fun onComplete() {
+        }
+
+        override fun onError(error: Throwable) {
+            onObserverError(error)
+        }
+    }
+
+    private inner class ResolveTransactionObserver : DisposableObserver<TransactionReceiver>() {
+        override fun onNext(transactionReceiver: TransactionReceiver) {
+            mTransactionDetailsView!!.transactionUpdated(transactionReceiver)
         }
 
         override fun onComplete() {

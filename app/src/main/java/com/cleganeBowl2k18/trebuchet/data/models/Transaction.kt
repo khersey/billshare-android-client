@@ -15,24 +15,24 @@ class Transaction {
     var amount: Long = 0
     var currencyCode: String? = null // this should be an ENUM
     var creator: Long = -1
-    var resolved: Boolean = false
-    var paySplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
-    var oweSplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
+    var paySplit: MutableMap<Long, Long> = mutableMapOf<Long, Long>()
+    var oweSplit: MutableMap<Long, Long> = mutableMapOf<Long, Long>()
+    var resolved: MutableMap<Long, Boolean> = mutableMapOf<Long, Boolean>()
+    var lineItemMap: MutableMap<Long, Long> = mutableMapOf<Long, Long>() // userId => lineId
     // TODO: add date
 
     constructor()
 
-    constructor(id: Long, group: Group?, label: String?, amount: Long, currencyCode: String, creator: Long, resolved: Boolean, paySplit: MutableMap<Long, Long>, oweSplit: MutableMap<Long, Long>) {
+    constructor(id: Long, group: Group?, label: String?, amount: Long, currencyCode: String?, creator: Long, paySplit: MutableMap<Long, Long>, oweSplit: MutableMap<Long, Long>, resolved: MutableMap<Long, Boolean>, lineItemMap: MutableMap<Long, Long>) {
         this.id = id
         this.group = group
         this.label = label
         this.amount = amount
         this.currencyCode = currencyCode
         this.creator = creator
-        this.resolved = resolved
         this.paySplit = paySplit
         this.oweSplit = oweSplit
         this.resolved = resolved
-        // TODO: add date
+        this.lineItemMap = lineItemMap
     }
 }

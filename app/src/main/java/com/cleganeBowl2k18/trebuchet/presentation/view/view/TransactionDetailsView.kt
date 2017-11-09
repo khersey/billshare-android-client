@@ -1,5 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.view
 
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 
@@ -11,6 +12,8 @@ interface TransactionDetailsView {
     fun groupReturned(group: Group)
 
     fun userReturned(user: User)
+
+    fun transactionUpdated(transactionReceiver: TransactionReceiver)
 
     fun showError(message: String)
 }

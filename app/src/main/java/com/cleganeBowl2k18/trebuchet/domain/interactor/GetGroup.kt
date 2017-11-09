@@ -15,7 +15,6 @@ class GetGroup @Inject constructor(private val mRepository: GroupRepository,
                                    postExecutionThread: PostExecutionThread) :
         UseCase<Group, Long>(threadExecutor, postExecutionThread) {
 
-    // TODO: make this fetch by User.id
     override fun buildUseCaseObservable(params: Long?): Observable<Group> {
         return mRepository.getGroup(params!!)
     }
