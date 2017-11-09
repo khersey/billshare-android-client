@@ -1,26 +1,37 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
+import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.TransactionItemsAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.TransactionDetailPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.TransactionDetailsView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
 
-class TransactionDetailsActivity : BaseActivity(), TransactionDetailsView {
+
+
+class TransactionDetailsActivity : BaseActivity(),
+        TransactionDetailsView, TransactionItemsAdapter.OnTransactionItemClickListener {
 
     private var mTransaction: Transaction = Transaction()
     private var mGroup: Group = Group()
@@ -54,6 +65,23 @@ class TransactionDetailsActivity : BaseActivity(), TransactionDetailsView {
         mPresenter.getUser(mCurrentUserId)
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() === 0) {
+            onBackPressed()
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+
+    override fun onBackPressed() {
+        val intent = Intent()
+        intent.putExtra("updatedTransaction", gson.toJson(mTransaction))
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
+
     private fun unpackIntent() {
         mTransaction = gson.fromJson(intent.getStringExtra("transaction"), object : TypeToken<Transaction>() {}.type)
 
@@ -65,6 +93,17 @@ class TransactionDetailsActivity : BaseActivity(), TransactionDetailsView {
         mTransactionAmount.text = "$${amountAsMoney} "
         mCurrencyCode.text = mTransaction.currencyCode
         mGroupLabel.text = "in ..."
+    }
+
+    private fun setupRecyclerView() {
+        mTransactionItemsAdapter = TransactionItemsAdapter(mTransaction, mGroup, mCurrentUserId, this)
+        mTransactionItemsAdapter.setPresener(mPresenter)
+
+        mTransactionItemsRV.itemAnimator = DefaultItemAnimator()
+        mTransactionItemsRV.addItemDecoration(VerticalSpacingItemDecoration(30))
+        mTransactionItemsRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        mTransactionItemsRV.setHasFixedSize(true)
+        mTransactionItemsRV.adapter = mTransactionItemsAdapter
     }
 
     @BindView(R.id.transaction_label)
@@ -79,6 +118,10 @@ class TransactionDetailsActivity : BaseActivity(), TransactionDetailsView {
     @BindView(R.id.group_label)
     lateinit var mGroupLabel: TextView
 
+    @BindView(R.id.transaction_items_rv)
+    lateinit var mTransactionItemsRV: RecyclerView
+    lateinit var mTransactionItemsAdapter: TransactionItemsAdapter
+
 
     override fun userReturned(user: User) {
         mCurrentUser = user
@@ -88,10 +131,21 @@ class TransactionDetailsActivity : BaseActivity(), TransactionDetailsView {
         mGroup = group
         mGroupLabel.text = "in ${mGroup.label}"
         mTransaction.group = mGroup
+
+        setupRecyclerView()
+    }
+
+    override fun transactionUpdated(transactionReceiver: TransactionReceiver) {
+        mTransaction = transactionReceiver.toTransaction()
+        mTransaction.group = mGroup
     }
 
     override fun showError(message: String) {
         // TODO: figure this out
+    }
+
+    override fun onTransactionItemClick(lineId: Long) {
+        // TODO: probably nothing here
     }
 
 }

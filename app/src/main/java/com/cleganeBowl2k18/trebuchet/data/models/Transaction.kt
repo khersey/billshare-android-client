@@ -23,6 +23,7 @@ class Transaction {
 
     constructor()
 
+    // the word of god
     constructor(id: Long, group: Group?, label: String?, amount: Long, currencyCode: String?, creator: Long, paySplit: MutableMap<Long, Long>, oweSplit: MutableMap<Long, Long>, resolved: MutableMap<Long, Boolean>, lineItemMap: MutableMap<Long, Long>) {
         this.id = id
         this.group = group
@@ -35,4 +36,18 @@ class Transaction {
         this.resolved = resolved
         this.lineItemMap = lineItemMap
     }
+
+    constructor(id: Long, group: Group?, label: String?, amount: Long, currencyCode: String?, creator: Long, paySplit: MutableMap<Long, Long>, oweSplit: MutableMap<Long, Long>) {
+        this.id = id
+        this.group = group
+        this.label = label
+        this.amount = amount
+        this.currencyCode = currencyCode
+        this.creator = creator
+        this.paySplit = paySplit
+        this.oweSplit = oweSplit
+    }
+
+    // for creating transactions
+
 }

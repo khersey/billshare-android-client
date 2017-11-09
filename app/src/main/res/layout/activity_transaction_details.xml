@@ -73,7 +73,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/split_details"/>
 
-            <!-- TODO: recycle view -->
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/card_transaction_item"
+                android:id="@+id/transaction_items_rv">
+
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

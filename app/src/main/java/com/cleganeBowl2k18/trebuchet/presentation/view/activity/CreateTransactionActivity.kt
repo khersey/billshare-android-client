@@ -180,7 +180,7 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         if (formIsValid()) {
             val currencyCode: String = mCurrencyCodeSpinner.selectedItem.toString()
             val label : String = mLabelEditText.text.toString()
-            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, mCurrentUserId, false, mPaySplit, mOweSplit)
+            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, mCurrentUserId, mPaySplit, mOweSplit)
             mPresenter.createTransaction(newTransaction)
         }
     }

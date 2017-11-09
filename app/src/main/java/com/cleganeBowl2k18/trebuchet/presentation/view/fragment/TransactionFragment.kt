@@ -103,8 +103,17 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            mPresenter.fetchTransactionsByUser(mCurrentUserId)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                1 -> mPresenter.fetchTransactionsByUser(mCurrentUserId)
+                2 -> {
+                    var transaction: Transaction = gson.fromJson(data!!.getStringExtra("updatedTransaction"), object : TypeToken<Transaction>() {}.type)
+                    mTransactions[mTransactions.indexOfFirst { t -> t.id == transaction.id }] = transaction
+                    mTransactionListAdapter.transactions = mTransactions
+                    mTransactionListAdapter.notifyDataSetChanged()
+                }
+            }
+
         }
     }
 
@@ -189,7 +198,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     override fun onTransactionItemClick(transaction: Transaction) {
         var intent = getActivity().CreateTransactionDetailItent()
         intent.putExtra("transaction", gson.toJson(transaction))
-        startActivity(intent)
+        startActivityForResult(intent, 2)
     }
 
     override fun onEditTransactionItemClick(transaction: Transaction) {

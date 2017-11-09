@@ -17,6 +17,6 @@ class FakeTransactionFactory {
         val group: Group = groupFactory.generateGroup(groupName, listOf("Tom", "Bob", "Ian", "Jack"))
 
         id += 1
-        return Transaction(id-1, group, name, amount, "CAD", 1, false, mutableMapOf<Long,Long>(), mutableMapOf<Long,Long>())
+        return Transaction(id-1, group, name, amount, "CAD", 1, mutableMapOf<Long,Long>(), mutableMapOf<Long,Long>())
     }
 }

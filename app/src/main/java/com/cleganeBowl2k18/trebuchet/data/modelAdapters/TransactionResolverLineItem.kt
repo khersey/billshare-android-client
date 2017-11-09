@@ -1,9 +1,12 @@
 package com.cleganeBowl2k18.trebuchet.data.modelAdapters
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * Created by khersey on 2017-11-08.
  */
 class TransactionResolverLineItem {
+    @SerializedName("transaction_line_item")
     var id: Long = 0
     var resolved: Boolean = true
 

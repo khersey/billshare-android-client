@@ -17,12 +17,12 @@ interface TransactionService {
     fun createTransaction(@Body transaction: TransactionCreator): Observable<TransactionReceiver>
 
     @PUT("transaction/")
-    fun resolveTransaction(@Body transactionResolver: TransactionResolver): Observable<TransactionReceiver>
+    fun resolveTransaction(@Body transaction: TransactionResolver): Observable<TransactionReceiver>
 
     @PUT("transaction/")
     fun updateTransaction(@Body transaction: Transaction): Observable<TransactionReceiver>
 
-    @DELETE("transaction/{transactionId}/")
-    fun deleteTransaction(@Path("transactionId") transactionId: Long): Observable<Response<Void>>
+    @DELETE("transaction/{id}/")
+    fun deleteTransaction(@Path("id") transactionId: Long): Observable<Response<Void>>
 
 }
