@@ -22,6 +22,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupDetailIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.GroupListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.GroupPresenter
@@ -167,7 +168,9 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
     }
 
     override fun onGroupItemClick(group: Group) {
-        //TODO: do something
+        val intent = context.CreateGroupDetailIntent()
+        intent.putExtra("group", gson.toJson(group))
+        startActivity(intent)
     }
 
     override fun onEditGroupItemClick(group: Group) {
@@ -203,8 +206,8 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
+     * to the activity_group_details and potentially other fragments contained in that
+     * activity_group_details.
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
