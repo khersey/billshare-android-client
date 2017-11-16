@@ -68,4 +68,6 @@
     <string name="who_paid_the_bill">Who Paid the Bill?</string>
     <string name="split_type">Split:</string>
     <string name="edit_transactons">Edit</string>
+    <string name="split_details">Transaction Details</string>
+    <string name="resolve_transaction">Paid in Full</string>
 </resources>

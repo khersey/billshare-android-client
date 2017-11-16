@@ -32,6 +32,8 @@ class TransactionReceiver {
         var total: Double = 0.0
         var paySplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
         var oweSplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
+        var resolved: MutableMap<Long, Boolean> = mutableMapOf<Long, Boolean>()
+        var lineItemMap: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
 
         for (lineItem in this.transactions!!) {
             if (paySplit[lineItem.creditor] != null) {
@@ -40,16 +42,17 @@ class TransactionReceiver {
             } else {
                 paySplit.put(lineItem.creditor, (lineItem.debt * 100).toLong())
             }
-            total += lineItem.debt
-        }
 
-        for (lineItem in this.transactions!!) {
             if (oweSplit[lineItem.debtor] != null) {
                 val currentVal: Long = oweSplit[lineItem.debtor]!!
                 oweSplit[lineItem.debtor] = currentVal + (lineItem.debt * 100).toLong()
             } else {
                 oweSplit.put(lineItem.debtor, (lineItem.debt * 100).toLong())
             }
+
+            resolved[lineItem.debtor] = lineItem.resolved
+            lineItemMap[lineItem.debtor] = lineItem.id
+            total += lineItem.debt
         }
 
         return Transaction(
@@ -59,9 +62,10 @@ class TransactionReceiver {
                 (total * 100).toLong(),
                 "CAD",
                 creator,
-                false,
                 paySplit,
-                oweSplit
+                oweSplit,
+                resolved,
+                lineItemMap
         )
     }
 }

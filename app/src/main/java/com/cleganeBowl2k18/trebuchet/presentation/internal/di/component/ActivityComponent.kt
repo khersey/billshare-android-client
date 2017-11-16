@@ -28,4 +28,6 @@ interface ActivityComponent {
 
     fun inject(activity: EditTransactionSplitActivity)
 
+    fun inject(activity: TransactionDetailsActivity)
+
 }

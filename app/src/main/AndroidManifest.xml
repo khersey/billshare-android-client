@@ -53,7 +53,8 @@
         <activity
             android:name=".presentation.view.activity.EditTransactionSplitActivity"
             android:label="@string/title_activity_edit_transaction_split"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".presentation.view.activity.TransactionDetailsActivity"></activity>
     </application>
 
 </manifest>

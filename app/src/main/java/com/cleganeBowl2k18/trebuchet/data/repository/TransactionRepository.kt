@@ -2,6 +2,7 @@ package com.cleganeBowl2k18.trebuchet.data.repository
 
 import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionCreator
 import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionResolver
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.network.TransactionService
 import com.cleganeBowl2k18.trebuchet.presentation.view.FakeTransactionFactory
@@ -26,6 +27,10 @@ class TransactionRepository(private val transactionService: TransactionService) 
 
     fun createTransaction(transaction: TransactionCreator): Observable<TransactionReceiver> {
         return transactionService.createTransaction(transaction)
+    }
+
+    fun resolveTransaction(transactionResolver: TransactionResolver): Observable<TransactionReceiver> {
+        return transactionService.resolveTransaction(transactionResolver)
     }
 
 }

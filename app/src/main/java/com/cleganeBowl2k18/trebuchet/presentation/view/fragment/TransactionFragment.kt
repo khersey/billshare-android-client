@@ -23,6 +23,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionDetailItent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.TransactionListAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.TransactionPresenter
@@ -102,8 +103,17 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            mPresenter.fetchTransactionsByUser(mCurrentUserId)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                1 -> mPresenter.fetchTransactionsByUser(mCurrentUserId)
+                2 -> {
+                    var transaction: Transaction = gson.fromJson(data!!.getStringExtra("updatedTransaction"), object : TypeToken<Transaction>() {}.type)
+                    mTransactions[mTransactions.indexOfFirst { t -> t.id == transaction.id }] = transaction
+                    mTransactionListAdapter.transactions = mTransactions
+                    mTransactionListAdapter.notifyDataSetChanged()
+                }
+            }
+
         }
     }
 
@@ -186,7 +196,9 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     }
 
     override fun onTransactionItemClick(transaction: Transaction) {
-        //To change body of created functions use File | Settings | File Templates.
+        var intent = getActivity().CreateTransactionDetailItent()
+        intent.putExtra("transaction", gson.toJson(transaction))
+        startActivityForResult(intent, 2)
     }
 
     override fun onEditTransactionItemClick(transaction: Transaction) {

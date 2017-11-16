@@ -16,7 +16,6 @@ class CreateNewGroup @Inject constructor(private val mRepository: GroupRepositor
         UseCase<Group, Group>(threadExecutor, postExecutionThread) {
 
     override fun buildUseCaseObservable(params: Group?): Observable<Group> {
-        // return mRepository.allTransactionsForUser(params!!)
         return mRepository.createGroup(params!!)
     }
 }
