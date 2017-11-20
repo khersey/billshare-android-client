@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.adapter
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -17,6 +18,7 @@ import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 
 
 class TransactionListAdapter(private val mTransactions: MutableList<Transaction>,
+                             private val mCurrentUserId: Long,
                              private val mOnTransactionItemClickListener: TransactionListAdapter.OnTransactionItemClickListener) :
         RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder>() {
 
@@ -37,13 +39,15 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         val transactionLabel = mTransactions[position].label
         val transactionOwed = mTransactions[position].oweSplit
         val transactionPayed = mTransactions[position].paySplit
+        val transactionCurrency = mTransactions[position].currencyCode
 
-        holder?.bindData(transactionGroup!!, transactionAmount!!.toDouble() * 0.01, transactionLabel!!, transactionOwed!!, transactionPayed!!)
+        holder?.bindData(transactionGroup!!, transactionAmount!!.toDouble() * 0.01,
+                transactionLabel!!, transactionOwed!!, transactionPayed!!, transactionCurrency!!, mCurrentUserId)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_transaction, parent, false)
+                .inflate(R.layout.card_transaction, parent, false)
         return TransactionViewHolder(view)
     }
 
@@ -68,24 +72,46 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
 
         @BindView(R.id.transaction_card_view)
         lateinit var mCardView: CardView
-        @BindView(R.id.transaction_card_title)
-        lateinit var mTitleTV: TextView
-        @BindView(R.id.transaction_card_subtitle)
-        lateinit var mSubTitleTV: TextView
-        @BindView(R.id.transaction_card_content)
-        lateinit var mContentTV: TextView
+        @BindView(R.id.transaction_label)
+        lateinit var mTransactionLabelTV: TextView
+        @BindView(R.id.group_label)
+        lateinit var mGroupLabelTV: TextView
+        @BindView(R.id.amount_owed_paid)
+        lateinit var mAmountPaidOwedTV: TextView
+        @BindView(R.id.amount_total)
+        lateinit var mAmountTotalTV: TextView
+        @BindView(R.id.currency_code)
+        lateinit var mCurrencyCodeTv: TextView
 
         init {
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>) {
+        fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>, currencyCode: String, userId: Long) {
 
             // TODO: figure out who the current user is and use Splits to generate mContentTV for that User
 
-            mTitleTV.text = label
-            mSubTitleTV.text = group.label
-            mContentTV.text = "$ ${amount}"
+            mTransactionLabelTV.text = label
+            mGroupLabelTV.text = group.label
+            mAmountTotalTV.text = "$ ${amount}"
+
+            var userTotal: Long = 0
+            if (oweSplit[userId] != null) {
+                userTotal -= oweSplit[userId]!!
+            }
+            if (paySplit[userId] != null) {
+                userTotal += paySplit[userId]!!
+            }
+
+            if (userTotal < 0) {
+                mAmountPaidOwedTV.text = "$ ${userTotal.toDouble() * 0.01} "
+                mAmountPaidOwedTV.setTextColor(Color.rgb(191, 49, 17))
+            } else {
+                mAmountPaidOwedTV.text = "$ +${userTotal.toDouble() * 0.01} "
+                mAmountPaidOwedTV.setTextColor(Color.rgb(65, 191, 30))
+            }
+
+            mCurrencyCodeTv.text = currencyCode
         }
 
         @OnClick(R.id.transaction_card_view)

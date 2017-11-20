@@ -3,7 +3,9 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 import android.support.annotation.NonNull
 import android.view.View
 import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
+import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUserGroups
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUserTransactions
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity
@@ -15,8 +17,9 @@ import javax.inject.Inject
  * TransactionFragment Presenter
  */
 @PerActivity
-class TransactionPresenter @Inject constructor(private val mGetTransactionList: GetUserTransactions) :
-        Presenter(mGetTransactionList) {
+class TransactionPresenter @Inject constructor(private val mGetTransactionList: GetUserTransactions,
+                                               private val mGetUserGroups: GetUserGroups) :
+        Presenter(mGetTransactionList, mGetUserGroups) {
 
     private var mTransactionView: TransactionView? = null
 
@@ -36,6 +39,10 @@ class TransactionPresenter @Inject constructor(private val mGetTransactionList: 
 
     fun fetchTransactionsByUser(userId: Long) {
         mGetTransactionList.execute(TransactionListObserver(), userId)
+    }
+
+    fun fetchGroupsByUserId(userId: Long) {
+        mGetUserGroups.execute(GroupListObserver(), userId)
     }
 
     private fun onObserverError(error: Throwable) {
@@ -60,6 +67,23 @@ class TransactionPresenter @Inject constructor(private val mGetTransactionList: 
             mTransactionView!!.hideProgress()
             onObserverError(error)
             mTransactionView!!.showTransactions()
+        }
+    }
+
+    private inner class GroupListObserver : DisposableObserver<List<Group>>() {
+
+        override fun onNext(groups: List<Group>) {
+            mTransactionView!!.hideProgress()
+            mTransactionView!!.returnedGroups(groups)
+        }
+
+        override fun onComplete() {
+        }
+
+        override fun onError(error: Throwable) {
+            mTransactionView!!.hideProgress()
+            onObserverError(error)
+            mTransactionView!!.returnedGroups()
         }
     }
 }
