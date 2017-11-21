@@ -18,6 +18,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
@@ -49,6 +50,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     lateinit var mPresenter: TransactionPresenter
     private val gson: Gson = Gson()
     private var mTransactions: MutableList<Transaction> = mutableListOf()
+    private var mGroups: MutableList<Group> = mutableListOf()
 
     private var mColumnCount = 1
     private var mListener: OnTransactionSelectedListener? = null
@@ -75,6 +77,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
         mPresenter.setView(this)
         mPresenter.fetchTransactionsByUser(mCurrentUserId)
+        mPresenter.fetchGroupsByUserId(mCurrentUserId)
     }
 
     override fun onDetach() {
@@ -131,7 +134,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     // Helper Methods
     private fun setupRecyclerView() {
-        mTransactionListAdapter = TransactionListAdapter(mTransactions, this)
+        mTransactionListAdapter = TransactionListAdapter(mTransactions, mCurrentUserId ,this)
 
         mTransactionListRV.itemAnimator = DefaultItemAnimator()
         mTransactionListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -147,14 +150,39 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
         mTransactionListAdapter.transactions = transactions
         mTransactionListAdapter.notifyDataSetChanged()
         mTransactions = transactions.toMutableList()
+        if (mGroups.size > 0) {
+            addGroupToTransaction()
+        }
     }
 
     override fun showTransactions() {
         mTransactionListAdapter.notifyDataSetChanged()
     }
 
+    override fun returnedGroups(groups: List<Group>) {
+        mGroups = groups.toMutableList()
+        if (mTransactions.size > 0) {
+            addGroupToTransaction()
+        }
+    }
+
+    override fun returnedGroups() {
+
+    }
+
     override fun showError(message: String) {
         //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun addGroupToTransaction() {
+        for (transaction in mTransactions) {
+            val thisGroup: Group? = mGroups.find {group -> group.externalId == transaction.group!!.externalId}
+            if (thisGroup != null) {
+                transaction.group = thisGroup
+            }
+        }
+        mTransactionListAdapter.transactions = mTransactions
+        mTransactionListAdapter.notifyDataSetChanged()
     }
 
     private fun onTransactionListChanged() {

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -20,7 +21,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerAc
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserSmallAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by khersey on 2017-11-08.
@@ -59,6 +60,16 @@ class GroupDetailsActivity: BaseActivity(), UserSmallAdapter.OnUserItemClickList
 
     private fun unpackIntent() {intent.getStringExtra("group")
         mGroup = gson.fromJson(intent.getStringExtra("group"), object : TypeToken<Group>() {}.type)
+        // TODO: this but based on group theme
+        val random = Random()
+        when (random.nextInt(6)) {
+            0 -> mGroupImage.setImageResource(R.drawable.champagne_theme_1x03)
+            1 -> mGroupImage.setImageResource(R.drawable.condo_theme_1x03)
+            2 -> mGroupImage.setImageResource(R.drawable.house_theme_1x03)
+            3 -> mGroupImage.setImageResource(R.drawable.school_theme_1x03)
+            4 -> mGroupImage.setImageResource(R.drawable.tropical_theme_1x03)
+            5 -> mGroupImage.setImageResource(R.drawable.sandwich_theme_1x03)
+        }
     }
 
     @BindView(R.id.user_list_recycle_view)
@@ -66,6 +77,9 @@ class GroupDetailsActivity: BaseActivity(), UserSmallAdapter.OnUserItemClickList
 
     @BindView(R.id.group_label)
     lateinit var mGroupLabel: TextView
+
+    @BindView(R.id.group_image)
+    lateinit var mGroupImage: ImageView
 
     private fun setupRecyclerView() {
         mUserSmallAdapter = UserSmallAdapter(mGroup!!.users!!.toMutableList(), this, false)

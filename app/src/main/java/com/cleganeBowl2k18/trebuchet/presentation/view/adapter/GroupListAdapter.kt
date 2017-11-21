@@ -7,6 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -15,6 +16,7 @@ import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment.OnListFragmentInteractionListener
+import java.util.*
 
 
 /**
@@ -70,10 +72,12 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
 
         @BindView(R.id.group_card_view)
         lateinit var mCardView: CardView
-        @BindView(R.id.group_card_name)
+        @BindView(R.id.group_label)
         lateinit var mNameTV: TextView
         @BindView(R.id.group_card_content)
         lateinit var mUsersTV: TextView
+        @BindView(R.id.group_image)
+        lateinit var mGroupImage: ImageView
 
         init {
             ButterKnife.bind(this, itemView)
@@ -91,6 +95,17 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
                 content = content.substringBeforeLast(',')
             }
             mUsersTV.text = content
+
+            // TODO: this but based on the group's theme
+            val random = Random()
+            when (random.nextInt(6)) {
+                0 -> mGroupImage.setImageResource(R.drawable.champagne_theme_1x02)
+                1 -> mGroupImage.setImageResource(R.drawable.condo_theme_1x02)
+                2 -> mGroupImage.setImageResource(R.drawable.house_theme_1x02)
+                3 -> mGroupImage.setImageResource(R.drawable.school_theme_1x02)
+                4 -> mGroupImage.setImageResource(R.drawable.tropical_theme_1x02)
+                5 -> mGroupImage.setImageResource(R.drawable.sandwich_theme_1x02)
+            }
         }
 
         @OnClick(R.id.group_card_view)

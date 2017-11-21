@@ -17,6 +17,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.view.activity.LoginActivity"
@@ -54,7 +55,9 @@
             android:name=".presentation.view.activity.EditTransactionSplitActivity"
             android:label="@string/title_activity_edit_transaction_split"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".presentation.view.activity.TransactionDetailsActivity"></activity>
+        <activity android:name=".presentation.view.activity.TransactionDetailsActivity"
+            android:label="Transaction Details"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".presentation.view.activity.GroupDetailsActivity"
             android:label="Group Details"

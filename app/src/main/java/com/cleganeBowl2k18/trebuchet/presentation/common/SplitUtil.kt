@@ -5,7 +5,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.common
  */
 class SplitUtil {
     companion object {
-        fun equalSplit (amount: Long, userIds: List<Long>) : MutableMap<Long, Long> {
+        fun equalSplit(amount: Long, userIds: List<Long>) : MutableMap<Long, Long> {
             var remainder : Long = 0
             var splitVal : Long = 0
             if (amount != 0.toLong()) {
