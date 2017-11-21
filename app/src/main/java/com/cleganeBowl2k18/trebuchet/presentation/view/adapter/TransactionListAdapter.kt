@@ -8,6 +8,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -88,8 +89,6 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         }
 
         fun bindData(group: Group, amount: Double, label: String, oweSplit: MutableMap<Long, Long>, paySplit: MutableMap<Long, Long>, currencyCode: String, userId: Long) {
-
-            // TODO: figure out who the current user is and use Splits to generate mContentTV for that User
 
             mTransactionLabelTV.text = label
             mGroupLabelTV.text = group.label

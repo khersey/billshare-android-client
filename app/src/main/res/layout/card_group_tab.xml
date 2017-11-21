@@ -29,23 +29,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:scaleType="centerCrop"
-                    android:layout_alignParentTop="true"
-                    android:src="@drawable/school_theme_1x02"/>
+                    android:layout_alignParentTop="true" />
 
                 <TextView
-                    android:id="@+id/group_card_name"
+                    android:id="@+id/group_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textSize="@dimen/cardview_title"
+                    android:padding="@dimen/text_margin"
+                    android:textSize="@dimen/imageview_title"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/cardview_light_background"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:layout_alignParentBottom="true"/>
+                    android:textColor="#EEEEEE"
+                    android:background="@drawable/scrim_gradient_card"
+                    android:layout_alignParentBottom="true" />
 
             </RelativeLayout>
-
 
 
             <TextView
