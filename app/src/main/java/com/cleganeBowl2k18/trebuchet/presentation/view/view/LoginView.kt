@@ -1,8 +1,13 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.view
 
+import com.cleganeBowl2k18.trebuchet.data.models.User
+
 /**
  * View interface for LoginActivity
  */
 interface LoginView {
-    // TODO: make use of this
+
+    fun loginSuccess(user: User)
+
+    fun showError(message: String)
 }

@@ -16,7 +16,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -26,13 +25,19 @@ import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
+import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
+import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.LoginPresenter
+import com.cleganeBowl2k18.trebuchet.presentation.view.view.LoginView
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*
+import javax.inject.Inject
 
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
+class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor>, LoginView {
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -40,12 +45,21 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     private var prefs: SharedPreferences? = null
 
     private var mCurrentUser: User? = null
+    @Inject
+    lateinit var mPresenter: LoginPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = this.getSharedPreferences(Constants.PREFS_FILENAME, 0)
         setContentView(R.layout.activity_login)
         ButterKnife.bind(this)
+
+        DaggerActivityComponent.builder()
+                .applicationComponent(mApplicationComponent)
+                .build()
+                .inject(this)
+
+        mPresenter.setView(this)
 
         // Set up the login form.
         populateAutoComplete()
@@ -156,9 +170,25 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr, passwordStr)
-            mAuthTask!!.execute(null as Void?)
+//            mAuthTask = UserLoginTask(emailStr, passwordStr)
+//            mAuthTask!!.execute(null as Void?)
+            mPresenter.login(emailStr, passwordStr)
         }
+    }
+
+    override fun loginSuccess(user: User) {
+        val editor = prefs!!.edit()
+        editor.putBoolean(Constants.LOGGED_IN, true)
+        editor.putLong(Constants.CURRENT_USER_ID, user.externalId)
+        editor.apply()
+        startActivity(MainIntent())
+        return
+    }
+
+    override fun showError(message: String) {
+        password.error = getString(R.string.error_incorrect_password)
+        password.requestFocus()
+        // TODO: snackbar
     }
 
     private fun isEmailValid(email: String): Boolean {
@@ -296,12 +326,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
 
         fun loginInSuccess(currentUserId: Long) {
-            val editor = prefs!!.edit()
-            editor.putBoolean(Constants.LOGGED_IN, true)
-            editor.putLong(Constants.CURRENT_USER_ID, currentUserId)
-            editor.apply()
-            startActivity(MainIntent())
-            return
+
         }
 
         override fun onCancelled() {
