@@ -21,16 +21,18 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_create_account">Create Account</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_password_match">Passwords do not match</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="error_email_in_use">Could not create account, email already in use</string>
 
     <!-- URLs -->
     <string name="base_url">http://billshare.io:3000/</string>
@@ -72,4 +74,7 @@
     <string name="edit_transactons">Edit</string>
     <string name="split_details">Transaction Details</string>
     <string name="resolve_transaction">Paid in Full</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="prompt_password_confirm">Confirm Password</string>
 </resources>

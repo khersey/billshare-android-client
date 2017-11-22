@@ -10,8 +10,10 @@ class CreateUserRequest {
     var password: String = ""
     @SerializedName("first_name")
     var fName: String = ""
-    @SerializedName("last_night")
+    @SerializedName("last_name")
     var lName: String = ""
+
+    constructor()
 
     constructor(email: String, password: String, fName: String, lName: String) {
         this.email = email
