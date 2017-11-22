@@ -9,5 +9,9 @@ interface LoginView {
 
     fun loginSuccess(user: User)
 
+    fun loginError(message: String)
+
+    fun createAccountError(message: String)
+
     fun showError(message: String)
 }

@@ -2,6 +2,7 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.CreateUserRequest
 import com.cleganeBowl2k18.trebuchet.data.modelAdapters.LoginRequest
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateUser
@@ -42,6 +43,10 @@ class LoginPresenter @Inject constructor(private val mLogin: Login,
         mLogin.execute(LoginObserver(), LoginRequest(email, password))
     }
 
+    fun createAccount(email: String, password: String, fName: String, lName: String) {
+        mCreateUser.execute(CreateUserObserver(), CreateUserRequest(email, password, fName, lName))
+    }
+
     private fun onObserverError(error: Throwable) {
         error.message?.let { mLoginView!!.showError(it) }
     }
@@ -55,7 +60,20 @@ class LoginPresenter @Inject constructor(private val mLogin: Login,
         }
 
         override fun onError(error: Throwable) {
-            onObserverError(error)
+            error.message?.let { mLoginView!!.loginError(it) }
+        }
+    }
+
+    private inner class CreateUserObserver : DisposableObserver<User>() {
+        override fun onNext(user: User) {
+            mLoginView!!.loginSuccess(user)
+        }
+
+        override fun onComplete() {
+        }
+
+        override fun onError(error: Throwable) {
+            error.message?.let { mLoginView!!.createAccountError(it) }
         }
     }
 }
