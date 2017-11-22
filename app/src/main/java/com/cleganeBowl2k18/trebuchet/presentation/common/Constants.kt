@@ -4,7 +4,7 @@ interface Constants {
 
     interface Api {
         companion object {
-            val BASE_API_URL = "http://billshare.io:3000/"
+            val BASE_API_URL = "https://api.billshare.io/"
         }
     }
 
@@ -14,7 +14,6 @@ interface Constants {
 
         // SharedPreference IDs
         val LOGGED_IN       = "logged_in"
-        val CURRENT_USER    = "current_user"
         val CURRENT_USER_ID = "current_user_id"
 
         // Split Types

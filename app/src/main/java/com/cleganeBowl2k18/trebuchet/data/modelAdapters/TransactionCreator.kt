@@ -1,6 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.modelAdapters
 
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
+import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.google.gson.annotations.SerializedName
 
 class TransactionCreator {
@@ -10,17 +11,21 @@ class TransactionCreator {
     var label: String? = null
     var group: Long? = null
     var creator: Long? = null
+    @SerializedName("split_type")
+    var splitType: String? = null
     @SerializedName("user_shares")
     var transactions: List<TransactionCreatorTransaction>? = listOf()
 
+
     constructor()
 
-    constructor(total: Double, currency_code: String, label: String, group: Long, creator: Long, transactions: List<TransactionCreatorTransaction>) {
+    constructor(total: Double, currency_code: String, label: String, group: Long, creator: Long, splitType: String, transactions: List<TransactionCreatorTransaction>) {
         this.total = total
         this.currencyCode = currency_code
         this.label = label
         this.group = group
         this.creator = creator
+        this.splitType = splitType
         this.transactions = transactions
     }
 
@@ -30,6 +35,13 @@ class TransactionCreator {
         this.label = transaction.label
         this.group = transaction.group!!.externalId
         this.creator = transaction.creator
+
+        if (transaction.splitType == Constants.SPLIT_BY_PERCENTAGE) {
+            this.splitType = "precent"
+        } else {
+            this.splitType = "money"
+        }
+
         var list: MutableList<TransactionCreatorTransaction> = mutableListOf()
 
         for (user in transaction!!.group!!.users!!) {
