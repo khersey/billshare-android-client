@@ -6,6 +6,7 @@ class TransactionLineItem{
 
     var id: Long = 0
     var label: String = ""
+    var percentage: Double = 0.0
     @SerializedName("debt_currency")
     var currencyCode: String = ""
     var debt: Double = 0.0
@@ -15,9 +16,10 @@ class TransactionLineItem{
     var debtor: Long = 0
     var creditor: Long = 0
 
-    constructor(id: Long, label: String, currencyCode: String, debt: Double, resolved: Boolean, transaction: Long, group: Long, debtor: Long, creditor: Long) {
+    constructor(id: Long, label: String, percentage: Double, currencyCode: String, debt: Double, resolved: Boolean, transaction: Long, group: Long, debtor: Long, creditor: Long) {
         this.id = id
         this.label = label
+        this.percentage = percentage
         this.currencyCode = currencyCode
         this.debt = debt
         this.resolved = resolved

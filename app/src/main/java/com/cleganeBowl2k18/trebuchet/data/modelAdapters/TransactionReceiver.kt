@@ -2,6 +2,7 @@ package com.cleganeBowl2k18.trebuchet.data.modelAdapters
 
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
+import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.google.gson.annotations.SerializedName
 
 
@@ -62,6 +63,7 @@ class TransactionReceiver {
                 (total * 100).toLong(),
                 "CAD",
                 creator,
+                Constants.SPLIT_BY_AMOUNT,
                 paySplit,
                 oweSplit,
                 resolved,

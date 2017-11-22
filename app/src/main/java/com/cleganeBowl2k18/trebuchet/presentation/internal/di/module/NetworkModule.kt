@@ -1,8 +1,12 @@
 package com.cleganeBowl2k18.trebuchet.presentation.internal.di.module
 
 import android.app.Application
+import android.content.Context
 import com.cleganeBowl2k18.trebuchet.BuildConfig
 import com.cleganeBowl2k18.trebuchet.data.network.*
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -46,9 +50,16 @@ class NetworkModule(private val mBaseApiUrl: String) {
 
     @Provides
     @Singleton
-    internal fun provideHttpClient(cache: Cache, interceptor: HttpLoggingInterceptor): OkHttpClient {
+    internal fun providesPersistentCookieJar(context: Context) : PersistentCookieJar {
+        return PersistentCookieJar(SetCookieCache(),SharedPrefsCookiePersistor(context))
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideHttpClient(cache: Cache, interceptor: HttpLoggingInterceptor, cookieJar: PersistentCookieJar): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor(interceptor)
+                .cookieJar(cookieJar)
                 .cache(cache)
                 .build()
     }
@@ -86,5 +97,11 @@ class NetworkModule(private val mBaseApiUrl: String) {
     @Singleton
     internal fun providesTransactionService(retrofit: Retrofit): TransactionService {
         return retrofit.create<TransactionService>(TransactionService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    internal fun providesAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create<AuthService>(AuthService::class.java)
     }
 }
