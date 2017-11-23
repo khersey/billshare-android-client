@@ -5,10 +5,7 @@ import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryRecei
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  * Interface for accessing the User API
@@ -29,7 +26,10 @@ interface UserService {
     fun getUserTransactions( @Path("id") userId: Long): Observable<List<TransactionReceiver>>
 
     @GET("/user/{id}/transactions/summary/")
-    fun getUserTransactionsSummary(@Path("id") userId: Long): Observable<TransactionSummaryReceiver>
+    fun getUserTransactionsSummary(@Path("id") userId: Long,
+                                   @Query("date_end") lastDate: String,
+                                   @Query("date_start") firstDate: String):
+            Observable<TransactionSummaryReceiver>
 
     @GET("/user/{id}/group/{groupId}/balance")
     fun getGroupBalance(@Path("id") userId: Long, @Path("groupId") groupId: Long): Observable<Double>
