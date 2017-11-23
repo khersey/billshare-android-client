@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
 import com.cleganeBowl2k18.trebuchet.data.models.Group
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.GroupCreator
+import com.cleganeBowl2k18.trebuchet.data.models.request.GroupCreator
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import io.reactivex.Observable
 import retrofit2.Response

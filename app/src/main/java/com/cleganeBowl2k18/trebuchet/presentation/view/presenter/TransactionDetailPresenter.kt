@@ -2,8 +2,8 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionResolver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionResolver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetGroup

@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.domain.interactor
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.LoginRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.LoginRequest
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.data.repository.AuthRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread

@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionSummaryReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.data.network.UserService

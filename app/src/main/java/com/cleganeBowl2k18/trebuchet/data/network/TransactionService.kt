@@ -1,8 +1,8 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionCreator
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionResolver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionCreator
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionResolver
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import io.reactivex.Observable
 import retrofit2.Response

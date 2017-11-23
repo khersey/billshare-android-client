@@ -1,4 +1,4 @@
-package com.cleganeBowl2k18.trebuchet.data.modelAdapters
+package com.cleganeBowl2k18.trebuchet.data.models.request
 
 import com.google.gson.annotations.SerializedName
 
