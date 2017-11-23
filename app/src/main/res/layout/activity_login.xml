@@ -59,6 +59,12 @@
                     android:textStyle="bold"
                     android:gravity="center"/>
 
+                <ImageView
+                    android:id="@+id/logo_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:scaleType="centerInside"/>
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

@@ -67,7 +67,7 @@ class TransactionDetailsActivity : BaseActivity(),
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() === 0) {
+                && event.repeatCount === 0) {
             onBackPressed()
             return true
         }

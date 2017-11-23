@@ -44,14 +44,14 @@ class TransactionCreator {
 
         var list: MutableList<TransactionCreatorTransaction> = mutableListOf()
 
-        for (user in transaction!!.group!!.users!!) {
+        for (user in transaction.group!!.users!!) {
             var tc = TransactionCreatorTransaction()
             tc.user = user.externalId
-            if (transaction!!.oweSplit!!.keys.contains(tc.user)) {
-                tc.owes = transaction!!.oweSplit!![user.externalId]!!.toDouble() * 0.01
+            if (transaction.oweSplit.keys.contains(tc.user)) {
+                tc.owes = transaction.oweSplit[user.externalId]!!.toDouble() * 0.01
             }
-            if (transaction!!.paySplit!!.keys.contains(tc.user)) {
-                tc.paid = transaction!!.paySplit!![user.externalId]!!.toDouble() * 0.01
+            if (transaction.paySplit.keys.contains(tc.user)) {
+                tc.paid = transaction.paySplit[user.externalId]!!.toDouble() * 0.01
             }
             if (tc.owes > 0 || tc.paid > 0) {
                 list.add(tc)

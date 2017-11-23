@@ -62,7 +62,7 @@ class UserSmallAdapter(private val mUsers: MutableList<User>,
                 content = mUsers[position].email!!
             }
 
-            holder.bindData(title!!, content!!)
+            holder.bindData(title!!, content)
         }
     }
 

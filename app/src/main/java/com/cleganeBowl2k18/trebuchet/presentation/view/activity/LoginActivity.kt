@@ -62,6 +62,10 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor>, LoginView {
                 .load(R.drawable.cloud_login_4k)
                 .into(mBackgroundImage)
 
+        Glide.with(this)
+                .load(R.drawable.billshare_logo_x05)
+                .into(mLogoImage)
+
         // Set up the login form.
         populateAutoComplete()
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
@@ -237,6 +241,9 @@ class LoginActivity : BaseActivity(), LoaderCallbacks<Cursor>, LoginView {
 
     @BindView(R.id.last_name)
     lateinit var mLastName: EditText
+
+    @BindView(R.id.logo_image)
+    lateinit var mLogoImage: ImageView
 
     @OnClick(R.id.create_account_button)
     fun showAccountCreate() {

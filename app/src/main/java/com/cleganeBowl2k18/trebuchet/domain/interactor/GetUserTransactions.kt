@@ -18,7 +18,7 @@ class GetUserTransactions @Inject constructor(private val mRepository: UserRepos
 
     override fun buildUseCaseObservable(params: Long?): Observable<List<TransactionReceiver>> {
         Log.i("API_CALL", "calling GET /user/${params!!}/transactions")
-        return mRepository.getTransactionsByUserId(params!!)
+        return mRepository.getTransactionsByUserId(params)
     }
 
 }

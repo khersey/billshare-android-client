@@ -15,6 +15,6 @@ class GetGroupBalance @Inject constructor(private val mRepository: UserRepositor
         UseCase<Double, List<Long>>(threadExecutor, postExecutionThread) {
 
     override fun buildUseCaseObservable(params: List<Long>?): Observable<Double> {
-        return mRepository.getGroupBalance(params!![0], params!![1])
+        return mRepository.getGroupBalance(params!![0], params[1])
     }
 }

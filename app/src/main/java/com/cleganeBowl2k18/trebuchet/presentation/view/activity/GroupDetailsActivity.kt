@@ -82,7 +82,7 @@ class GroupDetailsActivity: BaseActivity(), UserSmallAdapter.OnUserItemClickList
     lateinit var mGroupImage: ImageView
 
     private fun setupRecyclerView() {
-        mUserSmallAdapter = UserSmallAdapter(mGroup!!.users!!.toMutableList(), this, false)
+        mUserSmallAdapter = UserSmallAdapter(mGroup.users!!.toMutableList(), this, false)
 
         mUserListRV.itemAnimator = DefaultItemAnimator()
         mUserListRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

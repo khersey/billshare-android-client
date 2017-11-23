@@ -54,18 +54,18 @@ class MainActivity : BaseActivity(),
 
         mSectionsPagerAdapter = SectionsPagerAdapter(this.supportFragmentManager, this)
         mViewPager.adapter = mSectionsPagerAdapter
-        mViewPager.setOffscreenPageLimit(3)
+        mViewPager.offscreenPageLimit = 3
         mTabs.setupWithViewPager(mViewPager)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState!!.putInt(POSITION, mTabs.getSelectedTabPosition())
+        outState!!.putInt(POSITION, mTabs.selectedTabPosition)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        mViewPager.setCurrentItem(savedInstanceState.getInt(POSITION))
+        mViewPager.currentItem = savedInstanceState.getInt(POSITION)
     }
 
 

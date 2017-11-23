@@ -2,8 +2,8 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetTransactionsSummary
 import com.cleganeBowl2k18.trebuchet.presentation.common.presenter.Presenter
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.scope.PerActivity

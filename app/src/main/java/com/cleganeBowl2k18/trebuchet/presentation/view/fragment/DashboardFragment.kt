@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionSummaryReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
@@ -39,7 +39,7 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        prefs = getActivity().getSharedPreferences(Constants.PREFS_FILENAME, 0)
+        prefs = activity.getSharedPreferences(Constants.PREFS_FILENAME, 0)
         mCurrentUserId = prefs!!.getLong(Constants.CURRENT_USER_ID, -1)
 
         DaggerActivityComponent.builder()
@@ -71,7 +71,7 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
 
         mRecyclerView.itemAnimator = DefaultItemAnimator()
         mRecyclerView.addItemDecoration(VerticalSpacingItemDecoration(30))
-        mRecyclerView.layoutManager = LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        mRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.adapter = mDashboardAdapter
 

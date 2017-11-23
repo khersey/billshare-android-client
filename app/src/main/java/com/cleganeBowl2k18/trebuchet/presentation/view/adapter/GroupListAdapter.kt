@@ -87,10 +87,9 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
             mNameTV.text = groupName
 
             var content = "No Members"
-            if (groupUsers != null && groupUsers?.size != 0) {
+            if (groupUsers != null && groupUsers.size != 0) {
                 content = "Members: "
-                groupUsers?.forEach{
-                    user -> content += "${user.fName}, "
+                groupUsers.forEach{ user -> content += "${user.fName}, "
                 }
                 content = content.substringBeforeLast(',')
             }

@@ -67,7 +67,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
             throw RuntimeException(context!!.toString() + " must implement OnListFragmentInteractionListener")
         }
 
-        prefs = getActivity().getSharedPreferences(Constants.PREFS_FILENAME, 0)
+        prefs = activity.getSharedPreferences(Constants.PREFS_FILENAME, 0)
         mCurrentUserId = prefs!!.getLong(Constants.CURRENT_USER_ID, -1)
 
         DaggerActivityComponent.builder()
@@ -128,7 +128,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState != null) {
-            mTransactions = gson.fromJson(savedInstanceState!!.getString("mTransactions"), object : TypeToken<MutableList<Transaction>>() {}.type)
+            mTransactions = gson.fromJson(savedInstanceState.getString("mTransactions"), object : TypeToken<MutableList<Transaction>>() {}.type)
         }
     }
 
@@ -138,7 +138,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
         mTransactionListRV.itemAnimator = DefaultItemAnimator()
         mTransactionListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
-        mTransactionListRV.layoutManager = LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        mTransactionListRV.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         mTransactionListRV.setHasFixedSize(true)
         mTransactionListRV.adapter = mTransactionListAdapter
 
@@ -208,7 +208,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     @OnClick(R.id.create_transaction_fab)
     fun createNewTransaction() {
-        startActivityForResult(getActivity().CreateTransactionIntent(), 1)
+        startActivityForResult(activity.CreateTransactionIntent(), 1)
     }
 
     override fun showProgress() {
@@ -224,7 +224,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     }
 
     override fun onTransactionItemClick(transaction: Transaction) {
-        var intent = getActivity().CreateTransactionDetailItent()
+        var intent = activity.CreateTransactionDetailItent()
         intent.putExtra("transaction", gson.toJson(transaction))
         startActivityForResult(intent, 2)
     }

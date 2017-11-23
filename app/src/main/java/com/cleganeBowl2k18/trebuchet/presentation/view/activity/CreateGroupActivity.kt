@@ -67,11 +67,6 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onResume() {
-        super.onResume()
-        // mPresenter.onResume()
-    }
-
     override fun onPause() {
         super.onPause()
         mPresenter.onPause()

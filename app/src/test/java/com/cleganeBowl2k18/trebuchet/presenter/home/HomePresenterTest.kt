@@ -3,8 +3,6 @@ package com.cleganeBowl2k18.trebuchet.presenter.home
 import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.DeletePet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetPetList
-import com.cleganeBowl2k18.trebuchet.presentation.view.home.HomePresenter
-import com.cleganeBowl2k18.trebuchet.presentation.view.home.HomeView
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
