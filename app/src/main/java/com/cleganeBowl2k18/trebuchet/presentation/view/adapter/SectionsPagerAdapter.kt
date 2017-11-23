@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.MainActivity
+import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.DashboardFragment
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragment
 
@@ -31,7 +32,7 @@ class SectionsPagerAdapter(fm: FragmentManager, context: Context) : FragmentPage
 
     override fun getItem(position: Int): Fragment {
         when(position) {
-            0 -> return MainActivity.PlaceholderFragment.newInstance(1)
+            0 -> return DashboardFragment.newInstance()
             1 -> return GroupFragment.newInstance(1)
             2 -> return TransactionFragment.newInstance(1)
         }

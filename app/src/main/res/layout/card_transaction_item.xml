@@ -16,47 +16,57 @@
         card_view:cardCornerRadius="@dimen/card_corner_radius">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/cardview_title"
-                android:textStyle="bold"
-                android:id="@+id/user_label"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/cardview_title"
-                android:id="@+id/paid_amount"
-                android:visibility="gone"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/cardview_title"
-                android:id="@+id/owe_amount"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:weightSum="1">
 
-            <Button
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cardview_title"
+                    android:textStyle="bold"
+                    android:id="@+id/user_label"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cardview_title"
+                    android:id="@+id/paid_amount"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cardview_title"
+                    android:id="@+id/owe_amount"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/resolve_button"
-                android:visibility="gone"
-                android:padding="10dp"
-                android:textSize="@dimen/cardview_title"
-                android:text="@string/resolve_transaction"/>
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_gravity="right">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/resolve_button"
+                    android:visibility="gone"
+                    android:padding="10dp"
+                    android:textSize="@dimen/cardview_title"
+                    android:text="@string/resolve_transaction"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

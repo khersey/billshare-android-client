@@ -20,7 +20,7 @@ import com.cleganeBowl2k18.trebuchet.data.models.User
  */
 class UserSmallAdapter(private val mUsers: MutableList<User>,
                        private val mOnUserItemClickListener: UserSmallAdapter.OnUserItemClickListener,
-                       private var hasLoadButton : Boolean) :
+                       private var hasLoadButton: Boolean) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     lateinit private var mRecyclerView: RecyclerView
@@ -54,7 +54,7 @@ class UserSmallAdapter(private val mUsers: MutableList<User>,
 
         if (holder is UserSmallAdapter.UserViewHolder) {
 
-            var title = mUsers[position].email
+            var title   = mUsers[position].email
             var content = "invite sent"
 
             if (mUsers[position].fName != null && mUsers[position].lName != null ) {
