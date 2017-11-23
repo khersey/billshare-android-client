@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
@@ -81,6 +82,13 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
     lateinit var mRecyclerView: RecyclerView
     lateinit var mDashboardAdapter: DashboardAdapter
 
+    override fun showError(message: String) {
+
+    }
+
+    override fun summaryReceived(summary: TransactionSummaryReceiver) {
+
+    }
 
     override fun onCreateGroupClicked() {
         startActivityForResult(activity.CreateGroupIntent(), 1)

@@ -6,6 +6,8 @@ import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.data.network.UserService
 import io.reactivex.Observable
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Facilitates User API calls
@@ -29,7 +31,17 @@ class UserRepository(private val userService: UserService) {
     }
 
     fun getTransactionsSummary(id: Long) : Observable<TransactionSummaryReceiver> {
-        return userService.getUserTransactionsSummary(id)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val cal: Calendar = Calendar.getInstance()
+
+        val today: Date = cal.time
+        val lastDate = dateFormat.format(today)
+
+        cal.add(Calendar.MONTH, 1)
+        val end: Date = cal.time
+        val firstDate = dateFormat.format(end)
+
+        return userService.getUserTransactionsSummary(id, lastDate, firstDate)
     }
 
     fun getGroupBalance(userId: Long, groupId: Long) : Observable<Double> {
