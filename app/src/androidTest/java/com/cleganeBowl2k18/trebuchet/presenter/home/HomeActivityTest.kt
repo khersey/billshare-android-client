@@ -2,6 +2,7 @@ package com.cleganeBowl2k18.trebuchet.presenter.home
 
 import android.content.Intent
 import android.test.ActivityInstrumentationTestCase2
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.HomeActivity
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 

@@ -3,11 +3,13 @@ package com.cleganeBowl2k18.trebuchet.presenter.home
 import com.cleganeBowl2k18.trebuchet.data.models.Pet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.DeletePet
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetPetList
+import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.HomePresenter
+import com.cleganeBowl2k18.trebuchet.presentation.view.view.HomeView
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.inOrder
 import org.mockito.runners.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

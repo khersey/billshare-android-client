@@ -8,15 +8,16 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.KeyEvent
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.User
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
@@ -97,7 +98,10 @@ class TransactionDetailsActivity : BaseActivity(),
 
     private fun setupRecyclerView() {
         mTransactionItemsAdapter = TransactionItemsAdapter(mTransaction, mGroup, mCurrentUserId, this)
-        mTransactionItemsAdapter.setPresener(mPresenter)
+        mTransactionItemsAdapter.setPresenter(mPresenter)
+        Log.d("transactionCard:", "NAME: ${mTransaction.label}")
+        Log.d("transactionCard:", "PAYSPLIT: ${mTransaction.paySplit.toString()}")
+        Log.d("transactionCard:", "OWESPLIT: ${mTransaction.oweSplit.toString()}")
 
         mTransactionItemsRV.itemAnimator = DefaultItemAnimator()
         mTransactionItemsRV.addItemDecoration(VerticalSpacingItemDecoration(30))

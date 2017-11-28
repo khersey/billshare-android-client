@@ -72,10 +72,13 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
 
         @BindView(R.id.group_card_view)
         lateinit var mCardView: CardView
+
         @BindView(R.id.group_label)
         lateinit var mNameTV: TextView
+
         @BindView(R.id.group_card_content)
         lateinit var mUsersTV: TextView
+
         @BindView(R.id.group_image)
         lateinit var mGroupImage: ImageView
 

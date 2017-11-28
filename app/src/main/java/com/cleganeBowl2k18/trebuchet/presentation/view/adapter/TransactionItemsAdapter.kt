@@ -51,7 +51,7 @@ class TransactionItemsAdapter(private var mTransaction: Transaction,
         return mTransaction.lineItemMap.size
     }
 
-    fun setPresener(presenter: TransactionDetailPresenter) {
+    fun setPresenter(presenter: TransactionDetailPresenter) {
         mPresenter = presenter
     }
 

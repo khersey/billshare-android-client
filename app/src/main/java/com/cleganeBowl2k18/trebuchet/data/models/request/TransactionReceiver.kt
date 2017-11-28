@@ -31,10 +31,10 @@ class TransactionReceiver {
 
     fun toTransaction(): Transaction {
         var total: Double = 0.0
-        var paySplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
-        var oweSplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
-        var resolved: MutableMap<Long, Boolean> = mutableMapOf<Long, Boolean>()
-        var lineItemMap: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
+        val paySplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
+        val oweSplit: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
+        val resolved: MutableMap<Long, Boolean> = mutableMapOf<Long, Boolean>()
+        val lineItemMap: MutableMap<Long, Long> = mutableMapOf<Long,Long>()
 
         for (lineItem in this.transactions!!) {
             if (paySplit[lineItem.creditor] != null) {
@@ -54,6 +54,16 @@ class TransactionReceiver {
             resolved[lineItem.debtor] = lineItem.resolved
             lineItemMap[lineItem.debtor] = lineItem.id
             total += lineItem.debt
+        }
+
+        paySplit.keys.map {
+            userId ->
+            if (lineItemMap[userId] == null) {
+                lineItemMap[userId] = -1
+            }
+            if (resolved[userId] == null) {
+                resolved[userId] = true
+            }
         }
 
         return Transaction(

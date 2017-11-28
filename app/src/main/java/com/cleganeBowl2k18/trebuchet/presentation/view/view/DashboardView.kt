@@ -1,5 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.view
 
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 
 /**
@@ -11,4 +13,7 @@ interface DashboardView {
 
     fun summaryReceived(summary: TransactionSummaryReceiver)
 
+    fun transactionsReceived(transactons: MutableList<Transaction>)
+
+    fun groupsReceived(groups: MutableList<Group>)
 }

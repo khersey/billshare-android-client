@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_transaction_month_summary"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        card_view:cardElevation="@dimen/card_elevation_height"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardCornerRadius="@dimen/card_corner_radius">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/cardview_title"
+                android:textStyle="bold"
+                android:text="@string/monthly_transaction_summary"
+                android:padding="@dimen/appbar_padding_top"/>
+
+            <!-- transaction count -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_count"
+                    android:padding="@dimen/appbar_padding_top"/>
+
+                <TextView
+                    android:id="@+id/transaction_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/appbar_padding_top"/>
+            </LinearLayout>
+
+            <!-- debt -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/summary_debt"
+                    android:padding="@dimen/appbar_padding_top"/>
+
+                <TextView
+                    android:id="@+id/summary_debt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/appbar_padding_top"/>
+            </LinearLayout>
+
+            <!-- credit -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/summary_credit"
+                    android:padding="@dimen/appbar_padding_top"/>
+
+                <TextView
+                    android:id="@+id/summary_credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/appbar_padding_top"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

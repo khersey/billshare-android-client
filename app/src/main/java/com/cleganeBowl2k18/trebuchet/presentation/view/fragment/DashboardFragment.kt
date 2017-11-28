@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
+import com.cleganeBowl2k18.trebuchet.data.models.Group
+import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
@@ -63,20 +65,26 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
 
         setupRecyclerView()
 
+        getCardData()
+
         return view
     }
 
     private fun setupRecyclerView() {
-        mDashboardAdapter = DashboardAdapter(this, mutableListOf(0, 1))
+        mDashboardAdapter = DashboardAdapter(this, mutableListOf(0 to null, 1 to null))
 
         mRecyclerView.itemAnimator = DefaultItemAnimator()
         mRecyclerView.addItemDecoration(VerticalSpacingItemDecoration(30))
         mRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.adapter = mDashboardAdapter
-
     }
 
+    private fun getCardData() {
+        // Other API calls
+        mPresenter.getTransactionsSummary(mCurrentUserId)
+        mPresenter.getRecentActivity(mCurrentUserId)
+    }
 
     @BindView(R.id.dashboard_list)
     lateinit var mRecyclerView: RecyclerView
@@ -87,15 +95,36 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
     }
 
     override fun summaryReceived(summary: TransactionSummaryReceiver) {
-
+        mDashboardAdapter.addCard(mDashboardAdapter.TRANSACTION_SUMMARY to summary)
     }
 
+    override fun transactionsReceived(transactions: MutableList<Transaction>) {
+        transactions.map { transaction ->
+            mDashboardAdapter.addCard(mDashboardAdapter.NEW_TRANSACTION to (transaction to mCurrentUserId))
+        }
+    }
+
+    override fun groupsReceived(groups: MutableList<Group>) {
+        groups.map { group ->
+            mDashboardAdapter.addCard(mDashboardAdapter.NEW_GROUP to group)
+        }
+    }
+
+    // ON CLICKS
     override fun onCreateGroupClicked() {
         startActivityForResult(activity.CreateGroupIntent(), 1)
     }
 
     override fun onCreateTransactionClicked() {
         startActivityForResult(activity.CreateTransactionIntent(), 1)
+    }
+
+    override fun onGroupClicked(group: Group) {
+        
+    }
+
+    override fun onTransactionClicked(transaction: Transaction) {
+
     }
 
     companion object {

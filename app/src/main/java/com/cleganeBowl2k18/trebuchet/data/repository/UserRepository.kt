@@ -1,9 +1,10 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
-import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
-import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.User
+import com.cleganeBowl2k18.trebuchet.data.models.request.DashboardReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
 import com.cleganeBowl2k18.trebuchet.data.network.UserService
 import io.reactivex.Observable
 import java.text.SimpleDateFormat
@@ -37,7 +38,7 @@ class UserRepository(private val userService: UserService) {
         val today: Date = cal.time
         val lastDate = dateFormat.format(today)
 
-        cal.add(Calendar.MONTH, 1)
+        cal.add(Calendar.MONTH, -1)
         val end: Date = cal.time
         val firstDate = dateFormat.format(end)
 
@@ -46,6 +47,10 @@ class UserRepository(private val userService: UserService) {
 
     fun getGroupBalance(userId: Long, groupId: Long) : Observable<Double> {
         return userService.getGroupBalance(userId, groupId)
+    }
+
+    fun getRecentActivity(userId: Long) : Observable<DashboardReceiver> {
+        return userService.getRecentActivity(userId)
     }
 
 }
