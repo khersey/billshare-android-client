@@ -20,19 +20,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/cardview_title"
-                android:text="@string/create_transaction"
-                android:padding="@dimen/text_margin"/>
-
             <Button
                 android:id="@+id/create_transaction_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="+"
-                android:textSize="@dimen/big_title" />
+                android:paddingTop="@dimen/appbar_padding_top"
+                android:paddingBottom="@dimen/appbar_padding_top"
+                android:text="New Transaction +"
+                android:textSize="@dimen/cardview_title"/>
 
         </LinearLayout>
 
