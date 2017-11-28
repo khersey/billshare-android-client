@@ -42,8 +42,8 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         val transactionPayed = mTransactions[position].paySplit
         val transactionCurrency = mTransactions[position].currencyCode
 
-        holder?.bindData(transactionGroup!!, transactionAmount!!.toDouble() * 0.01,
-                transactionLabel!!, transactionOwed!!, transactionPayed!!, transactionCurrency!!, mCurrentUserId)
+        holder?.bindData(transactionGroup!!, transactionAmount.toDouble() * 0.01,
+                transactionLabel!!, transactionOwed, transactionPayed, transactionCurrency!!, mCurrentUserId)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {

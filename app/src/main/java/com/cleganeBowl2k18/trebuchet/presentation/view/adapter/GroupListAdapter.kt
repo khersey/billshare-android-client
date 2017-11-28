@@ -72,10 +72,13 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
 
         @BindView(R.id.group_card_view)
         lateinit var mCardView: CardView
+
         @BindView(R.id.group_label)
         lateinit var mNameTV: TextView
+
         @BindView(R.id.group_card_content)
         lateinit var mUsersTV: TextView
+
         @BindView(R.id.group_image)
         lateinit var mGroupImage: ImageView
 
@@ -87,10 +90,9 @@ class GroupListAdapter(private val mGroups: MutableList<Group>,
             mNameTV.text = groupName
 
             var content = "No Members"
-            if (groupUsers != null && groupUsers?.size != 0) {
+            if (groupUsers != null && groupUsers.size != 0) {
                 content = "Members: "
-                groupUsers?.forEach{
-                    user -> content += "${user.fName}, "
+                groupUsers.forEach{ user -> content += "${user.fName}, "
                 }
                 content = content.substringBeforeLast(',')
             }

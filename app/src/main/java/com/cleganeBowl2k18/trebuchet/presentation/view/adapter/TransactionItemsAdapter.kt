@@ -38,7 +38,7 @@ class TransactionItemsAdapter(private var mTransaction: Transaction,
     override fun onBindViewHolder(holder: TransactionItemViewHolder?, position: Int) {
         val userId: Long = mTransaction.lineItemMap.keys.toList()[position]
         val user: User? =  mGroup.users!!.find {user -> user.externalId == userId}
-        val userLabel = "${user!!.fName} ${user!!.lName}"
+        val userLabel = "${user!!.fName} ${user.lName}"
         val oweAmount: Long? = mTransaction.oweSplit[userId]
         val payAmount: Long? = mTransaction.paySplit[userId]
         val resolvable: Boolean = mCanResolve && !mTransaction.resolved[userId]!!
@@ -51,7 +51,7 @@ class TransactionItemsAdapter(private var mTransaction: Transaction,
         return mTransaction.lineItemMap.size
     }
 
-    fun setPresener(presenter: TransactionDetailPresenter) {
+    fun setPresenter(presenter: TransactionDetailPresenter) {
         mPresenter = presenter
     }
 
@@ -95,7 +95,7 @@ class TransactionItemsAdapter(private var mTransaction: Transaction,
             }
 
             if (payAmount != null) {
-                mPayAmountTV.text = "paid: $${payAmount!!.toDouble() * 0.01}"
+                mPayAmountTV.text = "paid: $${payAmount.toDouble() * 0.01}"
                 mPayAmountTV.visibility = View.VISIBLE
             }
 

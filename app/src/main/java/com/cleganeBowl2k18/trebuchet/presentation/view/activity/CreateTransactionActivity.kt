@@ -12,7 +12,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import butterknife.*
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.User
@@ -75,11 +75,6 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         setupTextViews()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     override fun onPause() {
         super.onPause()
         mPresenter.onPause()
@@ -94,9 +89,9 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             mOweSplit = gson.fromJson(data!!.getStringExtra("oweSplit"),  object : TypeToken<MutableMap<Long, Long>>() {}.type)
-            mPaySplit = gson.fromJson(data!!.getStringExtra("paySplit"),  object : TypeToken<MutableMap<Long, Long>>() {}.type)
-            mSplitType = data!!.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
-            mAmount = data!!.getLongExtra("amount" ,(mAmountEditText.text.toString().toDouble() * 100).toLong())
+            mPaySplit = gson.fromJson(data.getStringExtra("paySplit"),  object : TypeToken<MutableMap<Long, Long>>() {}.type)
+            mSplitType = data.getIntExtra("splitType", Constants.SPLIT_EQUALLY)
+            mAmount = data.getLongExtra("amount" ,(mAmountEditText.text.toString().toDouble() * 100).toLong())
             mAmountEditText.setText("${mAmount.toDouble() * 0.01}")
 
             updateTransactionSplitText()
@@ -106,11 +101,11 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState!!.putString("mGroups", gson.toJson(mGroups))
-        outState!!.putString("mSelecedGroup", gson.toJson(mSelectedGroup))
-        outState!!.putString("mOweSplit", gson.toJson(mOweSplit))
-        outState!!.putString("mPaySplit", gson.toJson(mPaySplit))
-        outState!!.putString("mCurrentUser", gson.toJson(mCurrentUser))
-        outState!!.putInt("mSplitType", mSplitType)
+        outState.putString("mSelecedGroup", gson.toJson(mSelectedGroup))
+        outState.putString("mOweSplit", gson.toJson(mOweSplit))
+        outState.putString("mPaySplit", gson.toJson(mPaySplit))
+        outState.putString("mCurrentUser", gson.toJson(mCurrentUser))
+        outState.putInt("mSplitType", mSplitType)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -194,8 +189,8 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
             } catch(exception: Exception) {
                 mAmount = 0
             }
-            mOweSplit = SplitUtil.equalSplit(mAmount, mOweSplit!!.keys.toList())
-            mPaySplit = SplitUtil.equalSplit(mAmount, mPaySplit!!.keys.toList())
+            mOweSplit = SplitUtil.equalSplit(mAmount, mOweSplit.keys.toList())
+            mPaySplit = SplitUtil.equalSplit(mAmount, mPaySplit.keys.toList())
             updateTransactionSplitText()
         } else if (mSplitType == Constants.SPLIT_BY_AMOUNT) {
             updateTransactionSplitText()
@@ -222,15 +217,15 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     fun updateTransactionSplitText() {
         var paySplitString : String = ""
         for (userId in mPaySplit.keys) {
-            var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
-            if (user != null) paySplitString += "${user?.fName} ${user?.lName!![0]} -> $${(mPaySplit[userId]!! * 0.01)!!.toDouble()}\n"
+            var user: User? = mSelectedGroup!!.users!!.find { user -> user.externalId == userId }
+            if (user != null) paySplitString += "${user.fName} ${user.lName!![0]} -> $${(mPaySplit[userId]!! * 0.01).toDouble()}\n"
         }
         mPaidByText.text = paySplitString
 
         var oweSplitString : String = ""
         for (userId in mOweSplit.keys) {
-            var user: User? = mSelectedGroup!!.users!!.find { user -> user!!.externalId == userId }
-            if (user != null) oweSplitString += "${user?.fName} ${user?.lName!![0]} -> $${(mOweSplit[userId]!! * 0.01)!!.toDouble()}\n"
+            var user: User? = mSelectedGroup!!.users!!.find { user -> user.externalId == userId }
+            if (user != null) oweSplitString += "${user.fName} ${user.lName!![0]} -> $${(mOweSplit[userId]!! * 0.01).toDouble()}\n"
         }
         mSplitBetweenText.text = oweSplitString
     }

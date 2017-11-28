@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.network
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.CreateUserRequest
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.LoginRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.CreateUserRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.LoginRequest
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import io.reactivex.Observable
 import retrofit2.Response

@@ -56,9 +56,6 @@ class UseCaseTest {
             return io.reactivex.Observable.empty<Any>()
         }
 
-        override fun execute(observer: io.reactivex.observers.DisposableObserver<Any>, params: com.cleganeBowl2k18.trebuchet.domain.interactor.UseCaseTest.Params?) {
-            super.execute(observer, params)
-        }
     }
 
     private class TestDisposableObserver<T> : io.reactivex.observers.DisposableObserver<T>() {

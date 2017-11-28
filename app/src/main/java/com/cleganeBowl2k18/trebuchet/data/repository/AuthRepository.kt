@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.data.repository
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.CreateUserRequest
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.LoginRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.CreateUserRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.LoginRequest
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.data.network.AuthService
 import io.reactivex.Observable

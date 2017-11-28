@@ -2,8 +2,8 @@ package com.cleganeBowl2k18.trebuchet.presentation.view.presenter
 
 import android.support.annotation.NonNull
 import android.view.View
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.CreateUserRequest
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.LoginRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.CreateUserRequest
+import com.cleganeBowl2k18.trebuchet.data.models.request.LoginRequest
 import com.cleganeBowl2k18.trebuchet.data.models.User
 import com.cleganeBowl2k18.trebuchet.domain.interactor.CreateUser
 import com.cleganeBowl2k18.trebuchet.domain.interactor.GetUser

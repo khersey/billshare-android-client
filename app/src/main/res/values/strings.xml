@@ -77,4 +77,8 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="prompt_password_confirm">Confirm Password</string>
+    <string name="monthly_transaction_summary">Last Month Transaction Summary</string>
+    <string name="transaction_count">Transaction Count</string>
+    <string name="summary_debt">Total Debt</string>
+    <string name="summary_credit">Total Credit</string>
 </resources>

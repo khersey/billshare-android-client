@@ -17,7 +17,6 @@ import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.SectionsPagerAdap
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainActivity : BaseActivity(),
         GroupFragment.OnGroupSelectedListener,
@@ -55,18 +54,18 @@ class MainActivity : BaseActivity(),
 
         mSectionsPagerAdapter = SectionsPagerAdapter(this.supportFragmentManager, this)
         mViewPager.adapter = mSectionsPagerAdapter
-        mViewPager.setOffscreenPageLimit(3)
+        mViewPager.offscreenPageLimit = 3
         mTabs.setupWithViewPager(mViewPager)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState!!.putInt(POSITION, mTabs.getSelectedTabPosition())
+        outState!!.putInt(POSITION, mTabs.selectedTabPosition)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        mViewPager.setCurrentItem(savedInstanceState.getInt(POSITION))
+        mViewPager.currentItem = savedInstanceState.getInt(POSITION)
     }
 
 
@@ -115,8 +114,7 @@ class MainActivity : BaseActivity(),
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
-            val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
+            val rootView = inflater.inflate(R.layout.fragment_dashboard, container, false)
             return rootView
         }
 

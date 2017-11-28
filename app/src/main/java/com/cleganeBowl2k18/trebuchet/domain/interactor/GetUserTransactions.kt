@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.domain.interactor
 
 import android.util.Log
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.data.repository.UserRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor
@@ -18,7 +18,7 @@ class GetUserTransactions @Inject constructor(private val mRepository: UserRepos
 
     override fun buildUseCaseObservable(params: Long?): Observable<List<TransactionReceiver>> {
         Log.i("API_CALL", "calling GET /user/${params!!}/transactions")
-        return mRepository.getTransactionsByUserId(params!!)
+        return mRepository.getTransactionsByUserId(params)
     }
 
 }

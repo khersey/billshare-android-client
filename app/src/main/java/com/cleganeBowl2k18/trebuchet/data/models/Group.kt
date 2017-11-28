@@ -1,6 +1,6 @@
 package com.cleganeBowl2k18.trebuchet.data.models
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.GroupCreator
+import com.cleganeBowl2k18.trebuchet.data.models.request.GroupCreator
 import com.google.gson.annotations.SerializedName
 
 /**

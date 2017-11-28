@@ -1,7 +1,7 @@
 package com.cleganeBowl2k18.trebuchet.domain.interactor
 
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionReceiver
-import com.cleganeBowl2k18.trebuchet.data.modelAdapters.TransactionResolver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionResolver
 import com.cleganeBowl2k18.trebuchet.data.repository.TransactionRepository
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.PostExecutionThread
 import com.cleganeBowl2k18.trebuchet.domain.excecutor.ThreadExecutor

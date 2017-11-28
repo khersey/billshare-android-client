@@ -65,7 +65,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
             throw RuntimeException(context!!.toString() + " must implement OnGroupSelectedListener")
         }
 
-        prefs = getActivity().getSharedPreferences(Constants.PREFS_FILENAME, 0)
+        prefs = activity.getSharedPreferences(Constants.PREFS_FILENAME, 0)
         mCurrentUserId = prefs!!.getLong(Constants.CURRENT_USER_ID, -1)
 
         DaggerActivityComponent.builder()
@@ -117,7 +117,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState != null) {
-            mGroups = gson.fromJson(savedInstanceState!!.getString("mGroups"), object : TypeToken<MutableList<Group>>() {}.type)
+            mGroups = gson.fromJson(savedInstanceState.getString("mGroups"), object : TypeToken<MutableList<Group>>() {}.type)
         }
     }
 
@@ -127,7 +127,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
 
         mGroupListRV.itemAnimator = DefaultItemAnimator()
         mGroupListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
-        mGroupListRV.layoutManager = LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        mGroupListRV.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         mGroupListRV.setHasFixedSize(true)
         mGroupListRV.adapter = mGroupListAdapter
 
@@ -164,7 +164,7 @@ class GroupFragment : BaseFragment(), GroupView, GroupListAdapter.OnGroupItemCli
 
     @OnClick(R.id.create_group_fab)
     fun createNewGroup() {
-        startActivityForResult(getActivity().CreateGroupIntent(), 1)
+        startActivityForResult(activity.CreateGroupIntent(), 1)
     }
 
     override fun onGroupItemClick(group: Group) {
