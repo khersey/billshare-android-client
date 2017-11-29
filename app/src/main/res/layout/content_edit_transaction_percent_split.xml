@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/transaction_percent_split"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.cleganeBowl2k18.trebuchet.presentation.view.activity.EditTransactionSplitActivity"
+    tools:showIn="@layout/activity_edit_transaction_split">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/percent_split_recycle_view"
+        android:name="com.cleganeBowl2k18.trebuchet.ItemFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/card_user_percentage">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

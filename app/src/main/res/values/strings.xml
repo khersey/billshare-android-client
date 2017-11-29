@@ -81,4 +81,5 @@
     <string name="transaction_count">Transaction Count</string>
     <string name="summary_debt">Total Debt</string>
     <string name="summary_credit">Total Credit</string>
+    <string name="percentage">% Percent Paid</string>
 </resources>

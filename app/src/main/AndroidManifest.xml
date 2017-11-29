@@ -32,7 +32,9 @@
             android:name=".presentation.view.activity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".presentation.view.activity.CreateGroupActivity" />
+        <activity
+            android:name=".presentation.view.activity.CreateGroupActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".presentation.view.activity.AddUserByEmailActivity"
             android:label="@string/title_activity_add_user_by_email"

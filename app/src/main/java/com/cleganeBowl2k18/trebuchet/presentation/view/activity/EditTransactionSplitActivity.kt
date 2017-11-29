@@ -27,6 +27,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserCheckmarkAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserEditMoneyAdapter
+import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserPercentageAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_edit_transaction_split.*
@@ -43,6 +44,7 @@ class EditTransactionSplitActivity : BaseActivity(),
     var mSplitType : Int = Constants.SPLIT_EQUALLY
     private var mOweSplit: MutableMap<Long, Long> = mutableMapOf()
     private var mPaySplit: MutableMap<Long, Long> = mutableMapOf()
+    private var mPercentSplit: MutableMap<Long, Long> = mutableMapOf()
     private var prefs: SharedPreferences? = null
     private var mCurrentUserId: Long = 0
 
@@ -82,7 +84,15 @@ class EditTransactionSplitActivity : BaseActivity(),
 
         mOweSplit = gson.fromJson(intent.getStringExtra("oweSplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
         mPaySplit = gson.fromJson(intent.getStringExtra("paySplit"), object : TypeToken<MutableMap<Long, Long>>() {}.type)
+        if (mSplitType != Constants.SPLIT_BY_PERCENTAGE) {
+            mPercentSplit = SplitUtil.precentageSplit(mAmount, mOweSplit)
+        } else {
+            mPercentSplit = mOweSplit
+        }
+
     }
+
+
 
     private fun setupSpinners() {
         mPaidBySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mUsers!!.map { user: User -> "${user.fName!!} ${user.lName!![0]}." })
@@ -119,6 +129,14 @@ class EditTransactionSplitActivity : BaseActivity(),
         mAmountSplitRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         mAmountSplitRV.setHasFixedSize(true)
         mAmountSplitRV.adapter = mAmountSplitAdapter
+
+        mPercentSplitAdapter = UserPercentageAdapter(mUsers!!, mPercentSplit)
+
+        mPercentSplitRV.itemAnimator = DefaultItemAnimator()
+        mPercentSplitRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
+        mPercentSplitRV.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        mPercentSplitRV.setHasFixedSize(true)
+        mPercentSplitRV.adapter = mPercentSplitAdapter
     }
 
     // UI Elements
@@ -144,13 +162,22 @@ class EditTransactionSplitActivity : BaseActivity(),
     lateinit var mAmountSplitRV : RecyclerView
     lateinit var mAmountSplitAdapter: UserEditMoneyAdapter
 
+    @BindView(R.id.percent_split_recycle_view)
+    lateinit var mPercentSplitRV: RecyclerView
+    lateinit var mPercentSplitAdapter: UserPercentageAdapter
+
     @BindView(R.id.transaction_amount_split)
     lateinit var mContainerAmountSplit : LinearLayout
+
+    @BindView(R.id.transaction_percent_split)
+    lateinit var mContainerPercentSplit : LinearLayout
 
     @OnItemSelected(R.id.split_type_spinner)
     fun onSplitTypeChanged() {
         mContainerAmountSplit.visibility = View.GONE
         mContainerEqualSplit.visibility = View.GONE
+        mContainerPercentSplit.visibility = View.GONE
+
         val selection = mSpinnerSplitType.selectedItem.toString()
 
         if (selection == "Equally") {
@@ -164,7 +191,7 @@ class EditTransactionSplitActivity : BaseActivity(),
         } else if (selection == "By Percent") {
             Log.d("SPLIT CHANGED", "By Percent == $selection")
             mSplitType = Constants.SPLIT_BY_PERCENTAGE
-            // TODO: add this UI
+            mContainerPercentSplit.visibility = View.VISIBLE
         }
 
         // TODO: Figure why the fuck these are inverted...
@@ -184,8 +211,15 @@ class EditTransactionSplitActivity : BaseActivity(),
 
             if (formIsValid()) {
 
-                var intent: Intent = Intent()
-                intent.putExtra("oweSplit", gson.toJson(mOweSplit))
+                val intent: Intent = Intent()
+
+                if (mSplitType == Constants.SPLIT_BY_PERCENTAGE) {
+                    mPercentSplit = mPercentSplitAdapter.getPercentSplit()
+                    intent.putExtra("oweSplit", gson.toJson(mPercentSplit))
+                } else {
+                    intent.putExtra("oweSplit", gson.toJson(mOweSplit))
+                }
+
                 intent.putExtra("paySplit", gson.toJson(mPaySplit))
                 intent.putExtra("splitType", mSplitType)
                 intent.putExtra("amount", mAmount)

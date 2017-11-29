@@ -12,10 +12,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import butterknife.*
 import com.cleganeBowl2k18.trebuchet.R
-import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.User
+import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionReceiver
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.SplitUtil
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
@@ -175,7 +175,8 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         if (formIsValid()) {
             val currencyCode: String = mCurrencyCodeSpinner.selectedItem.toString()
             val label : String = mLabelEditText.text.toString()
-            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount,currencyCode, mCurrentUserId, mPaySplit, mOweSplit)
+            val newTransaction = Transaction(0, mSelectedGroup!!, label, mAmount, currencyCode, mCurrentUserId, mPaySplit, mOweSplit)
+            newTransaction.splitType = mSplitType
             mPresenter.createTransaction(newTransaction)
         }
     }
@@ -193,6 +194,8 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
             mPaySplit = SplitUtil.equalSplit(mAmount, mPaySplit.keys.toList())
             updateTransactionSplitText()
         } else if (mSplitType == Constants.SPLIT_BY_AMOUNT) {
+            updateTransactionSplitText()
+        } else {
             updateTransactionSplitText()
         }
 
@@ -225,7 +228,12 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
         var oweSplitString : String = ""
         for (userId in mOweSplit.keys) {
             var user: User? = mSelectedGroup!!.users!!.find { user -> user.externalId == userId }
-            if (user != null) oweSplitString += "${user.fName} ${user.lName!![0]} -> $${(mOweSplit[userId]!! * 0.01).toDouble()}\n"
+            if (mSplitType == Constants.SPLIT_BY_PERCENTAGE) {
+                if (user != null) oweSplitString += "${user.fName} ${user.lName!![0]} -> %${mOweSplit[userId]!!}\n"
+            } else {
+                if (user != null) oweSplitString += "${user.fName} ${user.lName!![0]} -> $${(mOweSplit[userId]!! * 0.01).toDouble()}\n"
+            }
+
         }
         mSplitBetweenText.text = oweSplitString
     }
@@ -238,12 +246,21 @@ class CreateTransactionActivity : BaseActivity(), CreateTransactionView {
     }
 
     fun formIsValid() : Boolean {
-        var oweTotal: Long = mOweSplit.values.sum()
-        if (oweTotal != mAmount) {
-            // TODO: display error
-            return false
+        val oweTotal: Long = mOweSplit.values.sum()
+        if (mSplitType != Constants.SPLIT_BY_PERCENTAGE) {
+            if (oweTotal != mAmount) {
+                // TODO: display error
+                return false
+            }
+        } else {
+            val hundred: Long = 100
+            if (oweTotal != hundred) {
+                // TODO: display error
+                return false
+            }
         }
-        var payTotal: Long = mPaySplit.values.sum()
+
+        val payTotal: Long = mPaySplit.values.sum()
         if (payTotal != mAmount) {
             // TODO: display error
             return false

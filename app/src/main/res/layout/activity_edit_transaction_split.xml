@@ -69,8 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="50"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:prompt="@string/who_paid_the_bill"
-            >
+            android:prompt="@string/who_paid_the_bill">
         </Spinner>
 
     </LinearLayout>
@@ -94,8 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
-            android:layout_gravity="center_vertical|center_horizontal"
-            >
+            android:layout_gravity="center_vertical|center_horizontal">
         </Spinner>
 
     </LinearLayout>
@@ -103,5 +101,7 @@
     <include layout="@layout/content_edit_transaction_equal_split" />
 
     <include layout="@layout/content_edit_transaction_amount_split" />
+
+    <include layout="@layout/content_edit_transaction_percent_split" />
 
 </LinearLayout>
