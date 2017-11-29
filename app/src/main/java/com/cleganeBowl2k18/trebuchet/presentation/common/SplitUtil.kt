@@ -21,5 +21,29 @@ class SplitUtil {
             // TODO: validate
             return paySplit
         }
+
+        fun precentageSplit(amount: Long, oweSplit: MutableMap<Long, Long>): MutableMap<Long, Long> {
+            val percentSplit: MutableMap<Long, Long> = mutableMapOf()
+            var total: Long = 0
+
+            for (userId in oweSplit.keys) {
+                val value = oweSplit[userId]
+                val percent = ((value!!.toDouble() / amount.toDouble()) * 100).toLong()
+                percentSplit[userId] = percent
+                total += percent
+            }
+
+            var remainder = 100 - total
+
+            for (userId in percentSplit.keys) {
+                if (remainder > 0) {
+                    remainder -= 1
+                    val value: Long? = percentSplit[userId]
+                    percentSplit[userId] = value!! + 1
+                }
+            }
+
+            return percentSplit
+        }
     }
 }

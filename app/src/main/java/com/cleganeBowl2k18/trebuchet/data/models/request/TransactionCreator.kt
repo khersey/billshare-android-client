@@ -37,7 +37,7 @@ class TransactionCreator {
         this.creator = transaction.creator
 
         if (transaction.splitType == Constants.SPLIT_BY_PERCENTAGE) {
-            this.splitType = "precent"
+            this.splitType = "percent"
         } else {
             this.splitType = "money"
         }
@@ -48,7 +48,11 @@ class TransactionCreator {
             var tc = TransactionCreatorTransaction()
             tc.user = user.externalId
             if (transaction.oweSplit.keys.contains(tc.user)) {
-                tc.owes = transaction.oweSplit[user.externalId]!!.toDouble() * 0.01
+                if (this.splitType == "percent") {
+                    tc.owes = transaction.oweSplit[user.externalId]!!.toDouble()
+                } else {
+                    tc.owes = transaction.oweSplit[user.externalId]!!.toDouble() * 0.01
+                }
             }
             if (transaction.paySplit.keys.contains(tc.user)) {
                 tc.paid = transaction.paySplit[user.externalId]!!.toDouble() * 0.01
