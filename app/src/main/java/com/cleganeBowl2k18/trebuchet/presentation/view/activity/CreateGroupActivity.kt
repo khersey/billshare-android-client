@@ -83,7 +83,7 @@ class CreateGroupActivity : BaseActivity(), CreateGroupView,
             val email : String? = data?.getStringExtra("email")
 
             if (email != null) {
-                val user = User(0, null, email, null, null)
+                val user = User(0, "", email, "", "")
                 mUserSmallAdapter.addUser(user)
             } else {
                 Log.e("onActivityResultERROR", "AddUserReturned null!")

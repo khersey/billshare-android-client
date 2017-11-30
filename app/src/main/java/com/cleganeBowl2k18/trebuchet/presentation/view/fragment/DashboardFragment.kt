@@ -19,11 +19,14 @@ import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.ui.VerticalSpacingItemDecoration
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseFragment
 import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerActivityComponent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupDetailIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateGroupIntent
+import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionDetailItent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.DashboardAdapter
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.DashboardPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.DashboardView
+import com.google.gson.Gson
 import javax.inject.Inject
 
 /**
@@ -31,12 +34,19 @@ import javax.inject.Inject
  */
 class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDashboardItemClickListener {
 
+    // TODO: put these in a shared constants file
+    val CREATE_GROUP: Int = 0
+    val CREATE_TRANSACTION: Int = 1
+    val TRANSACTION_SUMMARY: Int = 2
+    val NEW_GROUP: Int = 3
+    val NEW_TRANSACTION: Int = 4
+
     @Inject
     lateinit var mPresenter: DashboardPresenter
 
     private var prefs: SharedPreferences? = null
     private var mCurrentUserId: Long = 0
-
+    private val gson: Gson = Gson()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -71,7 +81,8 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
     }
 
     private fun setupRecyclerView() {
-        mDashboardAdapter = DashboardAdapter(this, mutableListOf(0 to null, 1 to null))
+        mDashboardAdapter = DashboardAdapter(this, mutableListOf(CREATE_GROUP to null,
+                CREATE_TRANSACTION to null, TRANSACTION_SUMMARY to null))
 
         mRecyclerView.itemAnimator = DefaultItemAnimator()
         mRecyclerView.addItemDecoration(VerticalSpacingItemDecoration(30))
@@ -95,7 +106,7 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
     }
 
     override fun summaryReceived(summary: TransactionSummaryReceiver) {
-        mDashboardAdapter.addCard(mDashboardAdapter.TRANSACTION_SUMMARY to summary)
+        mDashboardAdapter.setCardAtPos(2, mDashboardAdapter.TRANSACTION_SUMMARY to summary)
     }
 
     override fun transactionsReceived(transactions: MutableList<Transaction>) {
@@ -120,11 +131,15 @@ class DashboardFragment : BaseFragment(), DashboardView, DashboardAdapter.OnDash
     }
 
     override fun onGroupClicked(group: Group) {
-        
+        val intent = context.CreateGroupDetailIntent()
+        intent.putExtra("group", gson.toJson(group))
+        startActivity(intent)
     }
 
     override fun onTransactionClicked(transaction: Transaction) {
-
+        val intent = activity.CreateTransactionDetailItent()
+        intent.putExtra("transaction", gson.toJson(transaction))
+        startActivity(intent)
     }
 
     companion object {
