@@ -17,7 +17,6 @@ import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.data.models.Group
 import com.cleganeBowl2k18.trebuchet.data.models.Transaction
 import com.cleganeBowl2k18.trebuchet.data.models.request.TransactionSummaryReceiver
-import java.util.*
 
 /**
  * Created by khersey on 2017-11-22.
@@ -43,18 +42,20 @@ class DashboardAdapter(private val mOnDashboardItemClickListener: OnDashboardIte
         }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        when (holder) {
-            is TransactionSummaryHolder -> {
-                holder.bindData(mCardQueue[position].second as TransactionSummaryReceiver)
-            }
-            is GroupViewHolder -> {
-                holder.bindData(mCardQueue[position].second as Group)
-            }
-            is TransactionViewHolder -> {
-                val pair = mCardQueue[position].second as Pair<Transaction, Long>
-                val userId = pair.second
-                val transaction = pair.first
-                holder.bindData(transaction, userId)
+        if (holder != null) {
+            when (holder) {
+                is TransactionSummaryHolder -> {
+                    holder.bindData(mCardQueue[position].second as TransactionSummaryReceiver?)
+                }
+                is GroupViewHolder -> {
+                    holder.bindData(mCardQueue[position].second as Group)
+                }
+                is TransactionViewHolder -> {
+                    val pair = mCardQueue[position].second as Pair<Transaction, Long>
+                    val userId = pair.second
+                    val transaction = pair.first
+                    holder.bindData(transaction, userId)
+                }
             }
         }
     }
@@ -104,6 +105,11 @@ class DashboardAdapter(private val mOnDashboardItemClickListener: OnDashboardIte
 
     fun addCard(card: Pair<Int, Any?>) {
         mCardQueue.add(card)
+        notifyDataSetChanged()
+    }
+
+    fun setCardAtPos(position: Int, card: Pair<Int, Any?>) {
+        mCardQueue[position] = card
         notifyDataSetChanged()
     }
 
@@ -169,18 +175,20 @@ class DashboardAdapter(private val mOnDashboardItemClickListener: OnDashboardIte
         internal var green: Int = 0
 
         fun bindData(summary: TransactionSummaryReceiver?) {
-            mTransactionCount.text = "${summary!!.transactionCount}"
-            mSummaryDebt.text   = "$ -${summary!!.debt}"
-            if (summary!!.debt == 0.0) {
-                mSummaryDebt.setTextColor(green)
-            } else {
-                mSummaryDebt.setTextColor(red)
-            }
-            mSummaryCredit.text = "$ +${summary!!.credit}"
-            if (summary!!.credit == 0.0) {
-                mSummaryCredit.setTextColor(green)
-            } else {
-                mSummaryCredit.setTextColor(red)
+            if (summary != null) {
+                mTransactionCount.text = "${summary.transactionCount}"
+                mSummaryDebt.text   = "$ -${(summary.debt * 100).toLong().toDouble()}"
+                if (summary.debt == 0.0) {
+                    mSummaryDebt.setTextColor(green)
+                } else {
+                    mSummaryDebt.setTextColor(red)
+                }
+                mSummaryCredit.text = "$ +${(summary.credit * 100).toLong().toDouble()}"
+                if (summary.credit > 0.0) {
+                    mSummaryCredit.setTextColor(green)
+                } else if (summary.credit < 0.0) {
+                    mSummaryCredit.setTextColor(red)
+                }
             }
         }
 
@@ -214,7 +222,7 @@ class DashboardAdapter(private val mOnDashboardItemClickListener: OnDashboardIte
             mNameTV.text = group.label
 
             var content = "No Members"
-            if (group!!.users != null && group.users!!.size != 0) {
+            if (group.users != null && group.users!!.isNotEmpty()) {
                 content = "Members: "
                 group.users!!.forEach {
                     user -> content += "${user.fName}, "
@@ -224,8 +232,7 @@ class DashboardAdapter(private val mOnDashboardItemClickListener: OnDashboardIte
             mUsersTV.text = content
 
             // TODO: this but based on the group's theme
-            val random = Random()
-            when (random.nextInt(6)) {
+            when ( (group.externalId % 6).toInt() ) {
                 0 -> mGroupImage.setImageResource(R.drawable.champagne_theme_1x02)
                 1 -> mGroupImage.setImageResource(R.drawable.condo_theme_1x02)
                 2 -> mGroupImage.setImageResource(R.drawable.house_theme_1x02)

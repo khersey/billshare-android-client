@@ -21,7 +21,6 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerAc
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.UserSmallAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.*
 
 /**
  * Created by khersey on 2017-11-08.
@@ -61,8 +60,7 @@ class GroupDetailsActivity: BaseActivity(), UserSmallAdapter.OnUserItemClickList
     private fun unpackIntent() {intent.getStringExtra("group")
         mGroup = gson.fromJson(intent.getStringExtra("group"), object : TypeToken<Group>() {}.type)
         // TODO: this but based on group theme
-        val random = Random()
-        when (random.nextInt(6)) {
+        when ( (mGroup.externalId % 6).toInt() ) {
             0 -> mGroupImage.setImageResource(R.drawable.champagne_theme_1x03)
             1 -> mGroupImage.setImageResource(R.drawable.condo_theme_1x03)
             2 -> mGroupImage.setImageResource(R.drawable.house_theme_1x03)

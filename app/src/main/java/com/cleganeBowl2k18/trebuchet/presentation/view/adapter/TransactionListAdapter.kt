@@ -1,14 +1,11 @@
 package com.cleganeBowl2k18.trebuchet.presentation.view.adapter
 
-import android.graphics.Canvas
 import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -53,9 +50,6 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        val itemTouchHelper = ItemTouchHelper(AdapterItemTouchHelperCallback(0, ItemTouchHelper.RIGHT))
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-
         mRecyclerView = recyclerView
     }
 
@@ -116,41 +110,6 @@ class TransactionListAdapter(private val mTransactions: MutableList<Transaction>
         @OnClick(R.id.transaction_card_view)
         fun onCardClicked() {
             mOnTransactionItemClickListener.onTransactionItemClick(mTransactions[adapterPosition])
-        }
-    }
-
-    private inner class AdapterItemTouchHelperCallback(dragDirs: Int, swipeDirs: Int) :
-            ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
-
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder): Boolean {
-            return false
-        }
-
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            // onGroupRemoved(viewHolder)
-        }
-
-        override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
-            ItemTouchHelper.Callback.getDefaultUIUtil().clearView((viewHolder as TransactionListAdapter.TransactionViewHolder).mCardView)
-        }
-
-        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-            if (viewHolder != null) {
-                ItemTouchHelper.Callback.getDefaultUIUtil().onSelected((viewHolder as TransactionListAdapter.TransactionViewHolder).mCardView)
-            }
-        }
-
-        override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                                 dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-            ItemTouchHelper.Callback.getDefaultUIUtil().onDraw(c, recyclerView,
-                    (viewHolder as TransactionListAdapter.TransactionViewHolder).mCardView, dX, dY, actionState, isCurrentlyActive)
-        }
-
-        override fun onChildDrawOver(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                                     dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-            ItemTouchHelper.Callback.getDefaultUIUtil().onDrawOver(c, recyclerView,
-                    (viewHolder as TransactionListAdapter.TransactionViewHolder).mCardView, dX, dY, actionState, isCurrentlyActive)
         }
     }
 }

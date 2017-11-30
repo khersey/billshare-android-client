@@ -10,18 +10,17 @@ class User {
     @SerializedName("id")
     var externalId: Long = 0
     @SerializedName("last_login")
-    var lastLogin: String? = null
-    //
-    var email: String? = null
+    var lastLogin: String = " " // initialize with space in case first letter is called for something
+    var email: String = " "
     @SerializedName("first_name")
-    var fName: String? = null
+    var fName: String = " "
     @SerializedName("last_name")
-    var lName: String? = null
+    var lName: String = " "
 
 
     constructor()
 
-    constructor(id: Long, lastLogin: String?, email: String?, fName: String?, lName: String?) {
+    constructor(id: Long, lastLogin: String, email: String, fName: String, lName: String) {
         this.externalId = id
         this.lastLogin = lastLogin
         this.email = email
@@ -33,7 +32,7 @@ class User {
         return "User(externalId=$externalId, lastLogin=$lastLogin, email=$email, fName=$fName, lName=$lName)"
     }
 
-    fun getUserTitle(): String? {
-        return "${this.fName!!} ${this.lName!![0]}."
+    fun getUserTitle(): String {
+        return "${this.fName} ${this.lName[0]}."
     }
 }

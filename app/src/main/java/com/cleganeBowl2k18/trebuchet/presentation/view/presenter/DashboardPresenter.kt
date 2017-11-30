@@ -79,8 +79,8 @@ class DashboardPresenter @Inject constructor(private val mGetTransactionsSummary
                 }
             }
 
-            mDashboardView!!.transactionsReceived(recentTransactions)
             mDashboardView!!.groupsReceived(recentData.groups.toMutableList())
+            mDashboardView!!.transactionsReceived(recentTransactions)
         }
 
         override fun onComplete() {

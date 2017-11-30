@@ -39,7 +39,7 @@ class TransactionDetailsActivity : BaseActivity(),
     private var gson: Gson = Gson()
     private var prefs: SharedPreferences? = null
     private var mCurrentUserId: Long = 0
-    private var mCurrentUser: User = User(mCurrentUserId, null, null, null, null)
+    private var mCurrentUser: User = User(mCurrentUserId, "", "", "", "")
 
     @Inject
     lateinit var mPresenter: TransactionDetailPresenter

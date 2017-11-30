@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.annotation.ColorInt
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.view.*
+import butterknife.BindColor
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.cleganeBowl2k18.trebuchet.R
@@ -44,6 +46,8 @@ class MainActivity : BaseActivity(),
     @BindView(R.id.tabs)
     lateinit var mTabs: TabLayout
 
+    @JvmField @BindColor(R.color.colorPrimaryDark) @ColorInt
+    internal var colorPrimaryDark: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +87,9 @@ class MainActivity : BaseActivity(),
         // as you specify a parent activity_group_details in AndroidManifest.xml.
         val id = item.itemId
 
-        if (id == R.id.action_settings) {
-            return true
-        }
+//        if (id == R.id.action_settings) {
+//            return true
+//        }
         if (id == R.id.action_logout) {
             val editor = prefs!!.edit()
             editor.putBoolean(Constants.LOGGED_IN, false)
@@ -99,13 +103,11 @@ class MainActivity : BaseActivity(),
 
     override fun onFilterSelected(option: String) {
         val fragment : TransactionFragment = this.supportFragmentManager.fragments.find { fragment -> fragment is TransactionFragment } as TransactionFragment
-                //supportFragmentManager.findFragmentById(R.id.fragment_transactions) as TransactionFragment
         fragment.onFilterSelected(option)
     }
 
     override fun onGroupFilterSelect(groupId: Long) {
         val fragment : TransactionFragment = this.supportFragmentManager.fragments.find { fragment -> fragment is TransactionFragment } as TransactionFragment
-                //supportFragmentManager.findFragmentById(R.id.fragment_transactions) as TransactionFragment
         fragment.onGroupFilterSelect(groupId)
     }
 
