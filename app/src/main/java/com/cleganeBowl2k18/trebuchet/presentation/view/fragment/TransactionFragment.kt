@@ -27,6 +27,7 @@ import com.cleganeBowl2k18.trebuchet.presentation.internal.di.component.DaggerAc
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionDetailItent
 import com.cleganeBowl2k18.trebuchet.presentation.view.activity.CreateTransactionIntent
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.TransactionListAdapter
+import com.cleganeBowl2k18.trebuchet.presentation.view.dialog.TransactionFilterDialog
 import com.cleganeBowl2k18.trebuchet.presentation.view.presenter.TransactionPresenter
 import com.cleganeBowl2k18.trebuchet.presentation.view.view.TransactionView
 import com.google.gson.Gson
@@ -44,19 +45,23 @@ import javax.inject.Inject
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdapter.OnTransactionItemClickListener {
+class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdapter.OnTransactionItemClickListener,
+        TransactionFilterDialog.TransactionFilterListener {
 
     @Inject
     lateinit var mPresenter: TransactionPresenter
     private val gson: Gson = Gson()
+
     private var mTransactions: MutableList<Transaction> = mutableListOf()
     private var mGroups: MutableList<Group> = mutableListOf()
-
     private var mColumnCount = 1
     private var mListener: OnTransactionSelectedListener? = null
     private val VERTICAL_SPACING: Int = 30
     private var prefs: SharedPreferences? = null
     private var mCurrentUserId: Long = 0
+
+    private var mFilteredTransactions: MutableList<Transaction> = mutableListOf()
+    private var mFilterType: String = "Newest"
 
     // Lifecycle Methods
     override fun onAttach(context: Context?) {
@@ -134,7 +139,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     // Helper Methods
     private fun setupRecyclerView() {
-        mTransactionListAdapter = TransactionListAdapter(mTransactions, mCurrentUserId ,this)
+        mTransactionListAdapter = TransactionListAdapter(mFilteredTransactions, mCurrentUserId ,this)
 
         mTransactionListRV.itemAnimator = DefaultItemAnimator()
         mTransactionListRV.addItemDecoration(VerticalSpacingItemDecoration(VERTICAL_SPACING))
@@ -143,6 +148,45 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
         mTransactionListRV.adapter = mTransactionListAdapter
 
         mTransactionListAdapter.registerAdapterDataObserver(mAdapterDataObserver)
+
+        applyFilter()
+    }
+
+    private fun applyFilter(groupId: Long? = null) {
+        mSortFilterText.text = mFilterType
+
+        Log.d("APPLY_FILTER", mFilterType)
+
+        when (mFilterType) {
+            "Newest" -> mFilteredTransactions = mTransactions
+            "Oldest" -> mFilteredTransactions = mTransactions.asReversed()
+            "Largest Amount" -> {
+                mFilteredTransactions = mTransactions
+                mFilteredTransactions = mFilteredTransactions.sortedWith(compareBy({it.amount})).asReversed().toMutableList()
+            }
+            "Smallest Amount" -> {
+                mFilteredTransactions = mTransactions
+                mFilteredTransactions = mFilteredTransactions.sortedWith(compareBy({it.amount})).toMutableList()
+            }
+            "I Paid" -> {
+                mFilteredTransactions = mTransactions
+                mFilteredTransactions = mFilteredTransactions.filter { item -> item.paySplit.containsKey(mCurrentUserId) }.toMutableList()
+            }
+            "I Owe Money" -> {
+                mFilteredTransactions = mTransactions
+                mFilteredTransactions = mFilteredTransactions.filter { item -> item.oweSplit.containsKey(mCurrentUserId) && item.resolved[mCurrentUserId] != null &&
+                        item.resolved[mCurrentUserId] == false}.toMutableList()
+            }
+            "By Group" -> {
+                mFilteredTransactions = mTransactions
+                if (groupId != null) {
+                    mFilteredTransactions = mFilteredTransactions.filter { item -> item.group!!.externalId == groupId }.toMutableList()
+                }
+            }
+        }
+
+        mTransactionListAdapter.transactions = mFilteredTransactions
+        mTransactionListAdapter.notifyDataSetChanged()
     }
 
     // UseCase stuff
@@ -181,7 +225,7 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
                 transaction.group = thisGroup
             }
         }
-        mTransactionListAdapter.transactions = mTransactions
+        applyFilter()
         mTransactionListAdapter.notifyDataSetChanged()
     }
 
@@ -196,6 +240,9 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
     }
 
     // UI Elements
+    @BindView(R.id.sort_filter_type)
+    lateinit var mSortFilterText: TextView
+
     @BindView(R.id.transaction_list)
     lateinit var mTransactionListRV: RecyclerView
     lateinit var mTransactionListAdapter: TransactionListAdapter
@@ -205,6 +252,12 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     @BindView(R.id.progressbar_transaction)
     lateinit var mProgressBar: ContentLoadingProgressBar
+
+    @OnClick(R.id.sort_filter_button)
+    fun createSortFilterDialog() {
+        var newFragment = TransactionFilterDialog()
+        newFragment.show(fragmentManager, "sort/filter")
+    }
 
     @OnClick(R.id.create_transaction_fab)
     fun createNewTransaction() {
@@ -231,6 +284,16 @@ class TransactionFragment : BaseFragment(), TransactionView, TransactionListAdap
 
     override fun onEditTransactionItemClick(transaction: Transaction) {
         //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onFilterSelected(option: String) {
+        mFilterType = option
+        applyFilter()
+    }
+
+    override fun onGroupFilterSelect(groupId: Long) {
+        mFilterType = "By Group"
+        applyFilter(groupId)
     }
 
     private fun showEmptyView() {

@@ -14,13 +14,15 @@ import com.cleganeBowl2k18.trebuchet.R
 import com.cleganeBowl2k18.trebuchet.presentation.common.Constants
 import com.cleganeBowl2k18.trebuchet.presentation.common.view.BaseActivity
 import com.cleganeBowl2k18.trebuchet.presentation.view.adapter.SectionsPagerAdapter
+import com.cleganeBowl2k18.trebuchet.presentation.view.dialog.TransactionFilterDialog
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.GroupFragment
 import com.cleganeBowl2k18.trebuchet.presentation.view.fragment.TransactionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(),
         GroupFragment.OnGroupSelectedListener,
-        TransactionFragment.OnTransactionSelectedListener {
+        TransactionFragment.OnTransactionSelectedListener,
+        TransactionFilterDialog.TransactionFilterListener {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -93,6 +95,18 @@ class MainActivity : BaseActivity(),
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onFilterSelected(option: String) {
+        val fragment : TransactionFragment = this.supportFragmentManager.fragments.find { fragment -> fragment is TransactionFragment } as TransactionFragment
+                //supportFragmentManager.findFragmentById(R.id.fragment_transactions) as TransactionFragment
+        fragment.onFilterSelected(option)
+    }
+
+    override fun onGroupFilterSelect(groupId: Long) {
+        val fragment : TransactionFragment = this.supportFragmentManager.fragments.find { fragment -> fragment is TransactionFragment } as TransactionFragment
+                //supportFragmentManager.findFragmentById(R.id.fragment_transactions) as TransactionFragment
+        fragment.onGroupFilterSelect(groupId)
     }
 
     fun OnListFragmentInteractionListener() {
