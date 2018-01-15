@@ -1,19 +1,16 @@
-# Trebuchet
-Code name for the Android client of BillShare (https://billshare.io)
-
-![image](https://media0ch-a.akamaihd.net/72/68/3e5e931d91ea016a26a9dbf13cad5962.jpg)
-
 # Summary
-
-BillShare is a cost splitting app for use between groups and friends.
-
-We also have a web client!
+BillShare is a cost splitting app for use between groups of friends.  It was created for Guelph's CIS*4260 Software Design V course.
 
 The Android client is written in Kotlin implementing an MVP - Clean architecture.
 
-We are targetting Android sdk 26 (android 8.0, Oreo), with minimum sdk 15 (android 4.0).
+Libraries used include:
 
+- Retrofit - for API requests
+- Dagger - for dependency injection
+- ButterKnife - for view binding
+- Glide - for image scaling 
 
+This project consumed most of my time in the Fall 2017 semester, and lead to many all nighters, but in the end it was well worth it.  I learned so much about developing for Android, and gained a love for Kotlin.
 
 
 # Installation
@@ -38,6 +35,8 @@ That's it! Once your Android Studio has finished downloading all the project dep
 
 
 # Running Trebuchet
+NOTE: the backend API is currently down.
+
 First we need to enable ADB Integration in Android Studio.
 
 Click **Tools > Android > Enable ADB Integration**
